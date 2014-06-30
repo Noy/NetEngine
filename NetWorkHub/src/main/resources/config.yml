@@ -1,0 +1,122 @@
+announcer:
+  running: FALSE
+  delay: 60
+  announcements:
+  - Welcome to &cThe Server!
+  - <Insert Message Here>
+  - You can edit the colors &ein the config!
+formats:
+  prefix: "&c[&6&lHub&c] "
+  tp-to-spawn: "&bWelcome to the spawn!"
+  set-spawn: "&eYou have set the spawn!"
+  warp-set: "&2You have set that warp!"
+  delete-warp: "&4You have removed that warp!"
+  clear-chat: "&cChat has been cleared!"
+  tpd-spawn: "&dYou have been teleported to spawn!"
+  cant-drop: "&cYou cannot drop this!"
+  join-message: ""
+  leave-message: ""
+  spy-off: "&aYou have turned off your Command Spy!"
+  spy-on: "&aYou have turned on your Command Spy!"
+  not-flying: "&cYou need to have flight turned on in order to use this command!"
+  fly-speed: "&aYou have set your Flying Speed to &b&l<flyspeed>"
+  fly-speed-off: "&aYou have turned your Flying Speed back to the default!"
+  new-nick: "&eYour Nickname is now &3<nick>"
+  too-long: "&cThat Nickname is too long!"
+  set-nick: "&eYou have &3<player>'s &eNickname to &3<nick>"
+  nick-is-player: "&3<nick> &eis &3<player>"
+  no-nick: "&cThat Nickname was not recognised!"
+  nick-error: "&cCannot give you that nickname!"
+  fly-on: "&eFlight mode on!"
+  fly-off: "&eFlight mode off!"
+  set-fly-off: "&eYou have set &3<player>'s &eflight mode off!"
+  set-fly-on: "&eYou have set &3<player>'s &eflight mode on!"
+  give-item-1: "&eYou have received 1 &3<item>&e!"
+  give-item-2: "&eYou have received &3<amount> <item>&e(&3s&e)&e!"
+  give-item-3: "&eYou have received &3<amount> <item>&e(&3s&e)&e at &3<durability> &edurability!"
+
+module-listener:
+  util-listeners: TRUE
+  no-drop: TRUE
+  leave-listener: TRUE
+  hub-items: TRUE
+  command-spy: TRUE
+  colored-signs: TRUE
+  chat-listener: TRUE
+  bouncy-pads: TRUE
+  below-zero: TRUE
+
+whois:
+  uuid: "&3<name>'s &eUUID is:<nl>&3<uuid>&e."
+  nick: "&3<name>'s &enickname is: &3<nick>&e."
+  health: "&3<name>'s &ehealth is: &3<health>&e."
+  hunger: "&3<name>'s &efood level is: &3<hunger> &eat &3<saturation> &esaturation."
+  location: "&3<name>'s &elocation is:<nl>World: &3<worldname>&e.<nl>'X' co-ordinate: &3<x>&e.<nl>'Y' co-ordinate: &3<y>&e.<nl>'Z' co-ordinate: &3<z>&e."
+  ip: "&3<name>'s &eIP is: &3<ip>&e."
+  gamemode: "&3<name>'s &eGameMode is: &3<gamemode>&e."
+  op: "&3<name>'s &eOP status is: &3<op>&e."
+  flying: "&3<name>'s &eflying status is: &3<flying>&e."
+cooldown:
+  cooldown-item: "&cYou can only use that every &7&l[&e<time>&7&l] &cseconds!"
+  cooldown-time: 5 #In Seconds.
+  chat: "Please slow down chat!"
+  chat-time: 2.5
+
+hide-item:
+   item: WATCH
+   item-name: "&6&lHide&f/&c&lShow &3Players!"
+   item-lore: "&3Use this to &6&lHide&f/&c&lShow &3players!"
+   hide: "&eAll players are now hidden!"
+   unhide: "&eAll players have now re-appeared!"
+warp-item:
+  item: compass
+  item-name: "&eQuick-Warp"
+  item-lore: "&cUse this to teleport to the Mini-Games!"
+  warp-to: "&6You have warped to &3<warp>"
+  menu-name: "&cWhere to?"
+  click-item-sound: "enderman_teleport"
+spawn:
+  world: world
+  x: 20.139715855253172
+  y: 77.0
+  z: 208.1614858668613
+  yaw: 3.9007003
+  pitch: 8.099926
+hub:
+  warps:
+    spawn:
+      item: GOLDEN_APPLE
+      name: Spawn
+      lore:
+      - '&3Click to go to spawn'
+      location:
+        world: world
+        x: 20.139715855253172
+        y: 77.0
+        z: 208.1614858668613
+        yaw: 3.9007003
+        pitch: 8.099926
+    firegames:
+      item: FIRE
+      name: '&aFireGames'
+      lore:
+      - '&cClick to go to fire games'
+      location:
+        world: world
+        x: 27.83432547974983
+        y: 70.0
+        z: 251.3249096579308
+        yaw: -166.04941
+        pitch: 14.24991
+    arianagrande:
+          item: WOOL
+          name: '&dAriana&5Grande'
+          lore:
+          - '&5I love &dAriana Grande'
+          location:
+            world: world
+            x: 50.77413743479612
+            y: 68.0
+            z: 235.15624258998258
+            yaw: -86.549355
+            pitch: -3.0000906

@@ -1,0 +1,13 @@
+name: NetBattledome
+main: com.noyhillel.battledome.Battledome
+version: 1.0
+
+commands:
+    setWorld:
+        aliases: [sw]
+    startGame:
+        aliases: [sg]
+    heal:
+        aliases: [health]
+    tp:
+        aliases: [teleport]

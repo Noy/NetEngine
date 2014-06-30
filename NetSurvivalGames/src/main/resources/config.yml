@@ -1,0 +1,68 @@
+voting-length: 65 #Number of seconds until the game attempts to start
+maximum-playes: 24 #Never set this higher than the number of cornicopia points in any map, because the game will not start if there are too many players for the map to handler
+minimum-players: 2 #Default, adjust as needed! :3
+deathmatch-size: 4
+storage: debug
+formats:
+  prefix: "&e&l[&6&lSG&e&l] "
+  join-msg: "&3<player> &b&l>> &ehas joined &6&lSG&e."
+  voted-for-map: "&8You have voted for &6<map>&7!"
+  voting-scoreboard-title: "&eType &c/vote [name]"
+  time-remaining-lobby: "&7There are &e<time>&7 seconds until the game starts!"
+  player-hit-by-snowball: "&6You have been hit by a snowball by &c<player> &6and are slow for &c&l10 &6seconds!"
+  player-hit-by-egg: "&a<player> &6has hit you with an &eegg&6!"
+  shutdown: "&cThe server will be shutting down in <seconds> seconds!"
+  kick-game-over: "&3The game has ended, and you have been kicked!"
+  disguised-player: "&6You have been disguised as; &5&l<nickname>&6!"
+  nick-off: "&cYou have undisguised"
+  no-mutation-passes: "&cYou do not have any mutation passes to mutate with!"
+  tribute-fallen: "&5<fallen> &6was killed by &6<killer>"
+  game-start: "&6&lA new game of SurvivalGames has begun! Good luck!"
+  winner: "&6&l<victor> &chas won the &6&lSurvivalGames!"
+  kicked-for-vip: "&cYou have been kicked to make room for a donator/VIP"
+  setlobby: "&6You have set the lobby to the location you're standing in!"
+  unsetlobby: "&6You have unset the lobby!"
+  game-countdown: "&6&l<seconds> &5left before the game begins!"
+  deathmatch-countdown: "&5Deathmatch starts in &6&l<seconds>"
+  scoreboard:
+    players: "&ePlayers"
+    spectators: "&cSpectators:"
+    mutations: "&aMutations:"
+    title: "&SG"
+  spectator-compass-title: "&aView Spectators"
+  spectator-gui-name: "&5Inventory!"
+  teleport-spectator: "&6Teleported you to &b<target>!"
+  mutation-interface-title: "&3Mutate"
+  stats:
+    header: "&3&l-----------&5[&9&lStats&5]&3&l------------"
+    stat-display: "&9<name>&5 -- &9<stat>"
+  vip-kick: "&cThere is no room on the server for you!"
+database: #MUST CONFIGURE FOR PLUGIN TO WORK PROPERLY
+  host: "localhost"
+  port: '3306'
+  username: "root"
+  password: "root"
+  database: "minecraft"
+countdowns:
+  pregame: 60
+  pre-teleport-deathmatch: 61
+  post-teleport-deathmatch: 15
+  server-shutdown: 10
+sounds:
+  timer-sound: "CLICK"
+  timer-sound-higher: "ORB_PICKUP"
+mutation:
+  disguise: "ZOMBIE"
+  potion-effect-level: 3
+pregame-book:
+  title: "&cSurvivalGames"
+  author: "NWSG" #Author, should change
+  pages: [This is SurvivalGames! Hope you enjoy the game!] #Fill in
+arena:
+  name: "&cThis map is called: &6&l<name>"
+  author: "&cThis map was made by: &6&l<author>"
+  social-link: "&cWebsite/Social Link: &6&l<social>"
+chat:
+  spectator-chat: "&7[&cSpectator&7] &7<player>&a:&f "
+  player-chat: "&7<player>&a:&f "
+  lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "

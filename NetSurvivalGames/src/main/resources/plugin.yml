@@ -1,0 +1,24 @@
+name: SurvivalGames
+version: 1.0
+main: us.noyandjoey.sg.SurvivalGames
+authors: [Twister915, NoyHillel1]
+description: SurvivalGames Plugin
+depends: [LibsDisguises, ProtocolLib]
+commands:
+  vote:
+    description: Vote for the current map
+    aliases: [v]
+  map:
+    description: Get the info on the current map.
+  setup:
+    description: Setup a map in the current world.
+  game:
+    description: Manage the current game.
+  nick:
+    description: Disguise yourself with a nickname.
+    aliases: [disguisePlayer, disguise, d]
+  stats:
+    description: Display Stats
+    alaises: [stat]
+  linkchests:
+    description: Links the chests

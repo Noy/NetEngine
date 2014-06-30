@@ -1,0 +1,31 @@
+name: NetHub
+main: com.noyhillel.networkhub.NetWorkHub
+version: 1.0
+
+commands:
+    setwarp:
+        aliases: [sw]
+    deletewarp:
+        aliases: [dw]
+    spawn:
+        aliases: [s]
+    clearchat:
+        aliases: [cc, cchat]
+    clearmychat:
+        aliases: [cmc, cmchat]
+    commandspy:
+        aliases: [spy, cw]
+    flyspeed:
+        aliases: [fs]
+    nick:
+        aliases: [name]
+    giveme:
+        aliases: [i]
+        usage: /giveme <item> [amount] [durability]
+        description: The giveme command
+    getinfo:
+        aliases: [gi]
+    whois:
+        aliases: [wi]
+    fly:
+        aliases: [f, wings, flight]
