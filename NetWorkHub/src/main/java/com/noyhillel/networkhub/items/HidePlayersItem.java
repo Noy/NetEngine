@@ -3,7 +3,7 @@ package com.noyhillel.networkhub.items;
 import com.noyhillel.networkengine.exceptions.CooldownUnexpiredException;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -30,7 +30,7 @@ public final class HidePlayersItem extends NetWorkHubItemDelegate {
      */
     @Override
     protected ItemStack getItem() {
-        ItemStack item = new ItemStack(Material.valueOf(NetWorkHub.getInstance().getConfig().getString("hide-item.item").toUpperCase()));
+        ItemStack item = new ItemStack(Material.valueOf(NetHub.getInstance().getConfig().getString("hide-item.item").toUpperCase()));
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(MessageManager.getFormat("hide-item.item-name", false));
         List<String> lore = new ArrayList<>();
@@ -56,9 +56,9 @@ public final class HidePlayersItem extends NetWorkHubItemDelegate {
     @Override
     protected void onRightClick(NetPlayer player) {
         try {
-            if (!player.isOp()) NetWorkHub.getCooldown().testCooldown(player.getName(), NetWorkHub.getInstance().getConfig().getLong("cooldown.cooldown-time"));
+            if (!player.isOp()) NetHub.getCooldown().testCooldown(player.getName(), NetHub.getInstance().getConfig().getLong("cooldown.cooldown-time"));
         } catch (CooldownUnexpiredException e) {
-            player.sendMessage(MessageManager.getFormat("cooldown.cooldown-item", true, new String[]{"<time>", String.valueOf(NetWorkHub.getInstance().getConfig().getLong("cooldown.cooldown-time"))}));
+            player.sendMessage(MessageManager.getFormat("cooldown.cooldown-item", true, new String[]{"<time>", String.valueOf(NetHub.getInstance().getConfig().getLong("cooldown.cooldown-time"))}));
             return;
         }
         if (!hidingPlayers.contains(player.getUuid())) {

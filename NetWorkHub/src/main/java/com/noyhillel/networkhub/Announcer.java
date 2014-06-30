@@ -28,7 +28,7 @@ public final class Announcer implements Runnable {
      * Creating our constructor
      * @param hub Main class.
      */
-    public Announcer(NetWorkHub hub) {
+    public Announcer(NetHub hub) {
         this.msgs = hub.getConfig().getStringList("announcer.announcements");
         this.running = hub.getConfig().getBoolean("announcer.running");
     }
@@ -41,7 +41,7 @@ public final class Announcer implements Runnable {
         // If the announcements are set to true
         if (running) {
             // Loop through all players
-            for (Player p : NetWorkHub.getInstance().getServer().getOnlinePlayers()) {
+            for (Player p : NetHub.getInstance().getServer().getOnlinePlayers()) {
                 // Send them the announcements.
                 p.sendMessage(MessageManager.getFormat("formats.prefix", false) + getNextMsg());
             }

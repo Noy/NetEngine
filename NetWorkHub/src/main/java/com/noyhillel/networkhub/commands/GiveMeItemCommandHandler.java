@@ -6,7 +6,6 @@ import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

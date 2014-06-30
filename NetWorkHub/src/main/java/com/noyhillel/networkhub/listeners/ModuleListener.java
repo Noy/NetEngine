@@ -1,6 +1,6 @@
 package com.noyhillel.networkhub.listeners;
 
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.event.Listener;
 
 /**
@@ -26,8 +26,8 @@ public abstract class ModuleListener implements Listener {
      * @return true
      */
     public boolean register() {
-        if (!NetWorkHub.getInstance().getConfig().getBoolean("module-listener." + configString)) return false;
-        NetWorkHub.getInstance().registerListener(this);
+        if (!NetHub.getInstance().getConfig().getBoolean("module-listener." + configString)) return false;
+        NetHub.getInstance().registerListener(this);
         return true;
     }
 }

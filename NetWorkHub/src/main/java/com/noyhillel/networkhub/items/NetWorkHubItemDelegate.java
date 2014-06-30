@@ -1,7 +1,7 @@
 package com.noyhillel.networkhub.items;
 
 import com.noyhillel.networkengine.util.player.NetPlayer;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -42,7 +42,7 @@ public abstract class NetWorkHubItemDelegate implements Listener {
      * @param b Boolean to verify registering our events.
      */
     public NetWorkHubItemDelegate(Boolean b) {
-        if (b) NetWorkHub.getInstance().registerListener(this);
+        if (b) NetHub.getInstance().registerListener(this);
         // super(true) to register event below.
     }
 

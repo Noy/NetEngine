@@ -2,7 +2,7 @@ package com.noyhillel.networkhub.listeners;
 
 import com.noyhillel.networkengine.exceptions.CooldownUnexpiredException;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,10 +22,10 @@ public class ChatListener extends ModuleListener {
         Player player = event.getPlayer();
         try {
             if (!player.hasPermission("hub.anti-spam")) {
-                NetWorkHub.getCooldown().testCooldown(player.getName(), NetWorkHub.getInstance().getConfig().getLong("cooldown.chat-time"));
+                NetHub.getCooldown().testCooldown(player.getName(), NetHub.getInstance().getConfig().getLong("cooldown.chat-time"));
             }
         } catch (CooldownUnexpiredException e) {
-            player.sendMessage(MessageManager.getFormat("cooldown.chat", true, new String[]{"<time>", String.valueOf(NetWorkHub.getInstance().getConfig().getLong("formats.cooldown-time"))}));
+            player.sendMessage(MessageManager.getFormat("cooldown.chat", true, new String[]{"<time>", String.valueOf(NetHub.getInstance().getConfig().getLong("formats.cooldown-time"))}));
             event.setCancelled(true);
             return;
         }

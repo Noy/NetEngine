@@ -5,7 +5,7 @@ import com.noyhillel.networkengine.command.CommandStatus;
 import com.noyhillel.networkengine.command.NetCommand;
 import com.noyhillel.networkengine.command.NetCommandSenders;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -49,7 +49,7 @@ public final class WarpItemCommands implements CommandHandler {
         for (Integer i = 2; i < args.length; i++) {
             lore.add(args[i]);
         }
-        ConfigurationSection section = NetWorkHub.getInstance().getConfig().createSection("hub.warps." + ChatColor.stripColor(name).toLowerCase());
+        ConfigurationSection section = NetHub.getInstance().getConfig().createSection("hub.warps." + ChatColor.stripColor(name).toLowerCase());
         section.set("item", m.name());
         section.set("name", args[1]);
         section.set("lore", lore);
@@ -61,8 +61,8 @@ public final class WarpItemCommands implements CommandHandler {
         location.set("yaw", p.getLocation().getYaw());
         location.set("pitch", p.getLocation().getPitch());
         section.set("location", location);
-        NetWorkHub.getInstance().getConfig().set("hub.warps." + ChatColor.stripColor(name).toLowerCase(), section);
-        NetWorkHub.getInstance().saveConfig();
+        NetHub.getInstance().getConfig().set("hub.warps." + ChatColor.stripColor(name).toLowerCase(), section);
+        NetHub.getInstance().saveConfig();
         p.sendMessage(MessageManager.getFormats("formats.warp-set"));
         return CommandStatus.SUCCESS;
     }
@@ -78,16 +78,16 @@ public final class WarpItemCommands implements CommandHandler {
         Player p = (Player) sender;
         if (args.length == 0) return CommandStatus.FEW_ARGUMENTS;
         if (args.length > 1) return CommandStatus.MANY_ARGUMENTS;
-        ConfigurationSection warp = NetWorkHub.getInstance().getConfig().getConfigurationSection("hub.warps." + args[0]);
+        ConfigurationSection warp = NetHub.getInstance().getConfig().getConfigurationSection("hub.warps." + args[0]);
         if (warp == null)  return CommandStatus.NULL;
-        NetWorkHub.getInstance().getConfig().set("hub.warps." + args[0], null);
-        NetWorkHub.getInstance().saveConfig();
+        NetHub.getInstance().getConfig().set("hub.warps." + args[0], null);
+        NetHub.getInstance().saveConfig();
         p.sendMessage(MessageManager.getFormats("formats.delete-warp"));
         return CommandStatus.SUCCESS;
     }
 
     @Override
     public void handleCommand(CommandStatus status, CommandSender sender, NetCommandSenders senderType) {
-        NetWorkHub.getInstance().handleCommand(status, sender, senderType);
+        NetHub.getInstance().handleCommand(status, sender, senderType);
     }
 }

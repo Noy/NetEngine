@@ -21,16 +21,16 @@ import org.bukkit.entity.Player;
  * Created by Noy on 26/05/2014.
  */
 @MainClass(name = "NetHub", description = "NetHub Plugin.")
-public final class NetWorkHub extends NetPlugin {
+public final class NetHub extends NetPlugin {
 
-    @Getter private static NetWorkHub instance;
+    @Getter private static NetHub instance;
     @Getter private static NetWorkCoolDown cooldown;
     private static final String RELOAD_MESSAGE = ChatColor.GRAY + "Hub Reloading!";
 
     @Override
     protected void enable() {
         try {
-            NetWorkHub.instance = this;
+            NetHub.instance = this;
             Integer delay = getConfig().getInt("announcer.delay", 60);
             getServer().getScheduler().scheduleSyncRepeatingTask(this, new Announcer(this), 20 * delay, 20 * delay);
             this.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "Hub Plugin >> Successfully enabled!");

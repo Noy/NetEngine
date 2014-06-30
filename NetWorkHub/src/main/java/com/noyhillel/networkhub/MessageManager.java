@@ -21,7 +21,7 @@ public final class MessageManager {
     }
 
     public static String getFormat(String format, String[]... dataArgs) {
-        FileConfiguration config = NetWorkHub.getInstance().getConfig();
+        FileConfiguration config = NetHub.getInstance().getConfig();
         if (!config.contains(format))
             return format;
         Object t = config.get(format);

@@ -1,7 +1,7 @@
 package com.noyhillel.networkhub.items.warpitem;
 
 import com.noyhillel.networkengine.util.utils.InventoryGUI;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,7 +34,7 @@ public final class ConfigManager {
         inventoryItems = new ArrayList<>();
         locations = new HashMap<>();
         // Creating local variable.
-        ConfigurationSection section = NetWorkHub.getInstance().getConfig().getConfigurationSection("hub.warps");
+        ConfigurationSection section = NetHub.getInstance().getConfig().getConfigurationSection("hub.warps");
         Set<String> sectionKeys = section.getKeys(false); // Storing a String in a Set, just so it wouldn't create duplicates.
         for (String s1 : sectionKeys) {
             ConfigurationSection section1 = section.getConfigurationSection(s1);

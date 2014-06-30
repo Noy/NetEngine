@@ -2,7 +2,7 @@ package com.noyhillel.networkhub.commands;
 
 import com.noyhillel.networkengine.command.*;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -42,10 +42,10 @@ public final class SpawnCommand extends AbstractCommandHandler {
     }
 
     public static Location getLocation(String path) {
-        ConfigurationSection configurationSection = NetWorkHub.getInstance().getConfig().getConfigurationSection(path);
+        ConfigurationSection configurationSection = NetHub.getInstance().getConfig().getConfigurationSection(path);
         if (configurationSection != null) {
             return new Location(
-                    NetWorkHub.getInstance().getServer().getWorld(configurationSection.getString("world")),
+                    NetHub.getInstance().getServer().getWorld(configurationSection.getString("world")),
                     configurationSection.getDouble("x"),
                     configurationSection.getDouble("y"),
                     configurationSection.getDouble("z"),
@@ -56,7 +56,7 @@ public final class SpawnCommand extends AbstractCommandHandler {
     }
 
     private void setLocation(String path, Location location) {
-        ConfigurationSection configurationSection = NetWorkHub.getInstance()
+        ConfigurationSection configurationSection = NetHub.getInstance()
                 .getConfig().getConfigurationSection(path);
         configurationSection.set("world", location.getWorld().getName());
         configurationSection.set("x", location.getX());

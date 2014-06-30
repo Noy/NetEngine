@@ -3,12 +3,10 @@ package com.noyhillel.networkhub.items.warpitem;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.InventoryGUI;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import com.noyhillel.networkhub.items.NetWorkHubItemDelegate;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -76,7 +74,7 @@ public final class WarpItem extends NetWorkHubItemDelegate {
      */
     @Override
     protected ItemStack getItem() {
-        ItemStack item = new ItemStack(Material.valueOf(NetWorkHub.getInstance().getConfig().getString("warp-item.item").toUpperCase()));
+        ItemStack item = new ItemStack(Material.valueOf(NetHub.getInstance().getConfig().getString("warp-item.item").toUpperCase()));
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(MessageManager.getFormat("warp-item.item-name", false));
         List<String> lore = new ArrayList<>();

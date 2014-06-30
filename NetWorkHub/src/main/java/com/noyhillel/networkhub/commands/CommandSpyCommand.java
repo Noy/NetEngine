@@ -2,7 +2,7 @@ package com.noyhillel.networkhub.commands;
 
 import com.noyhillel.networkengine.command.*;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
+import com.noyhillel.networkhub.NetHub;
 import com.noyhillel.networkhub.listeners.CommandSpyListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ public final class CommandSpyCommand extends AbstractCommandHandler {
 
     @Override
     public void handleCommand(CommandStatus commandStatus, CommandSender commandSender, NetCommandSenders commandSenders) {
-        NetWorkHub.getInstance().handleCommand(commandStatus, commandSender, commandSenders);
+        NetHub.getInstance().handleCommand(commandStatus, commandSender, commandSenders);
     }
 
     @NetCommand(

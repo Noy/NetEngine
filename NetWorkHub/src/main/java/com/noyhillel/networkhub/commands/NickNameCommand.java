@@ -2,7 +2,6 @@ package com.noyhillel.networkhub.commands;
 
 import com.noyhillel.networkengine.command.*;
 import com.noyhillel.networkhub.MessageManager;
-import com.noyhillel.networkhub.NetWorkHub;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
