@@ -4,6 +4,9 @@ import com.noyhillel.survivalgames.SurvivalGames;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
+/**
+ * This class is in here to prevent IntelliJ messin' up.
+ */
 public final class MessageManager {
 
     @SuppressWarnings("NullArgumentToVariableArgMethod")
