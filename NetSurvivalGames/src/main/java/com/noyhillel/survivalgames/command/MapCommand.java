@@ -3,7 +3,7 @@ package com.noyhillel.survivalgames.command;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
-import com.noyhillel.survivalgames.MessageManager;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.arena.ArenaMeta;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
 import org.bukkit.entity.Player;

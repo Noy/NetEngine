@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import static us.noyandjoey.sg.arena.setup.ArenaSetup.stackWithName;
+import static com.noyhillel.survivalgames.arena.setup.ArenaSetup.stackWithName;
 
 @Data
 public final class LobbySetup implements SetupSession {

@@ -1,6 +1,8 @@
 package com.noyhillel.survivalgames;
 
+import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
+import com.noyhillel.networkengine.util.RandomUtils;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.ArenaManager;
 import com.noyhillel.survivalgames.arena.JSONArenaManager;
@@ -16,7 +18,6 @@ import com.noyhillel.survivalgames.storage.ForgetfulStorage;
 import com.noyhillel.survivalgames.storage.GStorage;
 import com.noyhillel.survivalgames.storage.GStorageKey;
 import com.noyhillel.survivalgames.storage.StorageTypes;
-import com.noyhillel.survivalgames.utils.RandomUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,6 +31,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
+@MainClass(name = "NetSurvivalGames", description = "The NetSG Mini-Game!", authors = {"Twister915", "NoyHillel1"})
 public final class SurvivalGames extends NetPlugin {
 
     @Getter private static SurvivalGames instance;
@@ -42,7 +44,7 @@ public final class SurvivalGames extends NetPlugin {
 
     @Getter private boolean isSetupOnly = false;
 
-    private static final String arena_directory = "arenas";
+    private static final String ARENA_DIRECTORY = "arenas";
 
     @Override
     public void enable() {
@@ -84,7 +86,7 @@ public final class SurvivalGames extends NetPlugin {
 
     // So we can catch errors like a boss
     private void enableTry() throws ArenaException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        this.arenaManager = new JSONArenaManager(new File(getDataFolder(), arena_directory), getLogger());
+        this.arenaManager = new JSONArenaManager(new File(getDataFolder(), ARENA_DIRECTORY), getLogger());
         try {
             this.gameManager = new GameManager();
             registerListener(new GameManagerListener(this, gameManager));

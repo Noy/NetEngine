@@ -5,7 +5,7 @@ import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.newcommand.Permission;
-import com.noyhillel.survivalgames.MessageManager;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.player.GPlayer;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;

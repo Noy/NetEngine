@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.game;
 
-import com.noyhillel.survivalgames.MessageManager;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.player.GPlayer;
 import lombok.Data;

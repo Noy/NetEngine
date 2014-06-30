@@ -1,7 +1,7 @@
 package com.noyhillel.survivalgames.player;
 
+import com.noyhillel.networkengine.util.RandomUtils;
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.utils.RandomUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.libraryaddict.disguise.DisguiseAPI;

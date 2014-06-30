@@ -1,7 +1,7 @@
 package com.noyhillel.survivalgames.arena;
 
+import com.noyhillel.networkengine.util.RandomUtils;
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.utils.RandomUtils;
 import lombok.Data;
 import lombok.NonNull;
 import net.lingala.zip4j.core.ZipFile;

@@ -1,5 +1,6 @@
-package com.noyhillel.survivalgames;
+package com.noyhillel.survivalgames.utils;
 
+import com.noyhillel.survivalgames.SurvivalGames;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 

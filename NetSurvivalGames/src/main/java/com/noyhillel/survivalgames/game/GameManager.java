@@ -1,6 +1,7 @@
 package com.noyhillel.survivalgames.game;
 
-import com.noyhillel.survivalgames.MessageManager;
+import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.ArenaException;
@@ -15,7 +16,6 @@ import com.noyhillel.survivalgames.game.voting.VotingSessionDisplay;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.player.PlayerNotFoundException;
 import com.noyhillel.survivalgames.player.StorageError;
-import com.noyhillel.survivalgames.utils.RandomUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;

@@ -1,6 +1,7 @@
 package com.noyhillel.survivalgames.game.impl;
 
-import com.noyhillel.survivalgames.MessageManager;
+import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.PointIterator;
@@ -11,7 +12,6 @@ import com.noyhillel.survivalgames.game.countdown.CountdownDelegate;
 import com.noyhillel.survivalgames.game.countdown.GameCountdown;
 import com.noyhillel.survivalgames.game.loots.SGTierUtil;
 import com.noyhillel.survivalgames.player.GPlayer;
-import com.noyhillel.survivalgames.utils.RandomUtils;
 import com.noyhillel.survivalgames.utils.inventory.InventoryGUI;
 import com.noyhillel.survivalgames.utils.inventory.InventoryGUIItem;
 import lombok.AccessLevel;

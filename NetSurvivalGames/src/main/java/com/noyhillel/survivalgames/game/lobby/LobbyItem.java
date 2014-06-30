@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.game.lobby;
 
-import com.noyhillel.survivalgames.MessageManager;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.game.impl.SGGame;
 import com.noyhillel.survivalgames.player.GPlayer;
