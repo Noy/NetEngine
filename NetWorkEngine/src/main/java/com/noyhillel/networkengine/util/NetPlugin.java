@@ -104,7 +104,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
         return sgCommand.getDeclaredConstructor().newInstance();
     }
 
-    public void registerCommands(CommandHandler handler) {
+    public final void registerCommands(CommandHandler handler) {
         getCommandStructure().registerHandler(handler);
     }
 

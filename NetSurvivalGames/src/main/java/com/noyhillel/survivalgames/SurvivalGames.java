@@ -40,13 +40,11 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private GPlayerManager playerManager;
     @Getter private SetupCommand setupCommand;
     @Getter private static Random random = new Random();
-
     @Getter private boolean isSetupOnly = false;
-
     private static final String ARENA_DIRECTORY = "arenas";
 
     @Override
-    public void enable() {
+    protected void enable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer(ChatColor.RED + "Server reloading!");
         }
@@ -68,7 +66,7 @@ public final class SurvivalGames extends NetPlugin {
     }
 
     @Override
-    public void disable() {
+    protected void disable() {
         logInfo(ChatColor.RED + "Disabling SurvivalGames!");
         try {
             disableTry();
@@ -155,11 +153,11 @@ public final class SurvivalGames extends NetPlugin {
     }
 
     private void registerAllCommands() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        setupCommand = registerListener(setupCommands(SetupCommand.class));
         setupCommands(GameCommand.class);
         setupCommands(VoteCommand.class);
         setupCommands(MapCommand.class);
         setupCommands(LinkChestsCommand.class);
-        setupCommand = registerListener(setupCommands(SetupCommand.class));
         setupCommands(NickCommand.class);
         setupCommands(StatsCommand.class);
     }

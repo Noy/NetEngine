@@ -25,7 +25,6 @@ public final class NetWorkEngine extends NetPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.kickPlayer(RELOAD_MESSAGE);
         }
-
     }
 
     @Override

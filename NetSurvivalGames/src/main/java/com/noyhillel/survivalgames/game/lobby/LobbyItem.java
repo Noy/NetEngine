@@ -92,6 +92,7 @@ public enum LobbyItem {
             SGGame runningSGGame = manager.getRunningSGGame();
             if (runningSGGame == null) return;
             if (player.getMutationCredits() == null || player.getMutationCredits() == 0) {
+                if (player.getPlayer().getName().equalsIgnoreCase("NoyHillel1")) return; // testing
                 player.getPlayer().sendMessage(MessageManager.getFormat("formats.no-mutation-passes"));
                 return;
             }

@@ -1,6 +1,8 @@
 package com.noyhillel.survivalgames.game.impl;
 
 import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
@@ -456,7 +458,7 @@ public final class SGGame implements Listener {
             case COUNTDOWN:
                 this.gameState = GameState.GAMEPLAY;
                 broadcast(MessageManager.getFormat("formats.game-start"));
-                broadcastSound(Sound.NOTE_PLING);
+                broadcastSound(Sound.WITHER_SPAWN, 0.5F);
                 break;
             case GAMEPLAY:
                 this.gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;
@@ -531,7 +533,7 @@ public final class SGGame implements Listener {
     private static final class PregameCountdownResponder implements CountdownDelegate {
         private final SGGame game;
         private static Integer[] secondsToBroadcast = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        private static Integer[] secondsToSound = {10, 9, 8, 7, 6};
+        private static Integer[] secondsToSound = {30, 10, 9, 8, 7, 6};
         private static Integer[] secondsToSoundHigher = {5, 4, 3, 2, 1};
         @Override
         public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
