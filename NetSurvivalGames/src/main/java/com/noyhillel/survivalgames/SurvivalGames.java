@@ -35,7 +35,6 @@ import java.util.Random;
 public final class SurvivalGames extends NetPlugin {
 
     @Getter private static SurvivalGames instance;
-
     @Getter private ArenaManager arenaManager;
     @Getter private GameManager gameManager;
     @Getter private GPlayerManager playerManager;
@@ -51,7 +50,7 @@ public final class SurvivalGames extends NetPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer(ChatColor.RED + "Server reloading!");
         }
-        getLogger().info("Bootstrapping SurvivalGames!");
+        logInfo(ChatColor.YELLOW + "Bootstrapping SurvivalGames!");
         try {
             saveDefaultConfig();
             SurvivalGames.instance = this;
@@ -62,13 +61,15 @@ public final class SurvivalGames extends NetPlugin {
             SurvivalGames.instance = null;
             Bukkit.getPluginManager().disablePlugin(this);
             return;
+        } finally {
+            logInfo(ChatColor.RED + "SurvivalGames Default Enable Message, check console for errors!");
         }
-        getLogger().info("SurvivalGames has been enabled successfully!");
+        logInfo(ChatColor.GREEN + "SurvivalGames has been enabled successfully!");
     }
 
     @Override
     public void disable() {
-        getLogger().info("Disabling SurvivalGames!");
+        logInfo(ChatColor.RED + "Disabling SurvivalGames!");
         try {
             disableTry();
             SurvivalGames.instance = null;
@@ -76,7 +77,7 @@ public final class SurvivalGames extends NetPlugin {
             t.printStackTrace();
             return;
         }
-        getLogger().info("SurvivalGames is disabled completely!");
+        logInfo(ChatColor.RED + "SurvivalGames is disabled completely!");
     }
 
     private void disableTry() throws StorageError, ArenaException {
@@ -91,7 +92,7 @@ public final class SurvivalGames extends NetPlugin {
             this.gameManager = new GameManager();
             registerListener(new GameManagerListener(this, gameManager));
         } catch (GameException ex) {
-            getLogger().severe("Error from GameManager setup: " + ex.getMessage());
+            logInfo(ChatColor.RED + "Error from GameManager setup: " + ChatColor.DARK_RED + ex.getMessage());
             ex.getCause().printStackTrace();
             isSetupOnly = true; //This means that we can only setup arenas now because there was a problem setting up the game manager, which normally means that you could not load the lobby
         }
@@ -104,15 +105,9 @@ public final class SurvivalGames extends NetPlugin {
             error.printStackTrace();
             fallbackStorage();
         }
+        registerAllCommands();
         registerListener(new GPlayerManagerListener(this.playerManager));
-        setupCommands(GameCommand.class);
-        setupCommands(VoteCommand.class);
-        setupCommands(MapCommand.class);
-        setupCommands(LinkChestsCommand.class);
-        setupCommand = registerListener(setupCommands(SetupCommand.class));
         registerListener(new SetupModeListener());
-        setupCommands(NickCommand.class);
-        setupCommands(StatsCommand.class);
         ConsoleCommandSender consoleSender = getServer().getConsoleSender();
         consoleSender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSurvivalGames&e has been fully enabled!"));
     }
@@ -134,12 +129,12 @@ public final class SurvivalGames extends NetPlugin {
         }
     }
 
-
     private GStorage getStorage() {
         String storageType = getConfig().getString("storage");
         for (StorageTypes storageTypes : StorageTypes.values()) {
             GStorageKey annotation = storageTypes.getClazz().getAnnotation(GStorageKey.class);
-            if (RandomUtils.contains(storageType, annotation.value())) return storageTypes.getSetupDelegate().getStorage();
+            if (RandomUtils.contains(storageType, annotation.value()))
+                return storageTypes.getSetupDelegate().getStorage();
         }
         return null;
     }
@@ -157,5 +152,15 @@ public final class SurvivalGames extends NetPlugin {
             return null;
         }
         return builder.toString();
+    }
+
+    private void registerAllCommands() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        setupCommands(GameCommand.class);
+        setupCommands(VoteCommand.class);
+        setupCommands(MapCommand.class);
+        setupCommands(LinkChestsCommand.class);
+        setupCommand = registerListener(setupCommands(SetupCommand.class));
+        setupCommands(NickCommand.class);
+        setupCommands(StatsCommand.class);
     }
 }
