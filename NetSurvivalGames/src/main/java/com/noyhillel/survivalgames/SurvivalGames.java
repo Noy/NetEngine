@@ -50,7 +50,7 @@ public final class SurvivalGames extends NetPlugin {
         logInfo(ChatColor.YELLOW + "Bootstrapping SurvivalGames!");
         try {
             saveDefaultConfig();
-            SurvivalGames.instance = this;
+            SurvivalGames.instance = this; //
             enableTry();
             onSuccessfulEnable();
         } catch (Throwable t) {
