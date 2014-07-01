@@ -1,9 +1,9 @@
 package com.noyhillel.survivalgames.game.lobby;
 
-import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.game.impl.SGGame;
 import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -74,7 +74,7 @@ public enum LobbyItem {
     MUTATION_INTERFACE(new LobbyItemDefinition() {
         @Override
         Integer getSlot() {
-            return 5;
+            return 2;
         }
 
         @Override

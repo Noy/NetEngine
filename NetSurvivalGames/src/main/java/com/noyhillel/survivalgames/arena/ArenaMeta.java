@@ -8,5 +8,5 @@ import java.util.List;
 public final class ArenaMeta {
     private String name;
     private List<String> authors;
-    private String socialLink; //Social site such as a website, or youtube :D
+    private String socialLink;
 }

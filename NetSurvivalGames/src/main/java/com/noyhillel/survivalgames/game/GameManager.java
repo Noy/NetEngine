@@ -1,7 +1,6 @@
 package com.noyhillel.survivalgames.game;
 
 import com.noyhillel.networkengine.util.RandomUtils;
-import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.ArenaException;
@@ -16,6 +15,7 @@ import com.noyhillel.survivalgames.game.voting.VotingSessionDisplay;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.player.PlayerNotFoundException;
 import com.noyhillel.survivalgames.player.StorageError;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -44,7 +44,7 @@ public final class GameManager implements VotingSessionDisplay {
     @Getter private LobbyState lobbyState = LobbyState.PRE_GAME;
 
     /* constants */
-    private static final Integer[] BROADCAST_TIMES = new Integer[] {60, 30, 10, 5, 4, 3, 2, 1};
+    private static final Integer[] BROADCAST_TIMES = new Integer[] {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
     public GameManager() throws GameException {
         plugin = SurvivalGames.getInstance();
@@ -117,15 +117,24 @@ public final class GameManager implements VotingSessionDisplay {
         for (GPlayer player : players) {
             player.resetPlayer();
         }
-        GPlayer victor = this.runningSGGame.getVictor();
+        final GPlayer victor = this.runningSGGame.getVictor();
         victor.setWins(victor.getWins() + 1);
+        if (victor.getPlayer().hasPermission("survivalgames.extra-mutation")) {
+            victor.setMutationCredits(victor.getMutationCredits() + 2);
+            return;
+        }
         victor.setMutationCredits(victor.getMutationCredits() + 1);
+        if (victor.getPlayer().hasPermission("survivalgames.double-points")) {
+            victor.setPoints(victor.getPoints() + 200);
+            return;
+        }
+        victor.setPoints(victor.getPoints() + 100);
         int shutdownCountdownLength = SurvivalGames.getInstance().getConfig().getInt("countdowns.server-shutdown");
         broadcast(MessageManager.getFormat("formats.shutdown", new String[]{"<seconds>", String.valueOf(shutdownCountdownLength)}));
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
-                String format = MessageManager.getFormat("formats.kick-game-over");
+                String format = MessageManager.getFormat("formats.kick-game-over", false, new String[]{"<victor>", victor.getDisplayableName()});
                 for (GPlayer gPlayer : getPlayers()) {
                     try {
                         gPlayer.save();
@@ -191,13 +200,28 @@ public final class GameManager implements VotingSessionDisplay {
     public void clockUpdated(Integer secondsRemain) {
         if (RandomUtils.contains(secondsRemain, BROADCAST_TIMES)) {
             broadcast(MessageManager.getFormat("formats.time-remaining-lobby", new String[]{"<time>", String.valueOf(secondsRemain)}));
-            broadcastSound(Sound.NOTE_PLING); // mineplex
+            broadcastSound(Sound.CLICK);
         }
     }
 
     @Override
     public void votingFailedStart(VotingRestartReason reason) {
-        broadcast(ChatColor.RED + "Could not start game! Reason: " + ChatColor.BOLD + reason.name().toLowerCase());
+        switch (reason) {
+            case FAILURE:
+                broadcast(ChatColor.RED + "Could not start game! Reason: The game has failed to start, restarting countdown!!");
+                break;
+            case FEW_PLAYERS:
+                broadcast(ChatColor.RED + "Could not start game! Reason: There are not enough players to start the game, restarting countdown!");
+                break;
+            case MANY_PLAYERS:
+                broadcast(ChatColor.RED + "Could not start game! Reason: There are too many players to start the game, restarting countdown!");
+                break;
+            case INVALID_ARENA:
+                broadcast(ChatColor.RED + "Could not start game! Reason: The specific Arena is invalid!");
+                break;
+            default:
+                break;
+        }
     }
 
     public void voteFor(Player player, Arena arena) {

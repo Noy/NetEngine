@@ -1,9 +1,6 @@
 package com.noyhillel.survivalgames.game.impl;
 
 import com.noyhillel.networkengine.util.RandomUtils;
-import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
-import com.noyhillel.networkengine.util.player.NetPlayer;
-import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.PointIterator;
@@ -14,6 +11,7 @@ import com.noyhillel.survivalgames.game.countdown.CountdownDelegate;
 import com.noyhillel.survivalgames.game.countdown.GameCountdown;
 import com.noyhillel.survivalgames.game.loots.SGTierUtil;
 import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.utils.inventory.InventoryGUI;
 import com.noyhillel.survivalgames.utils.inventory.InventoryGUIItem;
 import lombok.AccessLevel;
@@ -160,7 +158,7 @@ public final class SGGame implements Listener {
 
     void attemptSpectatorTeleport(GPlayer teleporter, GPlayer target) {
         teleporter.teleport(target.getPlayer().getLocation());
-        teleporter.sendMessage(MessageManager.getFormat("formats.teleport-spectator", new String[]{"<target>", target.getDisplayableName()}));
+        teleporter.sendMessage(MessageManager.getFormat("formats.teleport-spectator", true, new String[]{"<target>", target.getDisplayableName()}));
     }
 
     private GPlayer getGPlayer(Player player) {
@@ -237,7 +235,7 @@ public final class SGGame implements Listener {
             case CUSTOM:
                 break;
         }
-        event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", false, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+        event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getName()}, new String[]{"<fallen>", player.getDisplayableName()}));
         playerDied(getGPlayer(event.getEntity()), cause);
         pendingSpectators.add(getGPlayer(event.getEntity()));
     }
@@ -261,12 +259,15 @@ public final class SGGame implements Listener {
         if (!(egg.getShooter() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
         player.addPotionEffect(PotionEffectType.CONFUSION, 200, 0);
+        player.addPotionEffect(PotionEffectType.BLINDNESS, 30, 0);
         shootFireworks(player, player.getPlayer().getEyeLocation());
         player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", player.getDisplayableName()}));
     }
 
     @EventHandler
-    public void onEggHatch(PlayerEggThrowEvent event) { event.setHatching(true); }
+    public void onEggHatch(PlayerEggThrowEvent event) {
+        event.setHatching(true);
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -290,12 +291,20 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onBlockPlaceEvent(BlockPlaceEvent event) { event.setCancelled(true); }
+    public void onBlockPlaceEvent(BlockPlaceEvent event) {
+        switch (event.getBlock().getType()) {
+            case LEAVES:
+            case WEB:
+            case FIRE:
+                return;
+        }
+        event.setCancelled(true);
+    }
 
     @EventHandler
     public void onPlayerFoodDecrease(FoodLevelChangeEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
-        if (!players.contains(getGPlayer((Player) event.getEntity()))) event.setCancelled(true);
+        if (!players.contains(getGPlayer((Player) event.getEntity()))) event.setCancelled(true); //TODO CHECK
     }
 
     @EventHandler
@@ -304,7 +313,7 @@ public final class SGGame implements Listener {
         boolean spectatorSent = spectators.contains(gPlayer);
         String formatName = spectatorSent ? "chat.spectator-chat" : "chat.player-chat";
         event.setCancelled(true);
-        String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}) + event.getMessage();
+        String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}, new String[]{"<points>", gPlayer.getPoints().toString()}) + event.getMessage();
         for (GPlayer player : getAllPlayers()) {
             if (this.gameState == GameState.OVER || (spectatorSent && (spectators.contains(player) || player.getPlayer().isOp())) || !spectatorSent) player.sendMessage(s);
         }
@@ -341,7 +350,7 @@ public final class SGGame implements Listener {
     private void shootFireworks(GPlayer p, Location location) {
         Firework f = p.getPlayer().getWorld().spawn(location, Firework.class);
         FireworkMeta fm = f.getFireworkMeta();
-        Random r = new Random();
+        Random r = SurvivalGames.getRandom();
         FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean())
                 .withColor(getRandomColor()).withFade(getRandomColor())
                 .with(getFireworkType())
@@ -414,7 +423,14 @@ public final class SGGame implements Listener {
             endGame();
             return;
         }
-        if (gameState == GameState.GAMEPLAY && getPlayers().size() <= deathmatchSize) updateState(); //Triggers deathmatch
+        if (gameState == GameState.GAMEPLAY && getPlayers().size() <= deathmatchSize) {
+            for (MutatedPlayer mutation : this.mutations) {
+                mutation.unMutate();
+                mutation.getPlayer().sendMessage(MessageManager.getFormat("formats.deathmatch-start-unmutate"));
+                mutation.getPlayer().playSound(Sound.BLAZE_DEATH);
+            }
+            updateState(); //Triggers deathmatch
+        }
     }
 
     public void mutatePlayer(GPlayer player) {
@@ -489,6 +505,12 @@ public final class SGGame implements Listener {
         for (MutatedPlayer mutation : this.mutations) mutation.unMutate();
         for (GPlayer gPlayer : getAllPlayers()) gPlayer.resetPlayer();
         for (GPlayer player : this.spectators) showToAllPlayers(player);
+        for (GPlayer gPlayer : getAllPlayers()) {
+            for (int x = 0; x <= 10; x++) {
+                shootFireworks(gPlayer, (Location) arena.getCornicopiaSpawns().getPoints());
+            }
+        }//TODO CHECK THIS
+
         this.manager.gameEnded();
     }
 

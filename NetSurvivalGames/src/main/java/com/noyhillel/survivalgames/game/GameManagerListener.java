@@ -1,8 +1,8 @@
 package com.noyhillel.survivalgames.game;
 
-import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Data;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

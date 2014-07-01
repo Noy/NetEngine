@@ -10,8 +10,6 @@ commands:
     aliases: [m, maps, arena, arenas]
   setup:
     aliases: [se]
-  game:
-    aliases: [g]
   nick:
     aliases: [disguisePlayer, disguise, d]
   stats:

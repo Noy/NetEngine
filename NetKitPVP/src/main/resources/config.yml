@@ -1,0 +1,7 @@
+kit:
+  items:
+    kit1:
+      item: GOLDEN_APPLE
+      name: "&cTest"
+      lore:
+      - '&cClick to go to fire games'

@@ -5,22 +5,22 @@ import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.ArenaMeta;
 import com.noyhillel.survivalgames.arena.Point;
+import com.noyhillel.survivalgames.command.LinkChestsCommand;
 import com.noyhillel.survivalgames.player.GPlayer;
 import lombok.Data;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Data
 public final class ArenaSetup implements SetupSession {
@@ -32,7 +32,7 @@ public final class ArenaSetup implements SetupSession {
     private List<Point> tier1 = new ArrayList<>();
     private List<Point> tier2 = new ArrayList<>();
     private List<Point> cornicopiaSpawns = new ArrayList<>();
-    public static ArenaMeta arenaMeta = new ArenaMeta("Untitled", Arrays.asList("Joey", "Noy"), "Ask an admin for this information.");
+    public static ArenaMeta arenaMeta = new ArenaMeta("Untitled", Arrays.asList("Noy", "Joey"), "Ask an admin for this");
 
     public ArenaSetup(GPlayer player, World world) {
         this.player = player;
@@ -116,24 +116,5 @@ public final class ArenaSetup implements SetupSession {
                 return;
         }
         event.setCancelled(true);
-    }
-
-    public void linkChests(LinkedList<Block> blockList) {
-        for (Block block : blockList) {
-            if (block.getType() == Material.SKULL) {
-                switch (((Skull) block.getState()).getSkullType()) {
-                    case ZOMBIE:
-                        tier1.add(Point.of(block));
-                        block.setType(Material.CHEST);
-                        break;
-                    case CREEPER:
-                        tier2.add(Point.of(block));
-                        block.setType(Material.CHEST);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
     }
 }

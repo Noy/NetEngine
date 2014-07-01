@@ -312,7 +312,7 @@ public final class BGame implements Listener, GameCountdownHandler {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         final NetPlayer playerFromPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
 //        Team teamForPlayer = getTeamForPlayer(playerFromPlayer);
-//        if (playerFromPlayer == null) broadcastMessage("FUCK NIGGERS");
+//        if (playerFromPlayer == null) broadcastMessage("racism...");
 //        if (this.obsidianHolders.get(teamForPlayer).equals(playerFromPlayer)) {
 //            giveTeamObsiRandomly(getTeamForPlayer(playerFromPlayer));
 //            return;

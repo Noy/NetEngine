@@ -4,7 +4,7 @@ minimum-players: 2 #Default, adjust as needed! :3
 deathmatch-size: 4
 storage: debug
 formats:
-  prefix: "&e&l[&6&lSG&e&l] "
+  prefix: "&e&l[&6&lSurvivalGames&e&l] "
   join-msg: "&3<player> &b&l>> &ehas joined &6&lSG&e."
   voted-for-map: "&8You have voted for &6<map>&7!"
   voting-scoreboard-title: "&eType &c/vote [name]"
@@ -12,7 +12,7 @@ formats:
   player-hit-by-snowball: "&6You have been hit by a snowball by &c<player> &6and are slow for &c&l10 &6seconds!"
   player-hit-by-egg: "&a<player> &6has hit you with an &eegg&6!"
   shutdown: "&cThe server will be shutting down in <seconds> seconds!"
-  kick-game-over: "&3The game has ended, and you have been kicked!"
+  kick-game-over: "&3The game has ended! The winner was <victor>"
   disguised-player: "&6You have been disguised as; &5&l<nickname>&6!"
   nick-off: "&cYou have undisguised"
   no-mutation-passes: "&cYou do not have any mutation passes to mutate with!"
@@ -24,13 +24,14 @@ formats:
   unsetlobby: "&6You have unset the lobby!"
   game-countdown: "&6&l<seconds> &5left before the game begins!"
   deathmatch-countdown: "&5Deathmatch starts in &6&l<seconds>"
+  deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
   scoreboard:
     players: "&ePlayers"
     spectators: "&cSpectators:"
     mutations: "&aMutations:"
     title: "&SG"
-  spectator-compass-title: "&aView Spectators"
-  spectator-gui-name: "&5Inventory!"
+  spectator-compass-title: "&aSpectator Compass"
+  spectator-gui-name: "&5Who would you like to spectate?"
   teleport-spectator: "&6Teleported you to &b<target>!"
   mutation-interface-title: "&3Mutate"
   stats:
@@ -45,7 +46,7 @@ database: #MUST CONFIGURE FOR PLUGIN TO WORK PROPERLY
   database: "minecraft"
 countdowns:
   pregame: 60
-  pre-teleport-deathmatch: 61
+  pre-teleport-deathmatch: 60
   post-teleport-deathmatch: 15
   server-shutdown: 10
 sounds:
@@ -64,5 +65,5 @@ arena:
   social-link: "&cWebsite/Social Link: &6&l<social>"
 chat:
   spectator-chat: "&7[&cSpectator&7] &7<player>&a:&f "
-  player-chat: "&7<player>&a:&f "
+  player-chat: "&6[&c<points>&6]&7<player>&a:&f "
   lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "

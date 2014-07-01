@@ -39,7 +39,6 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private GameManager gameManager;
     @Getter private GPlayerManager playerManager;
     @Getter private SetupCommand setupCommand;
-    @Getter private static Random random = new Random();
     @Getter private boolean isSetupOnly = false;
     private static final String ARENA_DIRECTORY = "arenas";
 
@@ -154,7 +153,8 @@ public final class SurvivalGames extends NetPlugin {
 
     private void registerAllCommands() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         setupCommand = registerListener(setupCommands(SetupCommand.class));
-        setupCommands(GameCommand.class);
+        //setupCommands(GameCommand.class);
+        setupCommands(SetMetaCommand.class);
         setupCommands(VoteCommand.class);
         setupCommands(MapCommand.class);
         setupCommands(LinkChestsCommand.class);

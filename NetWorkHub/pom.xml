@@ -37,5 +37,5 @@
         </dependency>
     </dependencies>
 
-    <artifactId>networkengine</artifactId>
+    <artifactId>nethub</artifactId>
 </project>
