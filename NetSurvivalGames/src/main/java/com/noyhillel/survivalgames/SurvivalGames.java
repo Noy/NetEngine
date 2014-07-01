@@ -154,7 +154,6 @@ public final class SurvivalGames extends NetPlugin {
     private void registerAllCommands() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         setupCommand = registerListener(setupCommands(SetupCommand.class));
         //setupCommands(GameCommand.class);
-        setupCommands(SetMetaCommand.class);
         setupCommands(VoteCommand.class);
         setupCommands(MapCommand.class);
         setupCommands(LinkChestsCommand.class);
