@@ -211,10 +211,10 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
      * @param delimiter Separates the Strings, in our case, a space.
      * @return Combination of Arguments.
      */
-    protected final String combineArgs(String[] args, String delimiter) {
+    protected String combineArgs(String[] args, String delimiter) {
         StringBuilder builder = new StringBuilder();
-        for (Integer i = 1; i < args.length; i++) {
-            builder.append(args[i]).append(delimiter);
+        for (String arg : args) {
+            builder.append(arg).append(delimiter);
         }
         builder.setLength(builder.length()-1);
         builder.trimToSize();

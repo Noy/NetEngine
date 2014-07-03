@@ -22,16 +22,17 @@ formats:
   kicked-for-vip: "&cYou have been kicked to make room for a donator/VIP"
   setlobby: "&6You have set the lobby to the location you're standing in!"
   unsetlobby: "&6You have unset the lobby!"
-  game-countdown: "&6&l<seconds> &5left before the game begins!"
-  deathmatch-countdown: "&5Deathmatch starts in &6&l<seconds>"
+  game-countdown: "&6&l<seconds> seconds &5left before the game begins!"
+  deathmatch-countdown: "&5Deathmatch starts in &6&l<seconds> seconds!"
   deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
+  points-got: "&eYou have received &4<points> points &efor that kill!"
   scoreboard:
     players: "&ePlayers"
     spectators: "&cSpectators:"
     mutations: "&aMutations:"
     title: "&SG"
   spectator-compass-title: "&aSpectator Compass"
-  spectator-gui-name: "&5Who would you like to spectate?"
+  spectator-gui-name: "&5Who to?"y
   teleport-spectator: "&6Teleported you to &b<target>!"
   mutation-interface-title: "&3Mutate"
   stats:

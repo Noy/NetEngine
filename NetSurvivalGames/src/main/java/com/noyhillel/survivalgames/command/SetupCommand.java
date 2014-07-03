@@ -1,5 +1,8 @@
 package com.noyhillel.survivalgames.command;
 
+import com.noyhillel.networkengine.exceptions.NewNetCommandException;
+import com.noyhillel.networkengine.newcommand.CommandMeta;
+import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
@@ -18,17 +21,16 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlayer;
+
 @Permission("survivalgames.admin.setup")
-public final class SetupCommand extends AbstractCommandHandler implements Listener {
+@CommandMeta(name = "setup", description = "The Setup Command", usage = "/setup")
+public final class SetupCommand extends NetAbstractCommandHandler implements Listener {
     static final Map<GPlayer, SetupSession> setupSessions = new HashMap<>();
 
-    public SetupCommand() throws CommandException {
-        super("setup", SurvivalGames.getInstance());
-    }
-
     @Override
-    public void executePlayer(Player player, String[] args) throws CommandException {
-        if (args.length == 0) throw new CommandException("Usage: /setup <arena|lobby>", CommandException.ErrorType.Special);
+    public void playerCommand(Player player, String[] args) throws NewNetCommandException {
+        if (args.length == 0) throw new NewNetCommandException("Usage: /setup <arena|lobby>", NewNetCommandException.ErrorType.Special);
         SetupSession session;
         GPlayer gPlayer = resolveGPlayer(player);
         if (args[0].equalsIgnoreCase("arena")) {
@@ -40,7 +42,7 @@ public final class SetupCommand extends AbstractCommandHandler implements Listen
             setupSessions.put(gPlayer, session);
         }
         else if (args[0].equalsIgnoreCase("done")) {
-            if (!setupSessions.containsKey(gPlayer)) throw new CommandException("You are not currently setting up an arena!", CommandException.ErrorType.Special);
+            if (!setupSessions.containsKey(gPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
             SetupSession setupSession = setupSessions.get(gPlayer);
             try {
                 setupSession.commit();
@@ -60,7 +62,7 @@ public final class SetupCommand extends AbstractCommandHandler implements Listen
             return;
         }
         else {
-            throw new CommandException("Use: /setup <arena|lobby>", CommandException.ErrorType.Special);
+            throw new NewNetCommandException("Use: /setup <arena|lobby>", NewNetCommandException.ErrorType.Special);
         }
         session.start();
     }

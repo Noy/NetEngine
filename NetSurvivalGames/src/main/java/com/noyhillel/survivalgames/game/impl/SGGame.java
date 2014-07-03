@@ -133,7 +133,7 @@ public final class SGGame implements Listener {
 
     private void teleportToCornicopia() {
         PointIterator cornicopiaSpawns = this.arena.getCornicopiaSpawns();
-        for (GPlayer gPlayer : players) {
+        for (GPlayer gPlayer : getAllPlayers()) {
             gPlayer.teleport(cornicopiaSpawns.next().toLocation(arenaWorld));
             gPlayer.playSound(Sound.LEVEL_UP);
             gPlayer.setScoreboardTitle(MessageManager.getFormat("scoreboard.title"));
@@ -192,6 +192,10 @@ public final class SGGame implements Listener {
             player.playSound(Sound.GHAST_SCREAM);
             player.sendMessage(ChatColor.RED + "ha u bad, ha you dead");
         }
+        GPlayer killer = getGPlayer(event.getEntity().getKiller());
+        Integer newPoints = killer.getPoints() + SurvivalGames.getRandom().nextInt(100) + 1;
+        killer.setPoints(newPoints);
+        killer.sendMessage(MessageManager.getFormat("formats.points-got", true, new String[]{"<points>", newPoints.toString()}));
         EntityDamageEvent lastDamageCause = event.getEntity().getLastDamageCause();
         EntityDamageEvent.DamageCause cause = lastDamageCause.getCause();
         switch (cause) {
@@ -253,7 +257,7 @@ public final class SGGame implements Listener {
         if (!(snowball.getShooter() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
         player.addPotionEffect(PotionEffectType.SLOW, 210, 1);
-        player.sendMessage(MessageManager.getFormat("formats.player-hit-by-snowball", true, new String[]{"<player>", player.getDisplayableName()}));
+        player.sendMessage(MessageManager.getFormat("formats.player-hit-by-snowball", true, new String[]{"<player>", ((Player) snowball.getShooter()).getName()}));
     }
 
     @EventHandler
@@ -266,7 +270,7 @@ public final class SGGame implements Listener {
         player.addPotionEffect(PotionEffectType.CONFUSION, 200, 0);
         player.addPotionEffect(PotionEffectType.BLINDNESS, 30, 0);
         shootFireworks(player, player.getPlayer().getEyeLocation());
-        player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", player.getDisplayableName()}));
+        player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", ((Player) egg.getShooter()).getName()}));
     }
 
     @EventHandler

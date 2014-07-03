@@ -1,5 +1,6 @@
 package com.noyhillel.survivalgames;
 
+import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.RandomUtils;
@@ -22,6 +23,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -127,13 +129,13 @@ public final class SurvivalGames extends NetPlugin {
 //            registerListener(new ArenaSetup());
         }
     }
-//
-//    public <T extends Listener> T registerListener(T listener) {
+
+//    public <T extends Listener> T registerListeners(T listener) {
 //        getServer().getPluginManager().registerEvents(listener, this);
 //        return listener;
 //    }
 
-    private <T extends AbstractCommandHandler> T setupCommand(Class<T> sgCommand) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private <T extends NetAbstractCommandHandler> T setupCommand(Class<T> sgCommand) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return sgCommand.getDeclaredConstructor().newInstance();
     }
 
