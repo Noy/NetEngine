@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * Created by Noy on 29/05/2014.
  */
-public final class HidePlayersItem extends NetWorkHubItemDelegate {
+public final class HidePlayersItem extends NetHubItemDelegate {
 
     public static Set<UUID> hidingPlayers = new HashSet<>();
 

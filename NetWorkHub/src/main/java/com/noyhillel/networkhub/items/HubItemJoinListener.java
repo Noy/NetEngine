@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public final class HubItemJoinListener extends ModuleListener {
 
-    private ArrayList<NetWorkHubItemDelegate> items;
+    private ArrayList<NetHubItemDelegate> items;
 
     public HubItemJoinListener() {
         super("hub-items");
@@ -35,7 +35,7 @@ public final class HubItemJoinListener extends ModuleListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         player.resetPlayer();
-        for (NetWorkHubItemDelegate item : items) {
+        for (NetHubItemDelegate item : items) {
             if (shouldAdd(event.getPlayer(), item.getItem())) player.getPlayer().getInventory().setItem(item.getItemSlot(), item.getItem());
         }
         if (!HidePlayersItem.hidingPlayers.isEmpty()) {

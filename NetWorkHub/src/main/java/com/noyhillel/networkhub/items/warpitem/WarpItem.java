@@ -4,7 +4,7 @@ import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.InventoryGUI;
 import com.noyhillel.networkhub.MessageManager;
 import com.noyhillel.networkhub.NetHub;
-import com.noyhillel.networkhub.items.NetWorkHubItemDelegate;
+import com.noyhillel.networkhub.items.NetHubItemDelegate;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by Noy on 26/05/2014.
  */
-public final class WarpItem extends NetWorkHubItemDelegate {
+public final class WarpItem extends NetHubItemDelegate {
 
     /**
      * Private field,, the InventoryGUI
