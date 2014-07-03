@@ -1,9 +1,5 @@
 package com.noyhillel.survivalgames.command;
 
-import com.noyhillel.networkengine.exceptions.NewNetCommandException;
-import com.noyhillel.networkengine.newcommand.CommandMeta;
-import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
-import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
@@ -22,22 +18,25 @@ import java.util.List;
 import static com.noyhillel.survivalgames.command.SetupCommand.setupSessions;
 
 @Permission("survivalgames.admin.linkchests")
-@CommandMeta(name = "linkchests", usage = "/linkchests", description = "The Link Chests command.")
-public final class LinkChestsCommand extends NetAbstractCommandHandler {
+public final class LinkChestsCommand extends AbstractCommandHandler {
+
+    public LinkChestsCommand() throws CommandException {
+        super("linkchests", SurvivalGames.getInstance());
+    }
 
     @Override
-    protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
+    protected void executePlayer(Player sender, String[] args) throws CommandException {
         GPlayer gPlayer = resolveGPlayer(sender);
-        if (!setupSessions.containsKey(gPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
+        if (!setupSessions.containsKey(gPlayer)) throw new CommandException("You are not currently setting up an arena!", CommandException.ErrorType.Special);
         SetupSession sSes = setupSessions.get(gPlayer);
-        if (!(sSes instanceof ArenaSetup)) throw new NewNetCommandException("You are not currently setting up an Arena!", NewNetCommandException.ErrorType.Special);
+        if (!(sSes instanceof ArenaSetup)) throw new CommandException("You are not currently setting up an Arena!", CommandException.ErrorType.Special);
         ArenaSetup arenaSetup = (ArenaSetup) sSes;
-        if (args.length < 1) throw new NewNetCommandException("You did not specify enough arguments!", NewNetCommandException.ErrorType.FewArguments);
+        if (args.length < 1) throw new CommandException("You did not specify enough arguments!", CommandException.ErrorType.FewArguments);
         String arg = args[0];
-        if (!(arg.equalsIgnoreCase("tier1") || arg.equalsIgnoreCase("tier2"))) throw new NewNetCommandException("You did not specify a valid argument, needs to be tier1 or tier2!", NewNetCommandException.ErrorType.Special);
+        if (!(arg.equalsIgnoreCase("tier1") || arg.equalsIgnoreCase("tier2"))) throw new CommandException("You did not specify a valid argument, needs to be tier1 or tier2!", CommandException.ErrorType.Special);
         Point l1 = arenaSetup.getL1();
         Point l2 = arenaSetup.getL2();
-        if (l1 == null || l2 == null) throw new NewNetCommandException("You need to specify a region!", NewNetCommandException.ErrorType.Special);
+        if (l1 == null || l2 == null) throw new CommandException("You need to specify a region!", CommandException.ErrorType.Special);
         Double maxX = Math.max(l1.getX(), l2.getX());
         Double maxY = Math.max(l1.getY(), l2.getY());
         Double maxZ = Math.max(l1.getZ(), l2.getZ());
@@ -62,10 +61,6 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
         sender.sendMessage(ChatColor.GREEN + "It's over!! Chests linked = " + pointList.size());
         if (arg.equalsIgnoreCase("tier1")) arenaSetup.setTier1(pointList);
         else if (arg.equalsIgnoreCase("tier2")) arenaSetup.setTier2(pointList);
-        else throw new NewNetCommandException("Lol found all the chests but can't link them!", NewNetCommandException.ErrorType.Special);
-    }
-
-    public static GPlayer resolveGPlayer(Player player) {
-        return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
+        else throw new CommandException("Lol found all the chests but can't link them!", CommandException.ErrorType.Special);
     }
 }

@@ -1,6 +1,7 @@
 package com.noyhillel.survivalgames.game;
 
 import com.noyhillel.survivalgames.SurvivalGames;
+import com.noyhillel.survivalgames.game.impl.SGGame;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Data;
@@ -51,7 +52,7 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(MessageManager.getFormat("formats.join-msg", true, new String[]{"<player>", event.getPlayer().getName()}));
+        event.setJoinMessage(MessageManager.getFormat("formats.join-msg", false, new String[]{"<player>", event.getPlayer().getName()}));
         try {
             gameManager.playerJoined(resolveGPlayer(event.getPlayer()));
         } catch (Exception e) {
@@ -62,7 +63,17 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLeave(PlayerQuitEvent event) {
+        event.setQuitMessage(MessageManager.getFormat("formats.quit-msg", false, new String[]{"<player>", event.getPlayer().getName()}));
         gameManager.playerLeft(resolveGPlayer(event.getPlayer()));
+    }
+
+    @EventHandler
+    public void onPlayerFoodDecrease(FoodLevelChangeEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        SGGame.GameState gameState = SGGame.gameState;
+        if (gameState == SGGame.GameState.GAMEPLAY) return;
+        event.setCancelled(true);
+        //if (!players.contains(getGPlayer((Player) event.getEntity()))) event.setCancelled(true);
     }
 
     @EventHandler
@@ -75,11 +86,6 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler
     public void onBreakBlock(BlockBreakEvent event) {
-        event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onPlayerFoodLevelChange(FoodLevelChangeEvent event) {
         event.setCancelled(true);
     }
 
@@ -128,6 +134,7 @@ public final class GameManagerListener implements Listener {
         event.setCancelled(true);
     }
 
+    @SuppressWarnings("AccessStaticViaInstance")
     @EventHandler
     public void onItemMoveInventory(InventoryClickEvent event) {
         if (gameManager.isPlayingGame() && !gameManager.getRunningSGGame().getSpectators().contains(resolveGPlayer((Player) event.getWhoClicked()))) return;

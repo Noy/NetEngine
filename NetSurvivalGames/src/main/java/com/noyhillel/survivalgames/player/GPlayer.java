@@ -23,12 +23,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, of = {"username"})
 @Data
 public final class GPlayer extends GOfflinePlayer {
+
     private final String username;
-
-    /*
-    stuff
-     */
-
     private Scoreboard playerScoreboard;
     private Objective currentScoreboardObjective;
 
@@ -148,8 +144,9 @@ public final class GPlayer extends GOfflinePlayer {
         this.currentScoreboardObjective.setDisplayName(title);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private void validateScoreboard() {
-        if (this.currentScoreboardObjective == null || this.playerScoreboard == null) throw new IllegalStateException("You cannot set a scoreboard value when there is no objective!");
+        if (this.currentScoreboardObjective == null || this.playerScoreboard == null) {}// throw new IllegalStateException("You cannot set a scoreboard value when there is no objective!");
     }
 
     public void save() throws StorageError, PlayerNotFoundException {

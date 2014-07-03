@@ -6,8 +6,6 @@ import org.bukkit.inventory.ItemStack;
 
 @Data
 public class InventoryGUIItem {
-    @NonNull
-    private final ItemStack representationItem;
-
+    @NonNull private final ItemStack representationItem;
     private Integer slot;
 }

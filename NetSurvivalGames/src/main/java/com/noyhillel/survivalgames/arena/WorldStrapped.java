@@ -13,8 +13,6 @@ import org.bukkit.WorldCreator;
 import org.bukkit.entity.Item;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 @Data
 public abstract class WorldStrapped {
@@ -60,18 +58,21 @@ public abstract class WorldStrapped {
         Bukkit.unloadWorld(loadedWorld, false);
         try {
             deleteDirectory(loadedWorld.getWorldFolder());
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new ArenaException(this, e, "Could not delete world folder on unload!");
         }
         loadedWorld = null;
     }
 
-    private static void deleteDirectory(File file) throws IOException {
-        if (file.isDirectory()) {
-            for (String s : file.list()) {
-                deleteDirectory(new File(file, s));
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static void deleteDirectory(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String aChildren : children) {
+                deleteDirectory(new File(dir, aChildren));
             }
-        } else Files.deleteIfExists(file.toPath());
+        }
+        dir.delete();
     }
 
     public void cleanupDrops() {

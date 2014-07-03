@@ -22,7 +22,7 @@ public class LobbyItemListener implements Listener {
         if (event.getAction() == Action.PHYSICAL) return;
         ItemStack itemInHand = event.getPlayer().getItemInHand();
         if (itemInHand == null) return;
-        if (itemInHand.getItemMeta() == null) return;
+        if (!(itemInHand.hasItemMeta())) return;
         LobbyItem lobbyItem1 = resolveLobbyItem(itemInHand, event.getPlayer().getInventory().getHeldItemSlot());
         if (lobbyItem1 == null) return;
         LobbyItemDefinition lobbyItem = lobbyItem1.getLobbyItemDefinition();
@@ -43,7 +43,7 @@ public class LobbyItemListener implements Listener {
     private LobbyItem resolveLobbyItem(ItemStack stack, Integer slot) {
         for (LobbyItem lobbyItem : gameManager.getLobbyState().getItems()) {
             LobbyItemDefinition lobbyItemDefinition = lobbyItem.getLobbyItemDefinition();
-            if (!lobbyItemDefinition.getSlot().equals(slot+1)) continue;
+            if (!lobbyItemDefinition.getSlot().equals(slot + 1)) continue;
             if (compareItemToLobbyItem(stack, lobbyItemDefinition)) return lobbyItem;
         }
         return null;
@@ -51,7 +51,7 @@ public class LobbyItemListener implements Listener {
 
     private boolean compareItemToLobbyItem(ItemStack itemStack, LobbyItemDefinition lobbyItemDefinition) {
         ItemMeta itemMeta = itemStack.getItemMeta();
-        return itemMeta != null && lobbyItemDefinition.getType().equals(itemStack.getType()) && itemMeta.getDisplayName().equals(lobbyItemDefinition.getTitle());
+        return itemMeta != null && lobbyItemDefinition.getType().equals(itemStack.getType()) && lobbyItemDefinition.getTitle().equalsIgnoreCase(lobbyItemDefinition.getTitle());
     }
 
     private GPlayer resolveGPlayer(Player player) {

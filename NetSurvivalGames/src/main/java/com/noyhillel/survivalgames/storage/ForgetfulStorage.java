@@ -23,17 +23,11 @@ public final class ForgetfulStorage implements GStorage {
     }
 
     @Override
-    public void savePlayer(GPlayer player) throws StorageError {
-
-    }
+    public void savePlayer(GPlayer player) throws StorageError {}
 
     @Override
-    public void startup() throws StorageError {
-
-    }
+    public void startup() throws StorageError {}
 
     @Override
-    public void shutdown() throws StorageError {
-
-    }
+    public void shutdown() throws StorageError {}
 }

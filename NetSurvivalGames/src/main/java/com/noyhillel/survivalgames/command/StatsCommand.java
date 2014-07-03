@@ -1,21 +1,21 @@
 package com.noyhillel.survivalgames.command;
 
-import com.noyhillel.networkengine.exceptions.NewNetCommandException;
-import com.noyhillel.networkengine.newcommand.CommandMeta;
-import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
-import com.noyhillel.survivalgames.utils.MessageManager;
+import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandMeta(name = "stats", usage = "/stats", description = "The stats command.")
-public final class StatsCommand extends NetAbstractCommandHandler {
+public final class StatsCommand extends AbstractCommandHandler {
+    public StatsCommand() throws CommandException {
+        super("stats", SurvivalGames.getInstance());
+    }
 
     @Override
-    public void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        GPlayer gPlayer = LinkChestsCommand.resolveGPlayer(player);
+    public void executePlayer(Player player, String[] args) throws CommandException {
+        GPlayer gPlayer = resolveGPlayer(player);
         List<String> strings = new ArrayList<>();
         strings.add(MessageManager.getFormat("formats.stats.header", false));
         strings.add(getFormattedStat("Kills", gPlayer.getKills()));

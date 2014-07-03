@@ -33,6 +33,12 @@ public enum LobbyItem {
         }
 
         @Override
+        void leftClick(GPlayer player, GameManager manager) { rightClick(player, manager); }
+
+        @Override
+        void rightClick(GPlayer player, GameManager manager) {}
+
+        @Override
         protected ItemStack getItem(GPlayer player, GameManager manager) {
             ItemStack book = new ItemStack(getType());
             BookMeta meta = (BookMeta) book.getItemMeta();
@@ -91,11 +97,11 @@ public enum LobbyItem {
         public void rightClick(GPlayer player, GameManager manager) {
             SGGame runningSGGame = manager.getRunningSGGame();
             if (runningSGGame == null) return;
-            if (player.getMutationCredits() == null || player.getMutationCredits() == 0) {
-                if (player.getPlayer().getName().equalsIgnoreCase("NoyHillel1")) return; // testing
-                player.getPlayer().sendMessage(MessageManager.getFormat("formats.no-mutation-passes"));
-                return;
-            }
+            //TODO ADD THAT BACK AFTER TEST
+//            if (player.getMutationCredits() == null || player.getMutationCredits() == 0) {
+//                player.getPlayer().sendMessage(MessageManager.getFormat("formats.no-mutation-passes"));
+//                return;
+//            }
             runningSGGame.mutatePlayer(player);
         }
 
@@ -103,7 +109,6 @@ public enum LobbyItem {
         public void leftClick(GPlayer player, GameManager manager) {
             rightClick(player, manager);
         }
-
     });
 
     @Getter private final LobbyItemDefinition lobbyItemDefinition;

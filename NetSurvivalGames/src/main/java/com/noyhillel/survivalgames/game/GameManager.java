@@ -118,16 +118,6 @@ public final class GameManager implements VotingSessionDisplay {
             player.resetPlayer();
         }
         final GPlayer victor = this.runningSGGame.getVictor();
-        victor.setWins(victor.getWins() + 1);
-        if (victor.getPlayer().hasPermission("survivalgames.extra-mutation")) {
-            victor.setMutationCredits(victor.getMutationCredits() + 2);
-            return;
-        }
-        victor.setMutationCredits(victor.getMutationCredits() + 1);
-        if (victor.getPlayer().hasPermission("survivalgames.double-points")) {
-            victor.setPoints(victor.getPoints() + 200);
-            return;
-        }
         victor.setPoints(victor.getPoints() + 100);
         int shutdownCountdownLength = SurvivalGames.getInstance().getConfig().getInt("countdowns.server-shutdown");
         broadcast(MessageManager.getFormat("formats.shutdown", new String[]{"<seconds>", String.valueOf(shutdownCountdownLength)}));
@@ -239,6 +229,7 @@ public final class GameManager implements VotingSessionDisplay {
         for (GPlayer gPlayer : getPlayers()) {
             gPlayer.sendMessage(message);
         }
+        SurvivalGames.getInstance().getServer().getConsoleSender().sendMessage(message);
     }
 
     void broadcastSound(Sound sound) {
@@ -249,6 +240,7 @@ public final class GameManager implements VotingSessionDisplay {
 
     /* Game listener methods */
     void playerJoined(GPlayer player) {
+        if (player == null) return;
         player.resetPlayer();
         player.teleport(lobby.getSpawnPoints().next().toLocation(lobby.getLoadedWorld()));
         if (isPlayingGame()) this.runningSGGame.makePlayerSpectator(player);
