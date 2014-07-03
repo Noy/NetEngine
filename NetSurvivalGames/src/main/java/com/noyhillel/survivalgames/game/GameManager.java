@@ -161,7 +161,7 @@ public final class GameManager implements VotingSessionDisplay {
     Set<GPlayer> getPlayers() {
         Set<GPlayer> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            players.add(plugin.getPlayerManager().getOnlinePlayer(player));
+            players.add(plugin.getGPlayerManager().getOnlinePlayer(player));
         }
         return players;
     }
@@ -225,7 +225,7 @@ public final class GameManager implements VotingSessionDisplay {
     }
 
     public void voteFor(Player player, Arena arena) {
-        this.votingSession.handleVote(arena, plugin.getPlayerManager().getOnlinePlayer(player));
+        this.votingSession.handleVote(arena, plugin.getGPlayerManager().getOnlinePlayer(player));
     }
 
     public void setupScoreboard(GPlayer player) {

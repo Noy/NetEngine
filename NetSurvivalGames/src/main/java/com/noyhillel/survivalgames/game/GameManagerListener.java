@@ -89,7 +89,7 @@ public final class GameManagerListener implements Listener {
         String formatName = "chat.lobby-chat";
         event.setCancelled(true);
         String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}) + event.getMessage();
-        for (GPlayer player : SurvivalGames.getInstance().getPlayerManager().getOnlinePlayers().values()) {
+        for (GPlayer player : SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayers().values()) {
             player.sendMessage(s);
         }
     }
@@ -135,6 +135,6 @@ public final class GameManagerListener implements Listener {
     }
 
     private GPlayer resolveGPlayer(Player player) {
-        return plugin.getPlayerManager().getOnlinePlayer(player);
+        return plugin.getGPlayerManager().getOnlinePlayer(player);
     }
 }

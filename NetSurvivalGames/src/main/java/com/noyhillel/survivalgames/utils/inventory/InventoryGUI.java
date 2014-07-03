@@ -70,7 +70,7 @@ public class InventoryGUI implements Listener {
     }
 
     public void open(Player player) {
-        open(SurvivalGames.getInstance().getPlayerManager().getOnlinePlayer(player));
+        open(SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player));
     }
 
     public void open(GPlayer player) {
@@ -117,7 +117,7 @@ public class InventoryGUI implements Listener {
     public void onPlayerInventoryClick(InventoryClickEvent event) {
         HumanEntity whoClicked = event.getWhoClicked();
         if (!(whoClicked instanceof Player)) return;
-        GPlayer gPlayer = SurvivalGames.getInstance().getPlayerManager().getOnlinePlayer((Player) whoClicked);
+        GPlayer gPlayer = SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer((Player) whoClicked);
         if (!this.playersWithInventories.contains(gPlayer)) return;
         event.setCancelled(true);
         event.setResult(Event.Result.DENY);
@@ -135,7 +135,7 @@ public class InventoryGUI implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity player = event.getPlayer();
         if (!(player instanceof Player)) return;
-        GPlayer gPlayer = SurvivalGames.getInstance().getPlayerManager().getOnlinePlayer((Player) player);
+        GPlayer gPlayer = SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer((Player) player);
         if (!this.playersWithInventories.contains(gPlayer)) return;
         closed(gPlayer);
     }

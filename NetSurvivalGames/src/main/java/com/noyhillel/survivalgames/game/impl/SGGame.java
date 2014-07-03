@@ -162,7 +162,7 @@ public final class SGGame implements Listener {
     }
 
     private GPlayer getGPlayer(Player player) {
-        return SurvivalGames.getInstance().getPlayerManager().getOnlinePlayer(player);
+        return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
     }
 
     /*

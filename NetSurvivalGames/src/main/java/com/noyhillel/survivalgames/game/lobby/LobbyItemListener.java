@@ -55,6 +55,6 @@ public class LobbyItemListener implements Listener {
     }
 
     private GPlayer resolveGPlayer(Player player) {
-        return SurvivalGames.getInstance().getPlayerManager().getOnlinePlayer(player);
+        return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
     }
 }

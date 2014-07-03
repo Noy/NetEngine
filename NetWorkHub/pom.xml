@@ -36,6 +36,5 @@
             <version>2.12.0-rc2</version>
         </dependency>
     </dependencies>
-
     <artifactId>nethub</artifactId>
 </project>

@@ -153,7 +153,7 @@ public final class GPlayer extends GOfflinePlayer {
     }
 
     public void save() throws StorageError, PlayerNotFoundException {
-        SurvivalGames.getInstance().getPlayerManager().getStorage().savePlayer(this);
+        SurvivalGames.getInstance().getGPlayerManager().getStorage().savePlayer(this);
     }
 
     @Override

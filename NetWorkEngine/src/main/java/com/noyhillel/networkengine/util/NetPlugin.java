@@ -111,7 +111,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     @SafeVarargs
     public static <T> void logInfo(T... args) {
         for (T t : args) {
-            instance.getServer().getConsoleSender().sendMessage(t.toString());
+            Bukkit.getServer().getLogger().info(t.toString());
         }
     }
 

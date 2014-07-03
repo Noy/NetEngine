@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
 
 @MainClass(name = "NetSurvivalGames", description = "The NetSG Mini-Game!", authors = {"Twister915", "NoyHillel1"})
 public final class SurvivalGames extends NetPlugin {
@@ -37,7 +36,7 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private static SurvivalGames instance;
     @Getter private ArenaManager arenaManager;
     @Getter private GameManager gameManager;
-    @Getter private GPlayerManager playerManager;
+    @Getter private GPlayerManager gPlayerManager;
     @Getter private SetupCommand setupCommand;
     @Getter private boolean isSetupOnly = false;
     private static final String ARENA_DIRECTORY = "arenas";
@@ -78,7 +77,7 @@ public final class SurvivalGames extends NetPlugin {
     }
 
     private void disableTry() throws StorageError, ArenaException {
-        this.playerManager.getStorage().shutdown();
+        this.gPlayerManager.getStorage().shutdown();
         if (this.gameManager != null) gameManager.disable();
     }
 
@@ -95,15 +94,15 @@ public final class SurvivalGames extends NetPlugin {
         }
         GStorage storage = getStorage();
         if (storage == null) fallbackStorage();
-        else this.playerManager = new GPlayerManager(storage);
+        else this.gPlayerManager = new GPlayerManager(storage);
         try {
-            this.playerManager.enable();
+            this.gPlayerManager.enable();
         } catch (StorageError error) {
             error.printStackTrace();
             fallbackStorage();
         }
         registerAllCommands();
-        registerListener(new GPlayerManagerListener(this.playerManager));
+        registerListener(new GPlayerManagerListener(this.gPlayerManager));
         registerListener(new SetupModeListener());
         ConsoleCommandSender consoleSender = getServer().getConsoleSender();
         consoleSender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSurvivalGames&e has been fully enabled!"));
@@ -111,9 +110,9 @@ public final class SurvivalGames extends NetPlugin {
 
     private void fallbackStorage() {
         getLogger().severe("Could not connect to MySQL, defaulting to no-save storage!");
-        this.playerManager = new GPlayerManager(new ForgetfulStorage());
+        this.gPlayerManager = new GPlayerManager(new ForgetfulStorage());
         try {
-            this.playerManager.enable();
+            this.gPlayerManager.enable();
         } catch (StorageError error) {
             error.printStackTrace();
         }

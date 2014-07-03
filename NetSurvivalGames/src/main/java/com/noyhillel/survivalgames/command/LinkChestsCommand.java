@@ -66,6 +66,6 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
     }
 
     public static GPlayer resolveGPlayer(Player player) {
-        return SurvivalGames.getInstance().getPlayerManager().getOnlinePlayer(player);
+        return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
     }
 }
