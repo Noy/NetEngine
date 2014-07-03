@@ -1,6 +1,8 @@
 package com.noyhillel.survivalgames.game;
 
 import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.ArenaException;
@@ -191,6 +193,11 @@ public final class GameManager implements VotingSessionDisplay {
         if (RandomUtils.contains(secondsRemain, BROADCAST_TIMES)) {
             broadcast(MessageManager.getFormat("formats.time-remaining-lobby", new String[]{"<time>", String.valueOf(secondsRemain)}));
             broadcastSound(Sound.CLICK);
+            for (GPlayer gPlayer : getPlayers()) {
+                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.floatValue()/60);
+                NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<seconds>", secondsRemain.toString()}));
+            }
         }
     }
 

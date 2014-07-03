@@ -27,6 +27,7 @@ formats:
   deathmatch-start: "&6Deathmatch is starting! &4Good luck!"
   deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
   points-got: "&eYou have received &4<points> points &efor that kill!"
+  quit-msg: "&3<player> &c&l<< &ehas left &6&lSG&e."
   scoreboard:
     players: "&ePlayers"
     spectators: "&cSpectators:"
@@ -63,10 +64,14 @@ pregame-book:
   author: "NWSG" #Author, should change
   pages: [This is SurvivalGames! Hope you enjoy the game!] #Fill in
 arena:
-  name: "&cThis map is called: &6&l<name>"
-  author: "&cThis map was made by: &6&l<author>"
-  social-link: "&cWebsite/Social Link: &6&l<social>"
+  name: "&cThis map is called: &6<name>"
+  author: "&cThis map was made by: &6<author>"
+  social-link: "&cWebsite/Social Link: &6<social>"
 chat:
   spectator-chat: "&7[&cSpectator&7] &7<player>&a:&f "
   player-chat: "&6[&c<points>&6]&7<player>&a:&f "
   lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "
+enderbar:
+  lobby-time: "&cThere are &6&l<seconds> &cseconds left!"
+  game-countdown-time: "There are &c&l<seconds> &cseconds left!"
+  enderbar.deathmatch-countdown-time: "&c&l<seconds> &5before deathmatch starts!"

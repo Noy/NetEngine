@@ -1,6 +1,8 @@
 package com.noyhillel.survivalgames.game.impl;
 
 import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.PointIterator;
@@ -184,6 +186,7 @@ public final class SGGame implements Listener {
         event.setTo(new Location(from.getWorld(), from.getX(), to.getY(), from.getZ(), to.getYaw(), to.getPitch()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         GPlayer player = getGPlayer(event.getEntity());
@@ -192,10 +195,6 @@ public final class SGGame implements Listener {
             player.playSound(Sound.GHAST_SCREAM);
             player.sendMessage(ChatColor.RED + "ha u bad, ha you dead");
         }
-        GPlayer killer = getGPlayer(event.getEntity().getKiller());
-        Integer newPoints = killer.getPoints() + SurvivalGames.getRandom().nextInt(100) + 1;
-        killer.setPoints(newPoints);
-        killer.sendMessage(MessageManager.getFormat("formats.points-got", true, new String[]{"<points>", newPoints.toString()}));
         EntityDamageEvent lastDamageCause = event.getEntity().getLastDamageCause();
         EntityDamageEvent.DamageCause cause = lastDamageCause.getCause();
         switch (cause) {
@@ -244,6 +243,16 @@ public final class SGGame implements Listener {
             case CUSTOM:
                 break;
         }
+        if (event.getEntity().getKiller() == null) {
+            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+            playerDied(getGPlayer(event.getEntity()), cause);
+            pendingSpectators.add(getGPlayer(event.getEntity()));
+            return;
+        }
+        GPlayer killer = getGPlayer(event.getEntity().getKiller());
+        Integer newPoints = killer.getPoints() + SurvivalGames.getRandom().nextInt(100) + 1;
+        killer.setPoints(newPoints);
+        killer.sendMessage(MessageManager.getFormat("formats.points-got", true, new String[]{"<points>", newPoints.toString()}));
         event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getName()}, new String[]{"<fallen>", player.getDisplayableName()}));
         playerDied(getGPlayer(event.getEntity()), cause);
         pendingSpectators.add(getGPlayer(event.getEntity()));
@@ -493,7 +502,7 @@ public final class SGGame implements Listener {
             //gPlayer.setScoreboardSide(spectatorsFormat, spectatorsSize);
             //gPlayer.setScoreboardSide(playersFormat, playersSize);
             //gPlayer.setScoreboardSide(mutationFormat, mutationSize);
-            //gPlayer.sendMessage(ChatColor.RED + "Welcome, you haved joined as a spectator!");
+            //gPlayer.sendMessage(ChatColor.RED + "Welcome, you have joined as a spectator!");
         }
     }
 
@@ -591,13 +600,26 @@ public final class SGGame implements Listener {
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
-            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) game.broadcast(MessageManager.getFormat("formats.game-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
+                game.broadcast(MessageManager.getFormat("formats.game-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+                for (GPlayer gPlayer : game.getAllPlayers()) {
+                    NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
+                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.game-countdown-time", false, new String[]{"<seconds>", secondsRemaining.toString()}));
+                }
+            }
             if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
             if (RandomUtils.contains(secondsRemaining, secondsToSoundHigher)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound-higher")), 0.5F);
         }
 
         @Override
-        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) { game.updateState(); }
+        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
+            game.updateState();
+            for (GPlayer gPlayer : game.getAllPlayers()) {
+                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                NetEnderHealthBarEffect.remove(playerFromNetPlayer);
+            }
+        }
     }
 
     @Data
@@ -605,12 +627,20 @@ public final class SGGame implements Listener {
         private final SGGame game;
         private static Integer[] secondsToBroadcast = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
         private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
         @Override
         public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
-            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
+                game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+                for (GPlayer gPlayer : game.getAllPlayers()) {
+                    NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
+                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false, new String[]{"<seconds>", secondsRemaining.toString()}));
+                }
+            }
             if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
         }
 

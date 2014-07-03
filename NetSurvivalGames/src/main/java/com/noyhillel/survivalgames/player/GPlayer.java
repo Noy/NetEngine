@@ -1,6 +1,7 @@
 package com.noyhillel.survivalgames.player;
 
 import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,6 +51,10 @@ public final class GPlayer extends GOfflinePlayer {
 
     public Player getPlayer() {
         return Bukkit.getPlayerExact(this.username);
+    }
+
+    public NetPlayer getPlayerFromNetPlayer() {
+        return NetPlayer.getPlayerFromPlayer(getPlayer());
     }
 
     public void resetPlayer() {
