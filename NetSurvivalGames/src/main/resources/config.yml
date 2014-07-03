@@ -32,7 +32,7 @@ formats:
     mutations: "&aMutations:"
     title: "&SG"
   spectator-compass-title: "&aSpectator Compass"
-  spectator-gui-name: "&5Who to?"y
+  spectator-gui-name: "&5Who to?"
   teleport-spectator: "&6Teleported you to &b<target>!"
   mutation-interface-title: "&3Mutate"
   stats:
