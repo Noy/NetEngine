@@ -16,14 +16,15 @@ formats:
   disguised-player: "&6You have been disguised as; &5&l<nickname>&6!"
   nick-off: "&cYou have undisguised"
   no-mutation-passes: "&cYou do not have any mutation passes to mutate with!"
-  tribute-fallen: "&5<fallen> &6was killed by &6<killer>"
-  game-start: "&6&lA new game of SurvivalGames has begun! Good luck!"
+  tribute-fallen: "&5<fallen> &6was killed by &5<killer>"
+  game-start: "&6A new game of SurvivalGames has begun! Good luck!"
   winner: "&6&l<victor> &chas won the &6&lSurvivalGames!"
   kicked-for-vip: "&cYou have been kicked to make room for a donator/VIP"
   setlobby: "&6You have set the lobby to the location you're standing in!"
   unsetlobby: "&6You have unset the lobby!"
   game-countdown: "&6&l<seconds> seconds &5left before the game begins!"
   deathmatch-countdown: "&5Deathmatch starts in &6&l<seconds> seconds!"
+  deathmatch-start: "&6Deathmatch is starting! &4Good luck!"
   deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
   points-got: "&eYou have received &4<points> points &efor that kill!"
   scoreboard:
@@ -56,6 +57,7 @@ sounds:
 mutation:
   disguise: "ZOMBIE"
   potion-effect-level: 3
+pregame-book:
 pregame-book:
   title: "&cSurvivalGames"
   author: "NWSG" #Author, should change
