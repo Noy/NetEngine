@@ -81,7 +81,7 @@ public final class WarpItem extends NetHubItemDelegate {
         lore.add(MessageManager.getFormat("warp-item.item-lore", false));
         meta.setLore(lore);
         item.setItemMeta(meta);
-        return new ItemStack(item);
+        return item;
     }
 
     /**

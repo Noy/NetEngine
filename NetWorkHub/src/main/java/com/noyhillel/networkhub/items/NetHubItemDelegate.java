@@ -39,10 +39,10 @@ public abstract class NetHubItemDelegate implements Listener {
 
     /**
      * Creating our constructor.
-     * @param b Boolean to verify registering our events.
+     * @param shouldRegisterEvents Boolean to verify registering our events.
      */
-    public NetHubItemDelegate(Boolean b) {
-        if (b) NetHub.getInstance().registerListener(this);
+    public NetHubItemDelegate(Boolean shouldRegisterEvents) {
+        if (shouldRegisterEvents) NetHub.getInstance().registerListener(this);
         // super(true) to register event below.
     }
 

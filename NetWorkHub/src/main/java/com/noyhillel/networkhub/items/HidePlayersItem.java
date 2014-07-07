@@ -37,7 +37,7 @@ public final class HidePlayersItem extends NetHubItemDelegate {
         lore.add(MessageManager.getFormat("hide-item.item-lore", false));
         meta.setLore(lore);
         item.setItemMeta(meta);
-        return new ItemStack(item);
+        return item;
     }
 
     /**

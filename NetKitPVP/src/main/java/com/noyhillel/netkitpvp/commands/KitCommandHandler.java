@@ -1,7 +1,6 @@
 package com.noyhillel.netkitpvp.commands;
 
 import com.noyhillel.netkitpvp.game.ConfigManager;
-import com.noyhillel.networkengine.exceptions.NetCommandException;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.util.player.NetPlayer;

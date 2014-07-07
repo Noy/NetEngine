@@ -58,7 +58,7 @@ public final class NetPlayer {
         player.setHealth(player.getMaxHealth());
         player.setSaturation(0);
         player.setFoodLevel(20);
-        player.getInventory().clear();
+        clearInventory();
     }
 
     public void restorePlayer() {
@@ -265,8 +265,16 @@ public final class NetPlayer {
         return this.getPlayer().hasPlayedBefore();
     }
 
-    public void setFlying(Boolean allowFlight) {
+    public void setFlying(boolean allowFlight) {
         this.getPlayer().setAllowFlight(allowFlight);
+    }
+
+    public Double getHealth() {
+        return this.getPlayer().getHealth();
+    }
+
+    public Integer getFoodLevel() {
+        return this.getPlayer().getFoodLevel();
     }
 
     public String getName() {
