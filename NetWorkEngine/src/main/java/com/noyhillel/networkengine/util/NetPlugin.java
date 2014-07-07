@@ -95,7 +95,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
         file.delete();
     }
 
-    protected final <T extends Listener> T registerListener(T listener) {
+    public final <T extends Listener> T registerListener(T listener) {
         getServer().getPluginManager().registerEvents(listener, this);
         return listener;
     }
@@ -109,7 +109,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     }
 
     @SafeVarargs
-    protected static <T> void logInfo(T... args) {
+    public static <T> void logInfo(T... args) {
         for (T t : args) {
             Bukkit.getServer().getLogger().info(t.toString());
         }
