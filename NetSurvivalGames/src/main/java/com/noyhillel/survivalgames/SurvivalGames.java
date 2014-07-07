@@ -50,7 +50,7 @@ public final class SurvivalGames extends NetPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer(ChatColor.RED + "Server reloading!");
         }
-        print(ChatColor.YELLOW + "Bootstrapping SurvivalGames!");
+        logInfoInColor(ChatColor.YELLOW + "Bootstrapping SurvivalGames!");
         try {
             saveDefaultConfig();
             SurvivalGames.instance = this;
@@ -65,15 +65,14 @@ public final class SurvivalGames extends NetPlugin {
 
     @Override
     protected void disable() {
-        print(ChatColor.YELLOW + "Disabling SurvivalGames!");
+        logInfoInColor(ChatColor.YELLOW + "Disabling SurvivalGames!");
         try {
             tryDisable();
             SurvivalGames.instance = null;
         } catch (Throwable t) {
             t.printStackTrace();
-            return;
         }
-        print(ChatColor.GREEN + "SurvivalGames is disabled completely!");
+        logInfoInColor(ChatColor.GREEN + "SurvivalGames is disabled completely!");
     }
 
     private void tryDisable() throws StorageError, ArenaException {
@@ -81,7 +80,6 @@ public final class SurvivalGames extends NetPlugin {
         if (this.gameManager != null) gameManager.disable();
     }
 
-    // So we can catch errors like a boss
     private void tryEnable() throws ArenaException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         this.arenaManager = new JSONArenaManager(new File(getDataFolder(), ARENA_DIRECTORY), getLogger());
         try {
@@ -102,14 +100,14 @@ public final class SurvivalGames extends NetPlugin {
             fallbackStorage();
         }
         registerListener(new GPlayerManagerListener(this.gPlayerManager));
-        setupCommand(VoteCommand.class);
-        setupCommand(MapCommand.class);
-        setupCommand(LinkChestsCommand.class);
-        setupCommand = registerListener(setupCommand(SetupCommand.class));
+        setupCommands(VoteCommand.class);
+        setupCommands(MapCommand.class);
+        setupCommands(LinkChestsCommand.class);
+        setupCommand = registerListener(setupCommands(SetupCommand.class));
         registerListener(new SetupModeListener());
-        setupCommand(NickCommand.class);
-        setupCommand(StatsCommand.class);
-        print(ChatColor.translateAlternateColorCodes('&', "&6SurvivalGames&a has been fully enabled!"));
+        setupCommands(NickCommand.class);
+        setupCommands(StatsCommand.class);
+        logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&6SurvivalGames&a has been fully enabled!"));
     }
 
     private void fallbackStorage() {
@@ -125,12 +123,7 @@ public final class SurvivalGames extends NetPlugin {
     private void onSuccessfulEnable() {
         if (isSetupOnly) {
             getLogger().warning("SurvivalGames is in SETUP MODE only. This will prevent all non-OPs from logging in.");
-//            registerListener(new ArenaSetup());
         }
-    }
-
-    private <T extends NetAbstractCommandHandler> T setupCommand(Class<T> sgCommand) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        return sgCommand.getDeclaredConstructor().newInstance();
     }
 
     private GStorage getStorage() {
@@ -155,12 +148,5 @@ public final class SurvivalGames extends NetPlugin {
             return null;
         }
         return builder.toString();
-    }
-
-    @SafeVarargs
-    private final <T> void print(T... args) {
-        for (T msg : args) {
-            getServer().getConsoleSender().sendMessage(msg.toString());
-        }
     }
 }

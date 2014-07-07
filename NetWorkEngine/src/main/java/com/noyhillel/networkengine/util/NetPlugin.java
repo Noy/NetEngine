@@ -95,7 +95,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
         file.delete();
     }
 
-    public final <T extends Listener> T registerListener(T listener) {
+    protected final <T extends Listener> T registerListener(T listener) {
         getServer().getPluginManager().registerEvents(listener, this);
         return listener;
     }
@@ -109,16 +109,22 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     }
 
     @SafeVarargs
-    public static <T> void logInfo(T... args) {
+    protected static <T> void logInfo(T... args) {
         for (T t : args) {
             Bukkit.getServer().getLogger().info(t.toString());
+        }
+    }
+
+    @SafeVarargs
+    protected final <T> void logInfoInColor(T... args) {
+        for (T msg : args) {
+            getServer().getConsoleSender().sendMessage(msg.toString());
         }
     }
 
     @Override
     public void handleCommand(CommandStatus status, CommandSender sender, NetCommandSenders senders) {}
 
-    @SneakyThrows
     private void registerPluginMeta() {
         registerDescription();
         registerWebsite();
