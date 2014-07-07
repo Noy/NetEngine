@@ -100,7 +100,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
         return listener;
     }
 
-    protected final  <T extends NetAbstractCommandHandler> T setupCommands(Class<T> sgCommand) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    protected final <T extends NetAbstractCommandHandler> T setupCommands(Class<T> sgCommand) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return sgCommand.getDeclaredConstructor().newInstance();
     }
 

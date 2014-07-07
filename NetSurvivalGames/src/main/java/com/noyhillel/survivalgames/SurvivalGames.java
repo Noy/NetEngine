@@ -129,11 +129,6 @@ public final class SurvivalGames extends NetPlugin {
         }
     }
 
-//    public <T extends Listener> T registerListeners(T listener) {
-//        getServer().getPluginManager().registerEvents(listener, this);
-//        return listener;
-//    }
-
     private <T extends NetAbstractCommandHandler> T setupCommand(Class<T> sgCommand) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return sgCommand.getDeclaredConstructor().newInstance();
     }
