@@ -26,10 +26,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public final class GameManager implements VotingSessionDisplay {
     @Getter private SGGame runningSGGame = null;
@@ -46,7 +43,7 @@ public final class GameManager implements VotingSessionDisplay {
     @Getter private LobbyState lobbyState = LobbyState.PRE_GAME;
 
     /* constants */
-    private static final Integer[] BROADCAST_TIMES = new Integer[] {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    private static final Integer[] BROADCAST_TIMES = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
     public GameManager() throws GameException {
         plugin = SurvivalGames.getInstance();
@@ -191,8 +188,10 @@ public final class GameManager implements VotingSessionDisplay {
     @Override
     public void clockUpdated(Integer secondsRemain) {
         if (RandomUtils.contains(secondsRemain, BROADCAST_TIMES)) {
-            broadcast(MessageManager.getFormat("formats.time-remaining-lobby", new String[]{"<time>", String.valueOf(secondsRemain)}));
+            broadcast(MessageManager.getFormat("formats.time-remaining-lobby", new String[]{"<time>", secondsRemain.toString()}));
             broadcastSound(Sound.CLICK);
+        }
+        if (secondsRemain <= 60 && secondsRemain >= 1) {
             for (GPlayer gPlayer : getPlayers()) {
                 NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
                 NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.floatValue()/60);

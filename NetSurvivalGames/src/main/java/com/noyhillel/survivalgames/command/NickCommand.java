@@ -4,7 +4,7 @@ package com.noyhillel.survivalgames.command;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
-import com.noyhillel.survivalgames.SurvivalGames;
+import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.game.impl.SGGame;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;

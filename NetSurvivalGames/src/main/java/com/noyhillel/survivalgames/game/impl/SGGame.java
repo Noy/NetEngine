@@ -524,7 +524,7 @@ public final class SGGame implements Listener {
                 gameCountdown1.start();
                 break;
             case PRE_DEATHMATCH_COUNTDOWN:
-                GameCountdown countdown2 = new GameCountdown(new PreDeathmatchCountdownResponder(this), plugin.getConfig().getInt("countdowns.post-teleport-deathmatch"));
+                GameCountdown countdown2 = new GameCountdown(new DeathmatchCountdownResponder(this), plugin.getConfig().getInt("countdowns.post-teleport-deathmatch"));
                 countdown2.start();
                 gameState = GameState.DEATHMATCH_COUNTDOWN;
                 teleportToCornicopia();
@@ -593,7 +593,7 @@ public final class SGGame implements Listener {
     private static final class PregameCountdownResponder implements CountdownDelegate {
         private final SGGame game;
         private static Integer[] secondsToBroadcast = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        private static Integer[] secondsToSound = {30, 10, 9, 8, 7, 6};
+        private static Integer[] secondsToSound = {45, 30, 15, 10, 9, 8, 7, 6};
         private static Integer[] secondsToSoundHigher = {5, 4, 3, 2, 1};
         @Override
         public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
@@ -602,6 +602,8 @@ public final class SGGame implements Listener {
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
             if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
                 game.broadcast(MessageManager.getFormat("formats.game-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+            }
+            if (secondsRemaining <= 60 && secondsRemaining >= 1) {
                 for (GPlayer gPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
                     NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
@@ -635,6 +637,8 @@ public final class SGGame implements Listener {
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
             if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
                 game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+            }
+            if (secondsRemaining <= 60 && secondsRemaining >= 1) {
                 for (GPlayer gPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
                     NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
@@ -645,6 +649,46 @@ public final class SGGame implements Listener {
         }
 
         @Override
-        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) { game.updateState(); }
+        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
+            game.updateState();
+            for (GPlayer gPlayer : game.getAllPlayers()) {
+                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                NetEnderHealthBarEffect.remove(playerFromNetPlayer);
+            }
+        }
+    }
+
+    @Data
+    private static final class DeathmatchCountdownResponder implements CountdownDelegate {
+        private final SGGame game;
+        private static Integer[] secondsToBroadcast = {15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
+        @Override
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
+
+        @Override
+        public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
+            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
+                game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
+            }
+            if (secondsRemaining <= 15 && secondsRemaining >= 1) {
+                for (GPlayer gPlayer : game.getAllPlayers()) {
+                    NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
+                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false, new String[]{"<seconds>", secondsRemaining.toString()}));
+                }
+            }
+            if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
+        }
+
+        @Override
+        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
+            game.updateState();
+            for (GPlayer gPlayer : game.getAllPlayers()) {
+                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                NetEnderHealthBarEffect.remove(playerFromNetPlayer);
+            }
+        }
     }
 }

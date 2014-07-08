@@ -73,5 +73,5 @@ chat:
   lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "
 enderbar:
   lobby-time: "&cThere are &6&l<seconds> &cseconds left!"
-  game-countdown-time: "There are &c&l<seconds> &cseconds left!"
-  enderbar.deathmatch-countdown-time: "&c&l<seconds> &5before deathmatch starts!"
+  game-countdown-time: "&6There are &c&l<seconds> &6seconds left!"
+  deathmatch-countdown-time: "&c&l<seconds> &5before deathmatch starts!"

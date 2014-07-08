@@ -3,6 +3,7 @@ package com.noyhillel.survivalgames.command;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
+import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
@@ -23,7 +24,6 @@ import static com.noyhillel.survivalgames.command.SetupCommand.setupSessions;
 @Permission("survivalgames.admin.linkchests")
 @CommandMeta(name = "linkchests", description = "The Link Chests Command", usage = "/linkchests")
 public final class LinkChestsCommand extends NetAbstractCommandHandler {
-
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
