@@ -1,6 +1,6 @@
 package com.noyhillel.battledome.game;
 
-import com.noyhillel.battledome.Battledome;
+import com.noyhillel.battledome.NetBD;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import org.bukkit.Material;
 
@@ -36,7 +36,7 @@ public enum Phase {
         public void update(BGame game) {
 
         }
-    }, Battledome.getInstance().getConfig().getInt("formats.build-phase-time", 600), "Build Phase"),
+    }, NetBD.getInstance().getConfig().getInt("formats.build-phase-time", 600), "Build Phase"),
     BATTLE(new GameListenerDelegate() {
         @Override
         public boolean canPvp() {

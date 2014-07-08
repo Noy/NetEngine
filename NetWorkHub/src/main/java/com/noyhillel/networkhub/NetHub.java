@@ -3,9 +3,9 @@ package com.noyhillel.networkhub;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.config.YAMLConfigurationFile;
-import com.noyhillel.networkengine.util.player.mongo.DatabaseConnectException;
-import com.noyhillel.networkengine.util.player.mongo.DefaultProvider;
-import com.noyhillel.networkengine.util.player.mongo.Provider;
+import com.noyhillel.networkengine.mongo.DatabaseConnectException;
+import com.noyhillel.networkengine.mongo.DefaultProvider;
+import com.noyhillel.networkengine.mongo.Provider;
 import com.noyhillel.networkengine.util.utils.NetWorkCoolDown;
 import com.noyhillel.networkhub.commands.*;
 import com.noyhillel.networkhub.items.HubItemJoinListener;
@@ -33,7 +33,7 @@ public final class NetHub extends NetPlugin {
             NetHub.instance = this;
             Integer delay = getConfig().getInt("announcer.delay", 60);
             getServer().getScheduler().scheduleSyncRepeatingTask(this, new Announcer(this), 20 * delay, 20 * delay);
-            this.getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + "Hub Plugin >> Successfully enabled!");
+            logInfoInColor(ChatColor.GREEN + "Hub Plugin >> Successfully enabled!");
             registerAllListeners();
             registerAllNetCommands();
             registerOtherCommands();
@@ -49,7 +49,7 @@ public final class NetHub extends NetPlugin {
 
     @Override
     protected void disable() {
-        this.getServer().getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "Hub Plugin >> Successfully disabled!");
+        logInfoInColor(ChatColor.DARK_RED + "Hub Plugin >> Successfully disabled!");
     }
 
     private void registerAllListeners() {

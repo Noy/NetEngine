@@ -1,6 +1,6 @@
 package com.noyhillel.battledome.commands;
 
-import com.noyhillel.battledome.Battledome;
+import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.MessageManager;
 import com.noyhillel.battledome.exceptions.BattledomeException;
 import com.noyhillel.battledome.game.BGame;
@@ -10,8 +10,6 @@ import com.noyhillel.networkengine.command.CommandHandler;
 import com.noyhillel.networkengine.command.CommandStatus;
 import com.noyhillel.networkengine.command.NetCommand;
 import com.noyhillel.networkengine.command.NetCommandSenders;
-import com.noyhillel.networkengine.util.NetPlugin;
-import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +36,7 @@ public final class BGameUtils implements CommandHandler, Listener {
 
     @Override
     public void handleCommand(CommandStatus commandStatus, CommandSender commandSender, NetCommandSenders commandSenders) {
-        Battledome.getInstance().handleCommand(commandStatus, commandSender, commandSenders);
+        NetBD.getInstance().handleCommand(commandStatus, commandSender, commandSenders);
     }
 
     @NetCommand(

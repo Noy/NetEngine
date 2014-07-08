@@ -1,6 +1,6 @@
 package com.noyhillel.battledome.game;
 
-import com.noyhillel.battledome.Battledome;
+import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.MessageManager;
 import com.noyhillel.networkengine.game.arena.Point;
 import com.noyhillel.networkengine.game.countdown.GameCountdown;
@@ -53,7 +53,7 @@ public final class BGame implements Listener, GameCountdownHandler {
     }
 
     void startGame() {
-        Battledome.getInstance().registerListener(this);
+        NetBD.getInstance().registerListener(this);
         randomisePlayersIntoTeams();
         for (NetPlayer player : playerSet) {
             playerStartsGame(player);
@@ -109,7 +109,7 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     private void performPhaseUpdate() {
         if (this.phase.getLength() == -1) this.gameCountdown = null;
-        else (this.gameCountdown = new GameCountdown(phase.getLength(), this, Battledome.getInstance())).start();
+        else (this.gameCountdown = new GameCountdown(phase.getLength(), this, NetBD.getInstance())).start();
         broadcastSound(Sound.WITHER_DEATH, 0.5F);
         broadcastMessage(MessageManager.getFormat("formats.phase-start", true, new String[]{"<phase>", this.phase.getName()}));
         updateInterfaces();
@@ -167,7 +167,7 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     private void giveTeamObsiRandomly(Team team) {
         List<NetPlayer> playersForTeam = getPlayersForTeam(team);
-        NetPlayer player = playersForTeam.get(Battledome.getRandom().nextInt(playersForTeam.size()));
+        NetPlayer player = playersForTeam.get(NetBD.getRandom().nextInt(playersForTeam.size()));
         player.giveItem(Material.OBSIDIAN, 1, (short)0, MessageManager.getFormat("formats.team-obsidian", false, new String[]{"<team>", team.toString()}));
         player.sendMessage(MessageManager.getFormat("formats.holding-team-obsidian"));
         this.obsidianHolders.put(team, player);
@@ -213,7 +213,7 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     private void finishGame() {
         broadcastMessage(MessageManager.getFormat("formats.game-ending"));
-        Bukkit.getScheduler().runTaskLater(Battledome.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), new Runnable() {
             @Override
             public void run() {
                 Bukkit.shutdown();
@@ -317,7 +317,7 @@ public final class BGame implements Listener, GameCountdownHandler {
 //            giveTeamObsiRandomly(getTeamForPlayer(playerFromPlayer));
 //            return;
 //        }
-        Bukkit.getScheduler().runTask(Battledome.getInstance(), new Runnable() {
+        Bukkit.getScheduler().runTask(NetBD.getInstance(), new Runnable() {
             @Override
             public void run() {
                 if (phase.getGameListenerDelegate().makeSpectatorOnDeath()) {

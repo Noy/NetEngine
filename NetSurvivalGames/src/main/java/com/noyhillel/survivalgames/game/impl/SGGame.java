@@ -2,6 +2,7 @@ package com.noyhillel.survivalgames.game.impl;
 
 import com.noyhillel.networkengine.util.RandomUtils;
 import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
+import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
@@ -21,9 +22,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Egg;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
@@ -274,7 +273,7 @@ public final class SGGame implements Listener {
         GPlayer player = getGPlayer((Player) event.getEntity());
         player.addPotionEffect(PotionEffectType.CONFUSION, 200, 0);
         player.addPotionEffect(PotionEffectType.BLINDNESS, 30, 0);
-        shootFireworks(player, player.getPlayer().getEyeLocation());
+        NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
         player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", ((Player) egg.getShooter()).getName()}));
     }
 
@@ -315,14 +314,6 @@ public final class SGGame implements Listener {
         event.setCancelled(true);
     }
 
-//    @EventHandler
-//    public void onPlayerFoodDecrease(FoodLevelChangeEvent event) {
-//        if (!(event.getEntity() instanceof Player)) return;
-//        if (gameState != GameState.GAMEPLAY) return;
-//        event.setCancelled(true);
-//        //if (!players.contains(getGPlayer((Player) event.getEntity()))) event.setCancelled(true);
-//    }
-
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         GPlayer gPlayer = getGPlayer(event.getPlayer());
@@ -361,30 +352,6 @@ public final class SGGame implements Listener {
         }
         GPlayer gDamager = getGPlayer((Player) event.getDamager());
         if (!players.contains(gDamager)) event.setCancelled(true);
-    }
-
-    private void shootFireworks(GPlayer p, Location location) {
-        Firework f = p.getPlayer().getWorld().spawn(location, Firework.class);
-        FireworkMeta fm = f.getFireworkMeta();
-        Random r = SurvivalGames.getRandom();
-        FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean())
-                .withColor(getRandomColor()).withFade(getRandomColor())
-                .with(getFireworkType())
-                .trail(r.nextBoolean()).build();
-        fm.addEffect(effect);
-        Integer power = r.nextInt(1)+1;
-        fm.setPower(power);
-        f.setFireworkMeta(fm);
-    }
-
-    private static Color getRandomColor() {
-        DyeColor[] values = DyeColor.values();
-        return values[SurvivalGames.getRandom().nextInt(values.length)].getColor();
-    }
-
-    private static Type getFireworkType() {
-        Type[] values = Type.values();
-        return values[SurvivalGames.getRandom().nextInt(values.length)];
     }
 
     private void playerDied(GPlayer player, EntityDamageEvent.DamageCause reason) {

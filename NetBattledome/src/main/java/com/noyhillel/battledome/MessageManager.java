@@ -21,7 +21,7 @@ public final class MessageManager {
     }
 
     public static String getFormat(String format, String[]... dataArgs) {
-        FileConfiguration config = Battledome.getInstance().getConfig();
+        FileConfiguration config = NetBD.getInstance().getConfig();
         if (!config.contains(format)) return format;
         Object t = config.get(format);
         String tigga;
