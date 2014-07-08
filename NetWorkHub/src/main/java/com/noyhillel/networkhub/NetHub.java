@@ -71,6 +71,7 @@ public final class NetHub extends NetPlugin {
         registerCommands(new CommandSpyCommand());
         registerCommands(new NickNameCommand());
         registerCommands(new FlyCommand());
+        registerCommands(new WhoIsCommand());
     }
 
     @SneakyThrows
