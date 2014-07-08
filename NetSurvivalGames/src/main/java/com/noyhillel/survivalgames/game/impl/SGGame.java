@@ -260,7 +260,8 @@ public final class SGGame implements Listener {
         Snowball snowball = (Snowball) event.getDamager();
         if (!(snowball.getShooter() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
-        player.addPotionEffect(PotionEffectType.SLOW, 210, 1);
+        player.addPotionEffect(PotionEffectType.SLOW, 2, 11);
+        NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
         player.sendMessage(MessageManager.getFormat("formats.player-hit-by-snowball", true, new String[]{"<player>", ((Player) snowball.getShooter()).getName()}));
     }
 
@@ -271,8 +272,8 @@ public final class SGGame implements Listener {
         Egg egg = (Egg) event.getDamager();
         if (!(egg.getShooter() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
-        player.addPotionEffect(PotionEffectType.CONFUSION, 200, 0);
-        player.addPotionEffect(PotionEffectType.BLINDNESS, 30, 0);
+        player.addPotionEffect(PotionEffectType.CONFUSION, 2, 10);
+        player.addPotionEffect(PotionEffectType.BLINDNESS, 2, 5);
         NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
         player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", ((Player) egg.getShooter()).getName()}));
     }
@@ -328,11 +329,6 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onPlayerEntityInteract(PlayerInteractEntityEvent event) {
-        event.setCancelled(true);
-    }
-
-    @EventHandler
     public void onHangingDestroyEvent(HangingBreakByEntityEvent event) {
         event.setCancelled(true);
     }
@@ -346,6 +342,8 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onPlayerAttack(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Egg) return;
+        if (event.getDamager() instanceof Snowball) return;
         if (!(event.getDamager() instanceof Player)) {
             event.setCancelled(true);
             return;
@@ -535,6 +533,13 @@ public final class SGGame implements Listener {
         for (GPlayer gPlayer : getAllPlayers()) gPlayer.resetPlayer();
         for (GPlayer player : spectators) showToAllPlayers(player);
         this.manager.gameEnded();
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                NetFireworkEffect.shootFireWorks(victor.getPlayerFromNetPlayer(), victor.getPlayer().getLocation());
+                NetFireworkEffect.shootFireWorks(victor.getPlayerFromNetPlayer(), arena.getCornicopiaSpawns().random().toLocation(arenaWorld));
+            }
+        }, 20L, 40L);
     }
 
     private void showToAllPlayers(GPlayer player) {

@@ -9,7 +9,7 @@ formats:
   voted-for-map: "&8You have voted for &6<map>&7!"
   voting-scoreboard-title: "&eType &c/vote [name]"
   time-remaining-lobby: "&7There are &e<time>&7 seconds until the game starts!"
-  player-hit-by-snowball: "&6You have been hit by a snowball by &c<player> &6and are slow for &c&l10 &6seconds!"
+  player-hit-by-snowball: "&c<player> &6has hit you with a snowball!"
   player-hit-by-egg: "&a<player> &6has hit you with an &eegg&6!"
   shutdown: "&cThe server will be shutting down in <seconds> seconds!"
   kick-game-over: "&3The game has ended! The winner was <victor>"
