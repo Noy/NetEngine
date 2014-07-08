@@ -9,9 +9,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-/**
- * Created by Noy on 28/05/2014.
- */
 public final class Packet18SpawnMob extends AbstractPacket {
 
     public static final Integer ID = 24;

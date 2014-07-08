@@ -5,9 +5,6 @@ import com.google.common.primitives.Ints;
 
 import java.util.List;
 
-/**
- * Created by Noy on 28/05/2014.
- */
 public final class Packet1DDestroyEntity extends AbstractPacket {
     public static final Integer ID = 29;
 

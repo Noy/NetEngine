@@ -4,9 +4,6 @@ import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.PacketContainer;
 import lombok.Getter;
 
-/**
- * Created by Noy on 28/05/2014.
- */
 public abstract class AbstractPacket {
 
     // The packet we will be modifying
