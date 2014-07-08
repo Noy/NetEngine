@@ -21,8 +21,6 @@ public final class GameCountdown implements Runnable {
         this.started = false;
     }
 
-
-
     public void start() {
         if (this.started) return;
         this.started = true;

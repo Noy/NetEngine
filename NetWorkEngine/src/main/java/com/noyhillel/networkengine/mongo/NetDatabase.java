@@ -1,5 +1,7 @@
 package com.noyhillel.networkengine.mongo;
 
+import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
+
 /**
  * Created by Noy on 11/06/2014.
  */

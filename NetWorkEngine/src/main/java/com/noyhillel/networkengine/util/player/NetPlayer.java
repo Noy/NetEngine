@@ -1,6 +1,5 @@
 package com.noyhillel.networkengine.util.player;
 
-import com.noyhillel.networkengine.NetWorkEngine;
 import com.noyhillel.networkengine.util.NetPlugin;
 import lombok.Data;
 import org.bukkit.*;
@@ -235,7 +234,7 @@ public final class NetPlayer {
     public void setScoreboardSideTitle(String title) {
         if (!isOnline()) return;
         if (this.sidebar == null) {
-            String s = new BigInteger(13, NetWorkEngine.getRandom()).toString(5);
+            String s = new BigInteger(13, NetPlugin.getRandom()).toString(5);
             this.sidebar = this.scoreboard.registerNewObjective(s.substring(0, Math.min(s.length(), 15)), "dummy");
             this.sidebar.setDisplaySlot(DisplaySlot.SIDEBAR);
         }

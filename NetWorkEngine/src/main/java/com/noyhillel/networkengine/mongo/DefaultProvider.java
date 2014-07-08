@@ -1,5 +1,6 @@
 package com.noyhillel.networkengine.mongo;
 
+import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
 import com.noyhillel.networkengine.util.NetPlugin;
 import org.bukkit.configuration.file.FileConfiguration;
 

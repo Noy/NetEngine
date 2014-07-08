@@ -1,15 +1,12 @@
 package com.noyhillel.networkengine.util.effects;
 
-import com.noyhillel.networkengine.NetWorkEngine;
 import com.noyhillel.networkengine.util.packets.FakeEntity;
 import com.noyhillel.networkengine.util.player.NetPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.HashMap;
 import java.util.Map;

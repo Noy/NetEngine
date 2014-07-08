@@ -3,7 +3,7 @@ package com.noyhillel.networkhub;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.config.YAMLConfigurationFile;
-import com.noyhillel.networkengine.mongo.DatabaseConnectException;
+import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
 import com.noyhillel.networkengine.mongo.DefaultProvider;
 import com.noyhillel.networkengine.mongo.Provider;
 import com.noyhillel.networkengine.util.utils.NetWorkCoolDown;

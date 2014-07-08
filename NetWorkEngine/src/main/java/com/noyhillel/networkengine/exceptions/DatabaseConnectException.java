@@ -1,5 +1,6 @@
-package com.noyhillel.networkengine.mongo;
+package com.noyhillel.networkengine.exceptions;
 
+import com.noyhillel.networkengine.mongo.NetDatabase;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

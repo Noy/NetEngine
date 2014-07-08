@@ -3,7 +3,6 @@ package com.noyhillel.networkengine.util.packets;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.noyhillel.networkengine.NetWorkEngine;
 import com.noyhillel.networkengine.util.NetPlugin;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -30,7 +29,12 @@ public final class FakeEntity {
     private WrappedDataWatcher watcher;
 
     public enum EntityFlags {
-        ON_FIRE, CROUCHED, SPRINTING, EATING_DRINKING_BLOCKING, INVISIBLE, NONE
+        ON_FIRE,
+        CROUCHED,
+        SPRINTING,
+        EATING_DRINKING_BLOCKING,
+        INVISIBLE,
+        NONE
     }
 
     public FakeEntity(Player player, EntityType type, Integer health, Location location, EntityFlags flag) {
@@ -123,7 +127,7 @@ public final class FakeEntity {
         try {
             ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
         } catch (InvocationTargetException e) {
-            NetWorkEngine.getInstance().getLogger().log(Level.WARNING, "Cannot send " + packet + " to " + player, e);
+            NetPlugin.getInstance().getLogger().log(Level.WARNING, "Cannot send " + packet + " to " + player, e);
         }
     }
 
