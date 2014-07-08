@@ -1,4 +1,4 @@
-voting-length: 65 #Number of seconds until the game attempts to start
+voting-length: 20 #Number of seconds until the game attempts to start
 maximum-playes: 24 #Never set this higher than the number of cornicopia points in any map, because the game will not start if there are too many players for the map to handler
 minimum-players: 2 #Default, adjust as needed! :3
 deathmatch-size: 4
@@ -28,6 +28,8 @@ formats:
   deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
   points-got: "&eYou have received &4<points> points &efor that kill!"
   quit-msg: "&3<player> &c&l<< &ehas left &6&lSG&e."
+  heal-msg: "&6You have been healed!"
+  healed-player: "&6You haved healed &4<target>"
   scoreboard:
     players: "&ePlayers"
     spectators: "&cSpectators:"
@@ -48,10 +50,10 @@ database: #MUST CONFIGURE FOR PLUGIN TO WORK PROPERLY
   password: "root"
   database: "minecraft"
 countdowns:
-  pregame: 60
-  pre-teleport-deathmatch: 60
-  post-teleport-deathmatch: 15
-  server-shutdown: 10
+  pregame: 20
+  pre-teleport-deathmatch: 20
+  post-teleport-deathmatch: 20
+  server-shutdown: 20
 sounds:
   timer-sound: "CLICK"
   timer-sound-higher: "ORB_PICKUP"

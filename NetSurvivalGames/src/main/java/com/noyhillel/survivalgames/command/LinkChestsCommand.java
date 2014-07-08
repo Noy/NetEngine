@@ -9,6 +9,7 @@ import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
 import com.noyhillel.survivalgames.arena.setup.SetupSession;
 import com.noyhillel.survivalgames.player.GPlayer;
+import lombok.SneakyThrows;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
@@ -71,7 +72,9 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
             throw new NewNetCommandException("Lol found all the chests but can't link them!", NewNetCommandException.ErrorType.Special);
     }
 
+    @SneakyThrows
     public static GPlayer resolveGPlayer(Player player) {
+        if (player == null) throw new NewNetCommandException("Player not found!", NewNetCommandException.ErrorType.Null);
         return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
     }
 }

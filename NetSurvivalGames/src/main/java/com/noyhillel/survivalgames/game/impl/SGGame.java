@@ -439,7 +439,29 @@ public final class SGGame implements Listener {
     @EventHandler
     public void onPlayerHunger(FoodLevelChangeEvent event) {
         if (isSpectating(getGPlayer((Player) event.getEntity()))) return;
-        if (gameState == GameState.PREGAME || gameState == GameState.OVER) event.setCancelled(true);
+        switch (gameState) {
+            case PREGAME:
+                event.setCancelled(true);
+                break;
+            case COUNTDOWN:
+                event.setCancelled(true);
+                break;
+            case GAMEPLAY:
+                event.setCancelled(false);
+                break;
+            case PRE_DEATHMATCH_COUNTDOWN:
+                event.setCancelled(false);
+                break;
+            case DEATHMATCH_COUNTDOWN:
+                event.setCancelled(false);
+                break;
+            case DEATHMATCH:
+                event.setCancelled(false);
+                break;
+            case OVER:
+                event.setCancelled(true);
+                break;
+        }
     }
 
     private void tributeFallen(GPlayer player) {
@@ -589,6 +611,13 @@ public final class SGGame implements Listener {
         }
     }
 
+    private void removeEnderBar() {
+        for (GPlayer gPlayer : getAllPlayers()) {
+            NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+            NetEnderHealthBarEffect.remove(playerFromNetPlayer);
+        }
+    }
+
     @Data
     private static final class PregameCountdownResponder implements CountdownDelegate {
         private final SGGame game;
@@ -617,10 +646,7 @@ public final class SGGame implements Listener {
         @Override
         public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
             game.updateState();
-            for (GPlayer gPlayer : game.getAllPlayers()) {
-                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-                NetEnderHealthBarEffect.remove(playerFromNetPlayer);
-            }
+            game.removeEnderBar();
         }
     }
 
@@ -651,10 +677,7 @@ public final class SGGame implements Listener {
         @Override
         public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
             game.updateState();
-            for (GPlayer gPlayer : game.getAllPlayers()) {
-                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-                NetEnderHealthBarEffect.remove(playerFromNetPlayer);
-            }
+            game.removeEnderBar();
         }
     }
 
@@ -672,23 +695,12 @@ public final class SGGame implements Listener {
             if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
                 game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
             }
-            if (secondsRemaining <= 15 && secondsRemaining >= 1) {
-                for (GPlayer gPlayer : game.getAllPlayers()) {
-                    NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
-                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false, new String[]{"<seconds>", secondsRemaining.toString()}));
-                }
-            }
             if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
         }
 
         @Override
         public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
             game.updateState();
-            for (GPlayer gPlayer : game.getAllPlayers()) {
-                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-                NetEnderHealthBarEffect.remove(playerFromNetPlayer);
-            }
         }
     }
 }

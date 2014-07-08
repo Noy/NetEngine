@@ -102,6 +102,7 @@ public final class SurvivalGames extends NetPlugin {
         registerListener(new GPlayerManagerListener(this.gPlayerManager));
         setupCommands(VoteCommand.class);
         setupCommands(MapCommand.class);
+        setupCommands(HealCommand.class);
         setupCommands(LinkChestsCommand.class);
         setupCommand = registerListener(setupCommands(SetupCommand.class));
         registerListener(new SetupModeListener());

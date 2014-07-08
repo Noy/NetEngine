@@ -3,6 +3,7 @@ package com.noyhillel.survivalgames.player;
 import com.noyhillel.networkengine.util.RandomUtils;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
+import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -74,6 +75,14 @@ public final class GPlayer extends GOfflinePlayer {
         player.setTotalExperience(0);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[4]);
+    }
+
+    public void heal() {
+        Player player = getPlayer();
+        player.setHealth(player.getMaxHealth());
+        player.setFireTicks(0);
+        player.setFoodLevel(20);
+        sendMessage(MessageManager.getFormat("formats.heal-msg", true));
     }
 
     public void playSound(Sound sound) {
