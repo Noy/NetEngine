@@ -5,6 +5,7 @@ import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.newcommand.Permission;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,7 @@ public final class GiveMeItemCommandHandler extends NetAbstractCommandHandler {
     g freaking g
      */
 
-    private final static List<String> materials;
+    private final static List<String> MATERIALS;
 
     static {
         ArrayList<String> materialList = new ArrayList<>();
@@ -35,11 +36,12 @@ public final class GiveMeItemCommandHandler extends NetAbstractCommandHandler {
             materialList.add(m.name());
         }
         Collections.sort(materialList);
-        materials = ImmutableList.copyOf(materialList);
+        MATERIALS = ImmutableList.copyOf(materialList);
     }
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
+        NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(player);
         if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FewArguments);
         if (args.length > 3) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
         Material m;
@@ -47,9 +49,9 @@ public final class GiveMeItemCommandHandler extends NetAbstractCommandHandler {
         if (args.length == 1) {
             try {
                 m = Material.valueOf(args[0].toUpperCase());
-                player.getInventory().addItem(new ItemStack(m, 1));
-                player.sendMessage(MessageManager.getFormat("formats.give-item-1", true, new String[]{"<item>", m.toString().toLowerCase()}));
-                //player.sendMessage("you have recieved 1" + m.toString().toLowerCase());
+                String[] itemName = {"<item>", m.toString().toLowerCase()};
+                netPlayer.giveItem(m, 1);
+                netPlayer.sendMessage(MessageManager.getFormat("formats.give-item-1", true, itemName));
                 return;
             } catch (IllegalArgumentException e) {
                 throw new NewNetCommandException("Unrecognized Item!", NewNetCommandException.ErrorType.Null);
@@ -59,10 +61,9 @@ public final class GiveMeItemCommandHandler extends NetAbstractCommandHandler {
             try {
                 m = Material.valueOf(args[0].toUpperCase());
                 i = Integer.valueOf(args[1]);
-                player.getInventory().addItem(new ItemStack(m, i));
-                player.sendMessage(MessageManager.getFormat("formats.give-item-2", true, new String[]{"<amount>", i.toString()},
-                        new String[]{"<item>", m.toString().toLowerCase()}));
-                //player.sendMessage("you have recieved " + i.toString() + " " + m.toString().toLowerCase());
+                String[] itemName = {"<item>", m.toString().toLowerCase()};
+                netPlayer.giveItem(m, i);
+                netPlayer.sendMessage(MessageManager.getFormat("formats.give-item-2", true, new String[]{"<amount>", i.toString()}, itemName));
                 return;
             } catch (IllegalArgumentException e) {
                 throw new NewNetCommandException("Unrecognized Item or Amount!", NewNetCommandException.ErrorType.Null);
@@ -73,9 +74,10 @@ public final class GiveMeItemCommandHandler extends NetAbstractCommandHandler {
                 m = Material.valueOf(args[0].toUpperCase());
                 i = Integer.valueOf(args[1]);
                 Short s = Short.valueOf(args[2]);
-                player.getInventory().addItem(new ItemStack(m, i, s));
-                player.sendMessage(MessageManager.getFormat("formats.give-item-3", true, new String[]{"<amount>", i.toString()},
-                        new String[]{"<item>", m.toString().toLowerCase()}, new String[]{"<durability>", s.toString()}));
+                String[] itemName = {"<item>", m.toString().toLowerCase()};
+                netPlayer.giveItem(m, i, s);
+                netPlayer.sendMessage(MessageManager.getFormat("formats.give-item-3", true, new String[]{"<amount>", i.toString()},
+                        itemName, new String[]{"<durability>", s.toString()}));
             } catch (IllegalArgumentException e) {
                 throw new NewNetCommandException("Unrecognized Item, Amount or Durability!", NewNetCommandException.ErrorType.Null);
             }
@@ -87,7 +89,7 @@ public final class GiveMeItemCommandHandler extends NetAbstractCommandHandler {
         if (sender.hasPermission("hub.giveme")) {
             if (args.length == 1) {
                 String arg = args[0];
-                List<String> materials = GiveMeItemCommandHandler.materials;
+                List<String> materials = GiveMeItemCommandHandler.MATERIALS;
                 List<String> completion = null;
                 Integer size = materials.size();
                 Integer i = Collections.binarySearch(materials, arg, String.CASE_INSENSITIVE_ORDER);

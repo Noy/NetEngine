@@ -14,7 +14,7 @@ public final class Announcer implements Runnable {
     /**
      * The List of messages that the announcer will announce.
      */
-    private List<String> msgs = new ArrayList<>();
+    private List<String> messages = new ArrayList<>();
     /**
      * The last message, default to 0.
      */
@@ -22,14 +22,14 @@ public final class Announcer implements Runnable {
     /**
      * Whether the announcements should be activated or not.
      */
-    private Boolean running = false;
+    private boolean running = false;
 
     /**
      * Creating our constructor
      * @param hub Main class.
      */
     public Announcer(NetHub hub) {
-        this.msgs = hub.getConfig().getStringList("announcer.announcements");
+        this.messages = hub.getConfig().getStringList("announcer.announcements");
         this.running = hub.getConfig().getBoolean("announcer.running");
     }
 
@@ -54,9 +54,9 @@ public final class Announcer implements Runnable {
      * @return The messages in color.
      */
     private String getNextMsg() {
-        String msg = msgs.get(lastMsg);
+        String msg = messages.get(lastMsg);
         // If the last message is smaller than all the messages minus 1
-        if (lastMsg < msgs.size()-1) {
+        if (lastMsg < messages.size()-1) {
             // Message increments by one
             lastMsg++;
         } else {

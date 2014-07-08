@@ -18,7 +18,6 @@ public final class LeaveListener extends ModuleListener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        //NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         Player player = event.getPlayer();
         if (CommandSpyListener.commandListeners.contains(player)) {
             CommandSpyListener.commandListeners.remove(player);

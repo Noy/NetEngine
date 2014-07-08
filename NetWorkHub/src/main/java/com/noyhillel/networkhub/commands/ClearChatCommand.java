@@ -1,7 +1,9 @@
 package com.noyhillel.networkhub.commands;
 
 import com.noyhillel.networkengine.command.*;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
+import com.noyhillel.networkhub.NetHub;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,7 +23,7 @@ public final class ClearChatCommand extends AbstractCommandHandler {
     )
     public CommandStatus clearchat(CommandSender sender, NetCommandSenders type, NetCommand netCommand, Command command, String[] args) {
         if (args.length > 0) return CommandStatus.MANY_ARGUMENTS;
-        for (Integer i = 0; i <= 200; i++) {
+        for (int i = 0; i <= 200; i++) {
             silentBroadcast("", true);
         }
         silentBroadcast(MessageManager.getFormats("formats.clear-chat"), false);
@@ -36,9 +38,10 @@ public final class ClearChatCommand extends AbstractCommandHandler {
             senders = {NetCommandSenders.PLAYER, NetCommandSenders.CONSOLE}
     )
     public CommandStatus clearmychat(CommandSender sender, NetCommandSenders type, NetCommand meta, Command command, String[] args) {
-        for (Integer i = 0; i <= 200; i++) {
-            sender.sendMessage("");
-        }
+        Player player = (Player) sender;
+        NetPlayer netPlayer = NetHub.getNetPlayerManager().getPlayer(player);
+        netPlayer.clearChat();
+        netPlayer.sendMessage(MessageManager.getFormat("formats.clear-chat"));
         return CommandStatus.SUCCESS;
     }
 

@@ -56,8 +56,7 @@ public final class SpawnCommand extends AbstractCommandHandler {
     }
 
     private void setLocation(String path, Location location) {
-        ConfigurationSection configurationSection = NetHub.getInstance()
-                .getConfig().getConfigurationSection(path);
+        ConfigurationSection configurationSection = NetHub.getInstance().getConfig().getConfigurationSection(path);
         configurationSection.set("world", location.getWorld().getName());
         configurationSection.set("x", location.getX());
         configurationSection.set("y", location.getY());

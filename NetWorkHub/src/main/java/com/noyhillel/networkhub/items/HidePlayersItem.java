@@ -46,7 +46,7 @@ public final class HidePlayersItem extends NetHubItemDelegate {
      */
     @Override
     protected Integer getItemSlot() {
-        return 2;
+        return 1;
     }
 
     /**

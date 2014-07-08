@@ -26,8 +26,8 @@ public final class HubItemJoinListener extends ModuleListener {
     public HubItemJoinListener() {
         super("hub-items");
         items = new ArrayList<>();
-        ConfigManager warpStarConfig = new ConfigManager();
-        items.add(new WarpItem(warpStarConfig));
+        ConfigManager configManager = new ConfigManager();
+        items.add(new WarpItem(configManager));
         items.add(new HidePlayersItem());
     }
 
@@ -36,7 +36,7 @@ public final class HubItemJoinListener extends ModuleListener {
         NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         player.resetPlayer();
         for (NetHubItemDelegate item : items) {
-            if (shouldAdd(event.getPlayer(), item.getItem())) player.getPlayer().getInventory().setItem(item.getItemSlot(), item.getItem());
+            if (shouldAdd(player, item.getItem())) player.getPlayer().getInventory().setItem(item.getItemSlot(), item.getItem());
         }
         if (!HidePlayersItem.hidingPlayers.isEmpty()) {
             if (player.getPlayer().hasPermission("hub.staff")) return;
@@ -53,7 +53,7 @@ public final class HubItemJoinListener extends ModuleListener {
         event.getPlayer().teleport(SpawnCommand.getLocation("spawn"));
     }
 
-    private boolean shouldAdd(Player player, ItemStack item) {
-        return !player.getInventory().contains(item);
+    private boolean shouldAdd(NetPlayer player, ItemStack item) {
+        return !player.getPlayer().getInventory().contains(item);
     }
 }

@@ -87,6 +87,20 @@ public final class NetPlayer {
         return p.getAddress().getHostString();
     }
 
+    public void clearChat() {
+        for (int x = 0; x <= 200; x++) {
+            sendMessage(" ");
+        }
+    }
+
+    public void turnOnFly() {
+        getPlayer().setAllowFlight(true);
+    }
+
+    public void turnOffFly() {
+        getPlayer().setAllowFlight(false);
+    }
+
     public void addPotionEffect(PotionEffectType type, Integer length, Integer intensity, Boolean ambient) {
         PotionEffect toAdd = new PotionEffect(type, (length == Integer.MAX_VALUE ? Integer.MAX_VALUE : length*20), intensity, ambient);
         this.getPlayer().addPotionEffect(toAdd);

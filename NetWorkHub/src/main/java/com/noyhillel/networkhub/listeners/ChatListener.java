@@ -11,7 +11,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 /**
  * Created by Noy on 28/05/2014.
  */
-public class ChatListener extends ModuleListener {
+public final class ChatListener extends ModuleListener {
 
     public ChatListener() {
         super("chat-listener");

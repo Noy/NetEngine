@@ -1,5 +1,6 @@
 package com.noyhillel.networkhub.listeners;
 
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -15,8 +16,9 @@ public final class NoDrop extends ModuleListener {
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent event) {
-        if (event.getPlayer().hasPermission("hub.drop-item")) return;
-        event.getPlayer().sendMessage(MessageManager.getFormats("formats.cant-drop"));
+        NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
+        if (netPlayer.hasPermission("hub.drop-item")) return;
+        netPlayer.sendMessage(MessageManager.getFormats("formats.cant-drop"));
         event.setCancelled(true);
     }
 }

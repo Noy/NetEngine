@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+
 /**
  * Created by Noy on 27/05/2014.
  */
@@ -34,7 +35,7 @@ public final class FlyCommand extends AbstractCommandHandler {
                 return CommandStatus.SUCCESS;
             }
         }
-        Player target = Bukkit.getPlayer(args[0]);
+        Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) return CommandStatus.NULL;
         if (!target.getAllowFlight()) {
             target.setAllowFlight(true);

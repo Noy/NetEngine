@@ -9,7 +9,7 @@ import com.noyhillel.networkengine.util.player.mongo.Provider;
 import com.noyhillel.networkengine.util.utils.NetWorkCoolDown;
 import com.noyhillel.networkhub.commands.*;
 import com.noyhillel.networkhub.items.HubItemJoinListener;
-import com.noyhillel.networkhub.items.warpitem.WarpItemCommands;
+import com.noyhillel.networkhub.commands.WarpItemCommands;
 import com.noyhillel.networkhub.listeners.*;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -91,5 +91,4 @@ public final class NetHub extends NetPlugin {
         this.netDatabase = provider.getNewDatabase(this);
         this.netDatabase.connect();
     }
-
 }

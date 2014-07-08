@@ -1,6 +1,7 @@
 package com.noyhillel.networkhub.commands;
 
 import com.noyhillel.networkengine.command.*;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import com.noyhillel.networkhub.NetHub;
 import com.noyhillel.networkhub.listeners.CommandSpyListener;
@@ -28,14 +29,14 @@ public final class CommandSpyCommand extends AbstractCommandHandler {
     public CommandStatus commandspy(CommandSender sender, NetCommandSenders senders, NetCommand meta, Command command, String[] args) {
         if (args.length > 0) return CommandStatus.HELP;
         Player p = (Player) sender;
-//        netPlayer = NetPlugin.getNetPlayerManager().getOnlinePlayer(p);
+        NetPlayer netPlayer = NetHub.getNetPlayerManager().getOnlinePlayer(p);
         if (CommandSpyListener.commandListeners.contains(p)) {
             CommandSpyListener.commandListeners.remove(p);
-            p.sendMessage(MessageManager.getFormats("formats.spy-off"));
+            netPlayer.sendMessage(MessageManager.getFormats("formats.spy-off"));
             return CommandStatus.SUCCESS;
         } else {
             CommandSpyListener.commandListeners.add(p);
-            p.sendMessage(MessageManager.getFormats("formats.spy-on"));
+            netPlayer.sendMessage(MessageManager.getFormats("formats.spy-on"));
         }
         return CommandStatus.SUCCESS;
     }

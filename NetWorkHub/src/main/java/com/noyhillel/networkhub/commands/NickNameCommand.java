@@ -36,7 +36,7 @@ public final class NickNameCommand extends AbstractCommandHandler {
                 player.sendMessage(MessageManager.getFormat("formats.new-nick", true, new String[]{"<nick>", coloredName}));
                 return CommandStatus.SUCCESS;
             }
-            Player target = Bukkit.getPlayer(args[0]);
+            Player target = Bukkit.getPlayerExact(args[0]);
             if (target == null) return CommandStatus.NULL;
             String targetNick = ChatColor.translateAlternateColorCodes('&', args[1]);
             if (targetNick.equalsIgnoreCase("off")) targetNick = null;
@@ -65,7 +65,7 @@ public final class NickNameCommand extends AbstractCommandHandler {
         if (args.length == 0) return CommandStatus.FEW_ARGUMENTS;
         if (args.length > 1) return CommandStatus.MANY_ARGUMENTS;
         String nick = args[0];
-        for (Player onlinePlayers : Bukkit.getServer().getOnlinePlayers()) {
+        for (Player onlinePlayers : Bukkit.getOnlinePlayers()) {
             if (!nick.equalsIgnoreCase(onlinePlayers.getDisplayName())) {
                 player.sendMessage(MessageManager.getFormats("formats.no-nick"));
                 return CommandStatus.SUCCESS;
