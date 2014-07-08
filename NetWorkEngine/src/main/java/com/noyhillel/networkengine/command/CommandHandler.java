@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 /**
  * Created by Noy on 25/05/2014.
  */
-public abstract interface CommandHandler {
+public interface CommandHandler {
     /**
      * Implement this interface in order to use the 'ACommand' annotation.
      * @param commandStatus The Status of the command

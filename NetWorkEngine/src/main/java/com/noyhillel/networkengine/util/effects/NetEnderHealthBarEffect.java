@@ -81,7 +81,6 @@ public final class NetEnderHealthBarEffect {
 
     public static class EnderBarListeners implements Listener {
 
-
         @EventHandler
         public void onPlayerMove(PlayerMoveEvent event) {
             NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
@@ -95,10 +94,6 @@ public final class NetEnderHealthBarEffect {
                 enderBarFor.enderDragon.setLocation(playerLocation.subtract(0, 100, 0));
             }
         }
-    }
-
-}
-//
 //        @EventHandler
 //        public void onPlayerRespawn(PlayerRespawnEvent event) {
 //            final NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
@@ -110,5 +105,5 @@ public final class NetEnderHealthBarEffect {
 //                }
 //            }, 2L);
 //        }
-//    }
-//}
+    }
+}

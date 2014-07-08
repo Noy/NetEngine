@@ -20,14 +20,12 @@ public @interface CommandMeta {
 
     /**
      * This would be the description of the command.
-     *
      * @return the description of the command.
      */
     String description();
 
     /**
      * This would be the usage of the command.
-     *
      * @return the usage of the command.
      */
     String usage();
