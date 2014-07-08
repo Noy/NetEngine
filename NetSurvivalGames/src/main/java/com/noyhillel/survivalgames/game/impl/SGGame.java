@@ -36,7 +36,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
@@ -70,10 +69,9 @@ public final class SGGame implements Listener {
         plugin.registerListener(this);
     }
 
-   @Setter(AccessLevel.NONE) private InventoryGUI spectatorGUI;
-
     public static GameState gameState = GameState.PREGAME;
 
+    @Setter(AccessLevel.NONE) private InventoryGUI spectatorGUI;
     @Setter(AccessLevel.NONE) @Getter(AccessLevel.NONE) private World arenaWorld;
 
     @Getter public final static Set<GPlayer> spectators = new HashSet<>();
@@ -325,7 +323,7 @@ public final class SGGame implements Listener {
         for (GPlayer player : getAllPlayers()) {
             if (gameState == GameState.OVER || (spectatorSent && (spectators.contains(player) || player.getPlayer().isOp())) || !spectatorSent) player.sendMessage(s);
         }
-        Bukkit.getServer().getConsoleSender().sendMessage(s);
+        SurvivalGames.getInstance().logInfoInColor(s);
     }
 
     @EventHandler
@@ -592,6 +590,7 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToBroadcast = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
         private static Integer[] secondsToSound = {45, 30, 15, 10, 9, 8, 7, 6};
         private static Integer[] secondsToSoundHigher = {5, 4, 3, 2, 1};
+
         @Override
         public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
 
