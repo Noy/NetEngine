@@ -116,7 +116,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     }
 
     @SafeVarargs
-    protected final <T> void logInfoInColor(T... args) {
+    public final <T> void logInfoInColor(T... args) {
         for (T msg : args) {
             getServer().getConsoleSender().sendMessage(msg.toString());
         }

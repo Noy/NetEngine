@@ -76,8 +76,8 @@ public final class NetHub extends NetPlugin {
 
     @SneakyThrows
     private void registerOtherCommands() {
-        setupCommands(GiveMeItemCommandHandler.class);
-        setupCommands(GetInfoCommandHandler.class);
+        setupCommands(GiveMeItemCommand.class);
+        setupCommands(GetInfoCommand.class);
     }
 
     private void setupDatabase() throws DatabaseConnectException {

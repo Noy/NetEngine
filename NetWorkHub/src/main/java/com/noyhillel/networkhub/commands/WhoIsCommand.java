@@ -13,8 +13,7 @@ import org.bukkit.entity.Player;
 /**
  * Created by Noy on 08/07/2014.
  */
-public class WhoIsCommand extends AbstractCommandHandler {
-
+public final class WhoIsCommand extends AbstractCommandHandler {
 
     @SuppressWarnings("LoopStatementThatDoesntLoop")
     @NetCommand(
