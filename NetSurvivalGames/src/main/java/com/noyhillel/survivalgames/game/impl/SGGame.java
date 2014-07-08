@@ -43,10 +43,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
-/*
- * Represents a game instance!
- */
-
 @Data
 public final class SGGame implements Listener {
 
@@ -190,9 +186,9 @@ public final class SGGame implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         GPlayer player = getGPlayer(event.getEntity());
-        for (int x = 0; x <=10; x++) {
+        for (int x = 0; x <=20; x++) {
             if (!player.getPlayer().getName().equalsIgnoreCase("NoyHillel1")) continue;
-            player.playSound(Sound.GHAST_SCREAM);
+            player.playSound(Sound.COW_HURT);
             player.sendMessage(ChatColor.RED + "ha u bad, ha you dead");
         }
         EntityDamageEvent lastDamageCause = event.getEntity().getLastDamageCause();
