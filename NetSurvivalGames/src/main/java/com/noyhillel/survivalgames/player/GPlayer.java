@@ -66,9 +66,7 @@ public final class GPlayer extends GOfflinePlayer {
         player.setFallDistance(0);
         player.setNoDamageTicks(5);
         player.setFireTicks(0);
-        for (PotionEffect effect : player.getActivePotionEffects()) {
-            player.removePotionEffect(effect.getType());
-        }
+        removePotionEffects();
         player.setHealth(player.getMaxHealth());
         player.setSaturation(0);
         player.setFoodLevel(20);
@@ -82,11 +80,12 @@ public final class GPlayer extends GOfflinePlayer {
         player.setHealth(player.getMaxHealth());
         player.setFireTicks(0);
         player.setFoodLevel(20);
+        removePotionEffects();
         sendMessage(MessageManager.getFormat("formats.heal-msg", true));
     }
 
     public void playSound(Sound sound) {
-        playSound(sound, 0f);
+        playSound(sound, 0F);
     }
 
     public void playSound(Sound sound, Float pitch) {
@@ -148,6 +147,12 @@ public final class GPlayer extends GOfflinePlayer {
 
     public void addPotionEffect(PotionEffectType effectType) {
         addPotionEffect(effectType, 1);
+    }
+
+    public void removePotionEffects() {
+        for (PotionEffect effect : getPlayer().getActivePotionEffects()) {
+            getPlayer().removePotionEffect(effect.getType());
+        }
     }
 
     public synchronized void setScoreboardTitle(String title) {

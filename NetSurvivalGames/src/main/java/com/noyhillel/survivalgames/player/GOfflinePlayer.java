@@ -40,5 +40,4 @@ public class GOfflinePlayer {
         if (player.getUniqueId().toString().equals(uuid)) return new GPlayer(player.getName(), uuid, usernames, kills, deaths, wins, totalGames, mutationCredits, points, nick);
         return null;
     }
-
 }

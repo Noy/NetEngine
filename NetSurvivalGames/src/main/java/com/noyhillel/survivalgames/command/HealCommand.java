@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 @Permission("survivalgames.heal")
 @CommandMeta(name = "heal", description = "The Heal Command", usage = "/heal")
-public class HealCommand extends NetAbstractCommandHandler {
+public final class HealCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
