@@ -1,6 +1,6 @@
 package com.noyhillel.networkengine.util.effects;
 
-import com.noyhillel.networkengine.NetWorkEngine;
+import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -32,11 +32,11 @@ public final class NetFireworkEffect {
 
     private static Color getRandomColors() {
         DyeColor[] dyeColors = DyeColor.values();
-        return dyeColors[NetWorkEngine.getRandom().nextInt(dyeColors.length)].getColor();
+        return dyeColors[NetPlugin.getRandom().nextInt(dyeColors.length)].getColor();
     }
 
     private static FireworkEffect.Type getFireWorkType() {
         FireworkEffect.Type[] fireworkType = FireworkEffect.Type.values();
-        return fireworkType[NetWorkEngine.getRandom().nextInt(fireworkType.length)];
+        return fireworkType[NetPlugin.getRandom().nextInt(fireworkType.length)];
     }
 }

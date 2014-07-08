@@ -2,9 +2,7 @@ package com.noyhillel.battledome.game;
 
 import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.MessageManager;
-import com.noyhillel.networkengine.game.arena.Point;
-import com.noyhillel.networkengine.game.countdown.GameCountdown;
-import com.noyhillel.networkengine.game.countdown.GameCountdownHandler;
+import com.noyhillel.battledome.arena.Point;
 import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
 import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;

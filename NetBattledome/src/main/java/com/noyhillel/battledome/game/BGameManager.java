@@ -2,7 +2,7 @@ package com.noyhillel.battledome.game;
 
 
 import com.noyhillel.battledome.exceptions.BattledomeException;
-import com.noyhillel.networkengine.game.arena.Point;
+import com.noyhillel.battledome.arena.Point;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
