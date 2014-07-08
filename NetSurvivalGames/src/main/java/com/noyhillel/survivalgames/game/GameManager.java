@@ -112,10 +112,6 @@ public final class GameManager implements VotingSessionDisplay {
     public void gameEnded() {
         this.lobbyState = LobbyState.POST_GAME;
         updateItemStates();
-        Set<GPlayer> players = getPlayers();
-        for (GPlayer player : players) {
-            player.resetPlayer();
-        }
         final GPlayer victor = this.runningSGGame.getVictor();
         victor.setPoints(victor.getPoints() + 100);
         int shutdownCountdownLength = SurvivalGames.getInstance().getConfig().getInt("countdowns.server-shutdown");
@@ -188,7 +184,7 @@ public final class GameManager implements VotingSessionDisplay {
     @Override
     public void clockUpdated(Integer secondsRemain) {
         if (RandomUtils.contains(secondsRemain, BROADCAST_TIMES)) {
-            broadcast(MessageManager.getFormat("formats.time-remaining-lobby", new String[]{"<time>", secondsRemain.toString()}));
+            broadcast(MessageManager.getFormat("formats.time-remaining-lobby", true, new String[]{"<time>", secondsRemain.toString()}));
             broadcastSound(Sound.CLICK);
         }
         if (secondsRemain <= 60 && secondsRemain >= 1) {

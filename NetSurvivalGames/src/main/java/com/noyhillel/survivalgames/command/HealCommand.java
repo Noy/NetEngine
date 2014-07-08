@@ -9,6 +9,8 @@ import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlayer;
+
 /**
  * Created by Noy on 08/07/2014.
  */
@@ -18,12 +20,12 @@ public final class HealCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        GPlayer player = LinkChestsCommand.resolveGPlayer(sender);
+        GPlayer player = resolveGPlayer(sender);
         if (args.length == 0) {
             player.heal();
         } else if (args.length == 1) {
             Player target = Bukkit.getServer().getPlayerExact(args[0]);
-            GPlayer gTarget = LinkChestsCommand.resolveGPlayer(target);
+            GPlayer gTarget = resolveGPlayer(target);
             gTarget.heal();
             player.sendMessage(MessageManager.getFormat("formats.healed-player", true, new String[]{"<target>", gTarget.getDisplayableName()}));
         }

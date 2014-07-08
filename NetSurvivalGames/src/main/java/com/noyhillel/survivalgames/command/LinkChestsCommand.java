@@ -22,7 +22,7 @@ import java.util.List;
 
 import static com.noyhillel.survivalgames.command.SetupCommand.setupSessions;
 
-@Permission("survivalgames.admin.linkchests")
+@Permission("survivalgames.linkchests")
 @CommandMeta(name = "linkchests", description = "The Link Chests Command", usage = "/linkchests")
 public final class LinkChestsCommand extends NetAbstractCommandHandler {
 

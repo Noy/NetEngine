@@ -1,6 +1,5 @@
 package com.noyhillel.survivalgames;
 
-import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.RandomUtils;

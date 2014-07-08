@@ -32,7 +32,7 @@ public final class ArenaSetup implements SetupSession {
     private List<Point> tier1 = new ArrayList<>();
     private List<Point> tier2 = new ArrayList<>();
     private List<Point> cornicopiaSpawns = new ArrayList<>();
-    public static ArenaMeta arenaMeta = new ArenaMeta("Untitled", Arrays.asList("Noy", "Joey"), "Ask an admin for this");
+    public static ArenaMeta arenaMeta = new ArenaMeta("Map", Arrays.asList("BuildTeam"), "Ask an admin for this");
 
     public ArenaSetup(GPlayer player, World world) {
         this.player = player;

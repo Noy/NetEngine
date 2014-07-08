@@ -24,7 +24,7 @@ import java.util.Map;
 
 import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlayer;
 
-@Permission("survivalgames.admin.setup")
+@Permission("survivalgames.setup")
 @CommandMeta(name = "setup", description = "The Setup Command", usage = "/setup")
 public final class SetupCommand extends NetAbstractCommandHandler implements Listener {
     static final Map<GPlayer, SetupSession> setupSessions = new HashMap<>();
