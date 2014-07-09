@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 public enum LobbyState {
-    SPECTATING(LobbyItem.SPECTATOR_COMPASS, LobbyItem.MUTATION_INTERFACE),
+    SPECTATING(LobbyItem.SPECTATOR_COMPASS/*LobbyItem.MUTATION_INTERFACE*/),
     PRE_GAME(LobbyItem.PREGAME_BOOK),
     POST_GAME();
 

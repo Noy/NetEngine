@@ -21,10 +21,9 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.server.v1_6_R3.EntityFishingHook;
 import org.bukkit.*;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -106,7 +105,7 @@ public final class SGGame implements Listener {
     }
 
     public void makePlayerSpectator(GPlayer player) {
-        if (spectators.contains(player)) return; //throw new IllegalStateException("You cannot make this player a spectator again!");
+        //if (spectators.contains(player)) return; //throw new IllegalStateException("You cannot make this player a spectator again!");
         spectators.add(player);
         hideFromAllPlayers(player);
         player.resetPlayer();
@@ -183,7 +182,7 @@ public final class SGGame implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         GPlayer player = getGPlayer(event.getEntity());
-        for (int x = 0; x <=20; x++) {
+        for (int x = 0; x <= 20; x++) {
             if (!player.getPlayer().getName().equalsIgnoreCase("NoyHillel1")) continue;
             player.playSound(Sound.COW_HURT);
             player.sendMessage(ChatColor.RED + "ha u bad, ha you dead");
@@ -258,6 +257,7 @@ public final class SGGame implements Listener {
         Snowball snowball = (Snowball) event.getDamager();
         if (!(snowball.getShooter() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
+        if (isSpectating(player)) return;
         player.addPotionEffect(PotionEffectType.SLOW, 2, 11);
         NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
         player.sendMessage(MessageManager.getFormat("formats.player-hit-by-snowball", true, new String[]{"<player>", ((Player) snowball.getShooter()).getName()}));
@@ -270,6 +270,7 @@ public final class SGGame implements Listener {
         Egg egg = (Egg) event.getDamager();
         if (!(egg.getShooter() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
+        if (isSpectating(player)) return;
         player.addPotionEffect(PotionEffectType.CONFUSION, 2, 10);
         player.addPotionEffect(PotionEffectType.BLINDNESS, 2, 5);
         NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
@@ -277,9 +278,20 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onEggHatch(PlayerEggThrowEvent event) {
-        event.setHatching(true);
+    public void onArrowHit(EntityDamageByEntityEvent event) {
+        if (gameState == GameState.COUNTDOWN || gameState == GameState.OVER) return;
+        if (!(event.getDamager() instanceof Arrow)) return;
+        Arrow arrow = (Arrow) event.getDamager();
+        if (!(arrow.getShooter() instanceof Player)) return;
+        GPlayer player = getGPlayer((Player) event.getEntity());
+        if (isSpectating(player)) return;
+        player.getPlayer().playEffect(player.getPlayer().getLocation(), Effect.MOBSPAWNER_FLAMES, 3);
+        NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
+        player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", ((Player) arrow.getShooter()).getName()}));
     }
+
+    @EventHandler
+    public void onEggHatch(PlayerEggThrowEvent event) { event.setHatching(true); }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
@@ -289,6 +301,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
+        if (gameState != GameState.GAMEPLAY) return;
         switch (event.getBlock().getType()) {
             case LEAVES:
             case LONG_GRASS:
@@ -297,6 +310,9 @@ public final class SGGame implements Listener {
             case POTATO:
             case CARROT:
             case CROPS:
+            case WEB:
+            case VINE:
+                event.setCancelled(false);
                 return;
         }
         event.setCancelled(true);
@@ -308,6 +324,7 @@ public final class SGGame implements Listener {
             case LEAVES:
             case WEB:
             case FIRE:
+                event.setCancelled(false);
                 return;
         }
         event.setCancelled(true);
@@ -333,6 +350,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
+        if (gameState == GameState.COUNTDOWN || gameState == GameState.DEATHMATCH_COUNTDOWN) return;
         if (!(event.getEntity() instanceof Player)) return;
         GPlayer gPlayer = getGPlayer((Player) event.getEntity());
         if (!this.players.contains(gPlayer)) event.setCancelled(true);
@@ -340,14 +358,11 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onPlayerAttack(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Egg) return;
-        if (event.getDamager() instanceof Snowball) return;
-        if (!(event.getDamager() instanceof Player)) {
-            event.setCancelled(true);
-            return;
+        if (event.getDamager() instanceof Player) {
+            GPlayer gDamager = getGPlayer((Player) event.getDamager());
+            if (isSpectating(gDamager)) event.setCancelled(true);
+            if (!players.contains(gDamager)) event.setCancelled(true);
         }
-        GPlayer gDamager = getGPlayer((Player) event.getDamager());
-        if (!players.contains(gDamager)) event.setCancelled(true);
     }
 
     private void playerDied(GPlayer player, EntityDamageEvent.DamageCause reason) {
@@ -390,9 +405,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onChestOpen(PlayerInteractEvent event) {
-        if (gameState != GameState.COUNTDOWN) return;
-        if (event.getClickedBlock() == null) return;
-        if (event.getClickedBlock().getType() == Material.CHEST) event.setCancelled(true);
+        if (gameState == GameState.COUNTDOWN || gameState == GameState.DEATHMATCH_COUNTDOWN) event.setCancelled(true);
     }
 
     @EventHandler
@@ -409,7 +422,7 @@ public final class SGGame implements Listener {
                 event.setCancelled(false);
                 break;
             case PRE_DEATHMATCH_COUNTDOWN:
-                event.setCancelled(false);
+                event.setCancelled(true);
                 break;
             case DEATHMATCH_COUNTDOWN:
                 event.setCancelled(false);
@@ -424,6 +437,7 @@ public final class SGGame implements Listener {
     }
 
     private void tributeFallen(GPlayer player) {
+        if (!players.contains(player)) return;
         players.remove(player);
         Player player1 = player.getPlayer();
         if (player1 != null) arenaWorld.strikeLightningEffect(player1.getLocation());
@@ -531,6 +545,7 @@ public final class SGGame implements Listener {
         for (GPlayer gPlayer : getAllPlayers()) gPlayer.resetPlayer();
         for (GPlayer player : spectators) showToAllPlayers(player);
         this.manager.gameEnded();
+        victor.getPlayer().setAllowFlight(true);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.getInstance(), new Runnable() {
             @Override
             public void run() {

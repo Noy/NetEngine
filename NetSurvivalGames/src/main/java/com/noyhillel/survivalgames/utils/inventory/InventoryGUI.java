@@ -74,7 +74,7 @@ public class InventoryGUI implements Listener {
     }
 
     public void open(GPlayer player) {
-        if (this.playersWithInventories.contains(player)) throw new IllegalStateException("Could not open inventory!");
+        if (this.playersWithInventories.contains(player)) return;
         this.playersWithInventories.add(player);
         player.getPlayer().openInventory(inv);
         if (!eventsRegistered) {

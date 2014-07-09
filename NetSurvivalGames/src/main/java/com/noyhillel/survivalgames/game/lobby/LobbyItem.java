@@ -76,40 +76,39 @@ public enum LobbyItem {
             rightClick(player, manager);
         }
 
-    }),
-    MUTATION_INTERFACE(new LobbyItemDefinition() {
-        @Override
-        Integer getSlot() {
-            return 2;
-        }
-
-        @Override
-        Material getType() {
-            return Material.NETHER_STAR;
-        }
-
-        @Override
-        String getTitle() {
-            return MessageManager.getFormat("formats.mutation-interface-title", false);
-        }
-
-        @Override
-        public void rightClick(GPlayer player, GameManager manager) {
-            SGGame runningSGGame = manager.getRunningSGGame();
-            if (runningSGGame == null) return;
-            //TODO ADD THAT BACK AFTER TEST
+    });
+//    MUTATION_INTERFACE(new LobbyItemDefinition() {
+//        @Override
+//        Integer getSlot() {
+//            return 2;
+//        }
+//
+//        @Override
+//        Material getType() {
+//            return Material.NETHER_STAR;
+//        }
+//
+//        @Override
+//        String getTitle() {
+//            return MessageManager.getFormat("formats.mutation-interface-title", false);
+//        }
+//
+//        @Override
+//        public void rightClick(GPlayer player, GameManager manager) {
+//            SGGame runningSGGame = manager.getRunningSGGame();
+//            if (runningSGGame == null) return;
 //            if (player.getMutationCredits() == null || player.getMutationCredits() == 0) {
 //                player.getPlayer().sendMessage(MessageManager.getFormat("formats.no-mutation-passes"));
 //                return;
 //            }
-            runningSGGame.mutatePlayer(player);
-        }
-
-        @Override
-        public void leftClick(GPlayer player, GameManager manager) {
-            rightClick(player, manager);
-        }
-    });
+//            runningSGGame.mutatePlayer(player);
+//        }
+//
+//        @Override
+//        public void leftClick(GPlayer player, GameManager manager) {
+//            rightClick(player, manager);
+//        }
+//    });
 
     @Getter private final LobbyItemDefinition lobbyItemDefinition;
     LobbyItem(LobbyItemDefinition definition) {

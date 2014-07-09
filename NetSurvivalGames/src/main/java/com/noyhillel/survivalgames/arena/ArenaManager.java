@@ -4,7 +4,7 @@ import com.noyhillel.survivalgames.game.lobby.GameLobby;
 
 import java.util.List;
 
-public interface ArenaManager<V> {
+public interface ArenaManager {
     List<Arena> getArenas();
 
     void saveArena(Arena arena) throws ArenaException;
