@@ -107,6 +107,8 @@ public final class SurvivalGames extends NetPlugin {
         registerListener(new SetupModeListener());
         setupCommands(NickCommand.class);
         setupCommands(StatsCommand.class);
+        setupCommands(SpawnCommand.class);
+        setupCommands(SetSpawnCommand.class);
         logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&eSurvivalGames&a has been fully enabled!"));
     }
 

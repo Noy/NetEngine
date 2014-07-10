@@ -6,6 +6,7 @@ import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
+import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.arena.PointIterator;
 import com.noyhillel.survivalgames.game.GameException;
 import com.noyhillel.survivalgames.game.GameManager;
@@ -163,6 +164,23 @@ public final class SGGame implements Listener {
         return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
     }
 
+    public void crossOutOfBounds(GPlayer player, Location goingTo) {
+        if (gameState != GameState.DEATHMATCH) return;
+        if (isSpectating(player)) return;
+        if (!players.contains(player)) return;
+        if (goingTo.distance(arenaWorld.getSpawnLocation()) >= 30) {
+            arenaWorld.strikeLightningEffect(player.getPlayer().getLocation());
+            player.addPotionEffect(PotionEffectType.BLINDNESS, 1, 6);
+            player.addPotionEffect(PotionEffectType.CONFUSION, 1, 6);
+            player.getPlayer().damage(1.5);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) {
+        crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo());
+    }
+
     /*
      Game implementation - Listeners
      */
@@ -235,16 +253,16 @@ public final class SGGame implements Listener {
                 break;
         }
         if (event.getEntity().getKiller() == null) {
-            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller().getDisplayName() == null ? "The Environment" : event.getEntity().getKiller().getDisplayName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getPlayerListName()}, new String[]{"<fallen>", player.getDisplayableName()}));
             playerDied(getGPlayer(event.getEntity()), cause);
             pendingSpectators.add(getGPlayer(event.getEntity()));
             return;
         }
         GPlayer killer = getGPlayer(event.getEntity().getKiller());
-        Integer newPoints = killer.getPoints() + SurvivalGames.getRandom().nextInt(100) + 1;
+        Integer newPoints = killer.getPoints() + SurvivalGames.getRandom().nextInt(26);
         killer.setPoints(newPoints);
         killer.sendMessage(MessageManager.getFormat("formats.points-got", true, new String[]{"<points>", newPoints.toString()}));
-        event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller().getDisplayName() == null ? "The Environment" : event.getEntity().getKiller().getDisplayName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+        event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", killer.getDisplayableName() == null ? "The Environment" : killer.getDisplayableName()}, new String[]{"<fallen>", player.getDisplayableName()}));
         playerDied(getGPlayer(event.getEntity()), cause);
         pendingSpectators.add(getGPlayer(event.getEntity()));
     }
@@ -417,6 +435,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onPlayerHunger(FoodLevelChangeEvent event) {
+        if (!players.contains(getGPlayer((Player) event.getEntity()))) return;
         if (isSpectating(getGPlayer((Player) event.getEntity()))) return;
         switch (gameState) {
             case PREGAME:
@@ -462,7 +481,9 @@ public final class SGGame implements Listener {
                 mutation.getPlayer().sendMessage(MessageManager.getFormat("formats.deathmatch-start-unmutate"));
                 mutation.getPlayer().playSound(Sound.BLAZE_DEATH);
             }
-            updateState(); //Triggers deathmatch
+            if (gameState != GameState.OVER) {
+                updateState(); //Triggers deathmatch
+            }
         }
     }
 

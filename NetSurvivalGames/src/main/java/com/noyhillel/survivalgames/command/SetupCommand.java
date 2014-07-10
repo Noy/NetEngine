@@ -57,7 +57,7 @@ public final class SetupCommand extends NetAbstractCommandHandler implements Lis
                 return;
             }
             HandlerList.unregisterAll(setupSession);
-            gPlayer.sendMessage(ChatColor.GREEN + "Your arena has been setup!");
+            gPlayer.sendMessage(ChatColor.GREEN + "Your arena has been setup! But did you remember to set the spawn of the arena to the middle of the map?");
             gPlayer.resetPlayer();
             gPlayer.playSound(Sound.LEVEL_UP);
             setupSessions.remove(gPlayer);

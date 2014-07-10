@@ -18,3 +18,7 @@ commands:
     aliases: [lc]
   heal:
     aliases: [health, h]
+  spawn:
+    aliases: [s]
+  setspawn:
+    aliases: [ss]
