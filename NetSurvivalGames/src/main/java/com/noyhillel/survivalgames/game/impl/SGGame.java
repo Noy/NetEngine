@@ -6,7 +6,6 @@ import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
-import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.arena.PointIterator;
 import com.noyhillel.survivalgames.game.GameException;
 import com.noyhillel.survivalgames.game.GameManager;
