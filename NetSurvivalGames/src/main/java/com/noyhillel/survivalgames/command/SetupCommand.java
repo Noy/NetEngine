@@ -4,6 +4,7 @@ import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.newcommand.Permission;
+import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
 import com.noyhillel.survivalgames.arena.setup.LobbySetup;
@@ -30,6 +31,7 @@ public final class SetupCommand extends NetAbstractCommandHandler implements Lis
 
     @Override
     public void playerCommand(Player player, String[] args) throws NewNetCommandException {
+        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
         if (args.length == 0) throw new NewNetCommandException("Usage: /setup <arena|lobby>", NewNetCommandException.ErrorType.Special);
         SetupSession session;
         GPlayer gPlayer = resolveGPlayer(player);

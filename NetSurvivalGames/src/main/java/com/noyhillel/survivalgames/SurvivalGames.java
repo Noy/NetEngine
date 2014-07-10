@@ -30,7 +30,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
-@MainClass(name = "NetSG", description = "The Net SurvivalGames plugin!")
+@MainClass(name = "NetSG", description = "The Net SurvivalGames plugin!", authors = {"Twister915", "NoyHillel1"})
 public final class SurvivalGames extends NetPlugin {
 
     @Getter private static SurvivalGames instance;
@@ -49,7 +49,7 @@ public final class SurvivalGames extends NetPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer(ChatColor.RED + "Server reloading!");
         }
-        logInfoInColor(ChatColor.YELLOW + "Bootstrapping SurvivalGames!");
+        logInfoInColor(ChatColor.YELLOW + "Enabling SurvivalGames...");
         try {
             saveDefaultConfig();
             SurvivalGames.instance = this;
@@ -107,7 +107,7 @@ public final class SurvivalGames extends NetPlugin {
         registerListener(new SetupModeListener());
         setupCommands(NickCommand.class);
         setupCommands(StatsCommand.class);
-        logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&6SurvivalGames&a has been fully enabled!"));
+        logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&eSurvivalGames&a has been fully enabled!"));
     }
 
     private void fallbackStorage() {

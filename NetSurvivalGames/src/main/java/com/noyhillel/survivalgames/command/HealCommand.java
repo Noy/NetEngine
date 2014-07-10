@@ -7,7 +7,12 @@ import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlayer;
 
@@ -15,7 +20,7 @@ import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlay
  * Created by Noy on 08/07/2014.
  */
 @Permission("survivalgames.heal")
-@CommandMeta(name = "heal", description = "The Heal Command", usage = "/heal")
+@CommandMeta(name = "heal", description = "The Heal Command", usage = "/heal [player]")
 public final class HealCommand extends NetAbstractCommandHandler {
 
     @Override
@@ -28,6 +33,21 @@ public final class HealCommand extends NetAbstractCommandHandler {
             GPlayer gTarget = resolveGPlayer(target);
             gTarget.heal();
             player.sendMessage(MessageManager.getFormat("formats.healed-player", true, new String[]{"<target>", gTarget.getDisplayableName()}));
+        } else if (args.length > 1) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
+    }
+
+    @Override
+    public List<String> completeArgs(CommandSender sender, String[] args) {
+        List<String> names = new ArrayList<>();
+        if (args[0].equals("")) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getName().startsWith(args[0])) {
+                    names.add(player.getName());
+                }
+            }
+            Collections.sort(names);
+            return names;
         }
+        return null;
     }
 }

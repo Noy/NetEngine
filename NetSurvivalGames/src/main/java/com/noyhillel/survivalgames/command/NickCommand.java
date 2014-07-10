@@ -1,6 +1,7 @@
 package com.noyhillel.survivalgames.command;
 
 
+import com.noyhillel.networkengine.command.CommandStatus;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
@@ -23,11 +24,14 @@ public final class NickCommand extends NetAbstractCommandHandler { // Just for y
         if (args.length == 0) throw new NewNetCommandException("Too few arguments, use /nick <name>", NewNetCommandException.ErrorType.FewArguments);
         if (args.length > 1) throw new NewNetCommandException("Too many arguments, use /nick <name>", NewNetCommandException.ErrorType.ManyArguments);
         String nick = args[0];
+        if (!nick.matches("^[a-zA-Z_0-9\u00a7]+$")) throw new NewNetCommandException("Nicknames must be AlphaNumeric!", NewNetCommandException.ErrorType.Special);
         GPlayer gPlayer = resolveGPlayer(player);
         if (SGGame.spectators.contains(gPlayer)) throw new NewNetCommandException("You cannot nick as a spectator!", NewNetCommandException.ErrorType.Special);
         if (nick.length() > 16) throw new NewNetCommandException("This nickname is too long!", NewNetCommandException.ErrorType.ManyArguments); // That's the limit, otherwise throws a NPE.
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (nick.equalsIgnoreCase(onlinePlayer.getName())) throw new NewNetCommandException("This nickname is already taken!", NewNetCommandException.ErrorType.Special); // Not sure about this one, change to a message if this isn't correct.
+            if (nick.equalsIgnoreCase(onlinePlayer.getDisplayName())) throw new NewNetCommandException("This nickname is already taken!", NewNetCommandException.ErrorType.Special);
+            if (nick.equalsIgnoreCase(onlinePlayer.getPlayerListName())) throw new NewNetCommandException("This nickname is already taken!", NewNetCommandException.ErrorType.Special);
         }
         if (nick.equalsIgnoreCase("remove") || nick.equalsIgnoreCase("off")) {
             gPlayer.setNick(null);
@@ -35,7 +39,6 @@ public final class NickCommand extends NetAbstractCommandHandler { // Just for y
             player.sendMessage(MessageManager.getFormat("formats.nick-off"));
             return;
         }
-        if (!StringUtils.isAlphanumeric(nick)) throw new NewNetCommandException("Nicknames must be AlphaNumeric", NewNetCommandException.ErrorType.Special);
         gPlayer.setNick(nick);
         gPlayer.sendMessage(MessageManager.getFormat("formats.disguised-player", true, new String[]{"<nickname>", nick}));
     }

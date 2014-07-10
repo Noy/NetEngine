@@ -28,6 +28,7 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
+        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
         GPlayer gPlayer = resolveGPlayer(sender);
         if (!setupSessions.containsKey(gPlayer))
             throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);

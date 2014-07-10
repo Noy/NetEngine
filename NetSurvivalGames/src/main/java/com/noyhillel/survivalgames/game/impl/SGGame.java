@@ -235,7 +235,7 @@ public final class SGGame implements Listener {
                 break;
         }
         if (event.getEntity().getKiller() == null) {
-            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller().getDisplayName() == null ? "The Environment" : event.getEntity().getKiller().getDisplayName()}, new String[]{"<fallen>", player.getDisplayableName()}));
             playerDied(getGPlayer(event.getEntity()), cause);
             pendingSpectators.add(getGPlayer(event.getEntity()));
             return;
@@ -244,7 +244,7 @@ public final class SGGame implements Listener {
         Integer newPoints = killer.getPoints() + SurvivalGames.getRandom().nextInt(100) + 1;
         killer.setPoints(newPoints);
         killer.sendMessage(MessageManager.getFormat("formats.points-got", true, new String[]{"<points>", newPoints.toString()}));
-        event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+        event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller().getDisplayName() == null ? "The Environment" : event.getEntity().getKiller().getDisplayName()}, new String[]{"<fallen>", player.getDisplayableName()}));
         playerDied(getGPlayer(event.getEntity()), cause);
         pendingSpectators.add(getGPlayer(event.getEntity()));
     }
@@ -255,6 +255,7 @@ public final class SGGame implements Listener {
         if (!(event.getDamager() instanceof Snowball)) return;
         Snowball snowball = (Snowball) event.getDamager();
         if (!(snowball.getShooter() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
         if (isSpectating(player)) return;
         player.addPotionEffect(PotionEffectType.SLOW, 2, 11);
@@ -268,6 +269,7 @@ public final class SGGame implements Listener {
         if (!(event.getDamager() instanceof Egg)) return;
         Egg egg = (Egg) event.getDamager();
         if (!(egg.getShooter() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
         if (isSpectating(player)) return;
         player.addPotionEffect(PotionEffectType.CONFUSION, 2, 10);
@@ -282,11 +284,11 @@ public final class SGGame implements Listener {
         if (!(event.getDamager() instanceof Arrow)) return;
         Arrow arrow = (Arrow) event.getDamager();
         if (!(arrow.getShooter() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
         GPlayer player = getGPlayer((Player) event.getEntity());
         if (isSpectating(player)) return;
         player.getPlayer().playEffect(player.getPlayer().getLocation(), Effect.MOBSPAWNER_FLAMES, 3);
         NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
-        player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", ((Player) arrow.getShooter()).getName()}));
     }
 
     @EventHandler
@@ -311,6 +313,10 @@ public final class SGGame implements Listener {
             case CROPS:
             case WEB:
             case VINE:
+            case BROWN_MUSHROOM:
+            case RED_MUSHROOM:
+            case CAKE_BLOCK:
+            case CAKE:
                 event.setCancelled(false);
                 return;
         }
@@ -320,9 +326,11 @@ public final class SGGame implements Listener {
     @EventHandler
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         switch (event.getBlock().getType()) {
-            case LEAVES:
             case WEB:
             case FIRE:
+            case BOAT:
+            case CAKE:
+            case CAKE_BLOCK:
                 event.setCancelled(false);
                 return;
         }
@@ -510,7 +518,7 @@ public final class SGGame implements Listener {
             case COUNTDOWN:
                 gameState = GameState.GAMEPLAY;
                 broadcast(MessageManager.getFormat("formats.game-start", true));
-                broadcastSound(Sound.WITHER_SPAWN, 0.5F);
+                broadcastSound(Sound.WITHER_SPAWN);
                 break;
             case GAMEPLAY:
                 gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;
@@ -578,6 +586,9 @@ public final class SGGame implements Listener {
         Set<GPlayer> players = new HashSet<>();
         for (GPlayer spectator : spectators) {
             players.add(spectator);
+        }
+        for (GPlayer pendingSpectators : this.getPendingSpectators()) {
+            players.add(pendingSpectators);
         }
         for (GPlayer player : this.players) {
             players.add(player);
