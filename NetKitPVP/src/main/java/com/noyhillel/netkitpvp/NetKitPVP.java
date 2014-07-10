@@ -20,7 +20,7 @@ public final class NetKitPVP extends NetPlugin {
 
     @Override
     protected void disable() {
-
+        NetKitPVP.instance = null;
     }
 
 //    private void registerAllCommands() {

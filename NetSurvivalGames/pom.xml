@@ -33,6 +33,11 @@
             <version>0.8.0.RELEASE</version>
         </dependency>
         <dependency>
+            <groupId>lilypad.client.connect</groupId>
+            <artifactId>api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>3.2.0</version>

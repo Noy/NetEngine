@@ -6,6 +6,7 @@ import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Data;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -86,6 +87,11 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler
     public void onBreakBlock(BlockBreakEvent event) {
+        if (event.getPlayer().isOp()) {
+            if (event.getBlock().getType() == Material.SIGN) return;
+            if (event.getBlock().getType() == Material.SIGN_POST) return;
+            if (event.getBlock().getType() == Material.WALL_SIGN) return;
+        }
         event.setCancelled(true);
     }
 
@@ -101,7 +107,12 @@ public final class GameManagerListener implements Listener {
     }
 
     @EventHandler
-    public void onBreakBlock(BlockPlaceEvent event) {
+    public void onPlaceBlock(BlockPlaceEvent event) {
+        if (event.getPlayer().isOp()) {
+            if (event.getBlock().getType() == Material.SIGN) return;
+            if (event.getBlock().getType() == Material.SIGN_POST) return;
+            if (event.getBlock().getType() == Material.WALL_SIGN) return;
+        }
         event.setCancelled(true);
     }
 

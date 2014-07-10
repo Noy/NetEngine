@@ -24,6 +24,7 @@ import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -175,14 +176,26 @@ public final class SGGame implements Listener {
         }
     }
 
+    /*
+     Game implementation - Listeners
+     */
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (gameState == GameState.OVER || gameState == GameState.PREGAME) return;
+        final GPlayer gPlayer = getGPlayer(event.getPlayer());
+        Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                makePlayerSpectator(gPlayer);
+            }
+        }, 40L); //SMD CORE
+    }
+
     @EventHandler
     public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) {
         crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo());
     }
-
-    /*
-     Game implementation - Listeners
-     */
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -313,6 +326,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (gameState == GameState.COUNTDOWN || gameState == GameState.DEATHMATCH_COUNTDOWN) event.setCancelled(true);
         GPlayer gPlayer = getGPlayer(event.getPlayer());
         if (!players.contains(gPlayer)) event.setCancelled(true);
     }
@@ -362,7 +376,7 @@ public final class SGGame implements Listener {
         String formatName = spectatorSent ? "chat.spectator-chat" : "chat.player-chat";
         event.setCancelled(true);
         String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}, new String[]{"<points>", gPlayer.getPoints().toString()}) + event.getMessage();
-        for (GPlayer player : getAllPlayers()) {
+        for (GPlayer player : getAllPlayersForChat()) {
             if (gameState == GameState.OVER || (spectatorSent && (spectators.contains(player) || player.getPlayer().isOp())) || !spectatorSent) player.sendMessage(s);
         }
         SurvivalGames.getInstance().logInfoInColor(s);
@@ -429,14 +443,13 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onChestOpen(PlayerInteractEvent event) {
-        if (gameState == GameState.COUNTDOWN || gameState == GameState.DEATHMATCH_COUNTDOWN) event.setCancelled(true);
-    }
-
-    @EventHandler
     public void onPlayerHunger(FoodLevelChangeEvent event) {
-        if (!players.contains(getGPlayer((Player) event.getEntity()))) return;
+        if (!players.contains(getGPlayer((Player) event.getEntity()))) {
+            event.setCancelled(true);
+            return;
+        }
         if (isSpectating(getGPlayer((Player) event.getEntity()))) return;
+        if (this.pendingSpectators.contains(getGPlayer((Player) event.getEntity()))) return;
         switch (gameState) {
             case PREGAME:
                 event.setCancelled(true);
@@ -608,15 +621,25 @@ public final class SGGame implements Listener {
         for (GPlayer spectator : spectators) {
             players.add(spectator);
         }
-        for (GPlayer pendingSpectators : this.getPendingSpectators()) {
-            players.add(pendingSpectators);
-        }
         for (GPlayer player : this.players) {
             players.add(player);
         }
         return players;
     }
 
+    public Set<GPlayer> getAllPlayersForChat() {
+        Set<GPlayer> players = new HashSet<>();
+        for (GPlayer spectator : spectators) {
+            players.add(spectator);
+        }
+        for (GPlayer pendingSpectator : pendingSpectators) {
+            players.add(pendingSpectator);
+        }
+        for (GPlayer player : this.players) {
+            players.add(player);
+        }
+        return players;
+    }
     private void hideFromAllPlayers(GPlayer player) {
         for (GPlayer gPlayer : getAllPlayers()) {
             gPlayer.getPlayer().hidePlayer(player.getPlayer());

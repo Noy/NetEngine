@@ -18,6 +18,12 @@ import com.noyhillel.survivalgames.storage.ForgetfulStorage;
 import com.noyhillel.survivalgames.storage.GStorage;
 import com.noyhillel.survivalgames.storage.GStorageKey;
 import com.noyhillel.survivalgames.storage.StorageTypes;
+import com.noyhillel.survivalgames.utils.SignListener;
+import lilypad.client.connect.api.Connect;
+import lilypad.client.connect.api.request.impl.RedirectRequest;
+import lilypad.client.connect.api.result.FutureResultListener;
+import lilypad.client.connect.api.result.StatusCode;
+import lilypad.client.connect.api.result.impl.RedirectResult;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -100,6 +106,7 @@ public final class SurvivalGames extends NetPlugin {
             fallbackStorage();
         }
         registerListener(new GPlayerManagerListener(this.gPlayerManager));
+        registerListener(new SignListener());
         setupCommands(VoteCommand.class);
         setupCommands(MapCommand.class);
         setupCommands(HealCommand.class);
@@ -110,6 +117,7 @@ public final class SurvivalGames extends NetPlugin {
         setupCommands(StatsCommand.class);
         setupCommands(SpawnCommand.class);
         setupCommands(SetSpawnCommand.class);
+        setupCommands(HubCommand.class);
         logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&eSurvivalGames&a has been fully enabled!"));
     }
 
@@ -151,5 +159,25 @@ public final class SurvivalGames extends NetPlugin {
             return null;
         }
         return builder.toString();
+    }
+
+    public Connect getBukkitConnect() {
+        return getServer().getServicesManager().getRegistration(Connect.class).getProvider();
+    }
+
+    public void sendToServer(String server, final Player player) {
+        try {
+            Connect c = getBukkitConnect();
+            c.request(new RedirectRequest(server, player.getName())).registerListener(new FutureResultListener<RedirectResult>() {
+                public void onResult(RedirectResult redirectResult) {
+                    if (redirectResult.getStatusCode() == StatusCode.SUCCESS) {
+                        return;
+                    }
+                    player.sendMessage("Could not connect");
+                }
+            });
+        } catch (Exception exception) {
+            player.sendMessage("Could not connect");
+        }
     }
 }

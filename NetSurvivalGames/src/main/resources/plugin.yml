@@ -22,3 +22,5 @@ commands:
     aliases: [s]
   setspawn:
     aliases: [ss]
+  hub:
+    aliases: [lobby, back, leave]
