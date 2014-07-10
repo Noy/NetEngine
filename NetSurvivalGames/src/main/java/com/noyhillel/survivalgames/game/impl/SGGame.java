@@ -322,6 +322,7 @@ public final class SGGame implements Listener {
         if (gameState != GameState.GAMEPLAY) return;
         switch (event.getBlock().getType()) {
             case LEAVES:
+            case LEAVES_2:
             case LONG_GRASS:
             case YELLOW_FLOWER:
             case RED_ROSE:
@@ -652,7 +653,7 @@ public final class SGGame implements Listener {
                 }
             }
             if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
-            if (RandomUtils.contains(secondsRemaining, secondsToSoundHigher)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound-higher")), 0.5F);
+            if (RandomUtils.contains(secondsRemaining, secondsToSoundHigher)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound-higher")), 1F);
         }
 
         @Override

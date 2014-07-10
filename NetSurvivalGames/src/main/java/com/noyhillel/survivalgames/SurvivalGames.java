@@ -40,6 +40,7 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private SetupCommand setupCommand;
     @Getter private static Random random = new Random();
     @Getter private boolean isSetupOnly = false;
+    private static final String RELOAD_MESSAGE = ChatColor.RED + "SG Server Reloading!";
 
     /* constants */
     private static final String ARENA_DIRECTORY = "arenas";
@@ -47,7 +48,7 @@ public final class SurvivalGames extends NetPlugin {
     @Override
     protected void enable() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.kickPlayer(ChatColor.RED + "Server reloading!");
+            p.kickPlayer(RELOAD_MESSAGE);
         }
         logInfoInColor(ChatColor.YELLOW + "Enabling SurvivalGames...");
         try {
