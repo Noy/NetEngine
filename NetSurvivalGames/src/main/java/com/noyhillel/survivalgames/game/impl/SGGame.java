@@ -24,7 +24,6 @@ import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -189,7 +188,7 @@ public final class SGGame implements Listener {
             public void run() {
                 makePlayerSpectator(gPlayer);
             }
-        }, 40L); //SMD CORE
+        }, 20L); //SMD CORE
     }
 
     @EventHandler

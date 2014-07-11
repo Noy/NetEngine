@@ -127,7 +127,8 @@ public final class GameManager implements VotingSessionDisplay {
                         storageError.printStackTrace();
                         gPlayer.sendMessage(ChatColor.RED + "Unable to save your player data!");
                     }
-                    gPlayer.getPlayer().kickPlayer(format); //TODO a 'sendToServer' method to kick them back to the hub for example
+                    gPlayer.sendMessage(format);
+                    SurvivalGames.getInstance().sendToServer("hub", gPlayer.getPlayer());
                 }
                 try {
                     runningSGGame.getArena().unloadWorld();

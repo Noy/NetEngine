@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 /**
  * Created by Noy on 10/07/2014.
  */
-public class SignListener implements Listener {
+public final class SignListener implements Listener {
 
     @EventHandler
     public void onSignPlace(SignChangeEvent event) {
