@@ -9,11 +9,8 @@ import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.InventoryGUI;
-import com.noyhillel.networkengine.util.utils.NetWorkCoolDown;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -52,7 +49,8 @@ public final class KitCommand extends NetAbstractCommandHandler {
                             items.add(new ItemStack(Material.valueOf(s)));
                         }
                     } catch (Exception ex) {
-                        System.out.println("Exception");
+                        player.sendMessage("Something went wrong, check below.");
+                        player.sendException(ex);
                     }
                 }
                 for (ItemStack theItems : items) {
@@ -69,7 +67,7 @@ public final class KitCommand extends NetAbstractCommandHandler {
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
         if (args.length > 0) throw new NewNetCommandException("Too few Arguments.", NewNetCommandException.ErrorType.ManyArguments);
         try {
-            NetKitPVP.getNetWorkCoolDown().testCooldown(sender.getName(), 20L);
+            NetKitPVP.getCoolDown().testCooldown(sender.getName(), 20L);
         } catch (CooldownUnexpiredException e) {
             sender.sendMessage("you cant do that for that amount of seconds nigga");
             return;

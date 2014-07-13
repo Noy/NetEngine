@@ -6,7 +6,7 @@ import com.noyhillel.networkengine.util.config.YAMLConfigurationFile;
 import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
 import com.noyhillel.networkengine.mongo.DefaultProvider;
 import com.noyhillel.networkengine.mongo.Provider;
-import com.noyhillel.networkengine.util.utils.NetWorkCoolDown;
+import com.noyhillel.networkengine.util.utils.NetCoolDown;
 import com.noyhillel.networkhub.commands.*;
 import com.noyhillel.networkhub.items.HubItemJoinListener;
 import com.noyhillel.networkhub.commands.WarpItemCommands;
@@ -24,8 +24,7 @@ import org.bukkit.entity.Player;
 public final class NetHub extends NetPlugin {
 
     @Getter private static NetHub instance;
-    @Getter private static NetWorkCoolDown cooldown;
-    private static final String RELOAD_MESSAGE = ChatColor.GRAY + "Hub Reloading!";
+    @Getter private static NetCoolDown cooldown;
 
     @Override
     protected void enable() {
@@ -38,7 +37,7 @@ public final class NetHub extends NetPlugin {
             registerAllNetCommands();
             registerOtherCommands();
             setupDatabase();
-            cooldown = new NetWorkCoolDown();
+            cooldown = new NetCoolDown();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.getPlayer().kickPlayer(RELOAD_MESSAGE);
             }

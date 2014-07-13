@@ -1,35 +1,36 @@
+
 kit:
   items:
-    sword:
+    IronSword:
       item: IRON_SWORD
       name: "IronSword"
       items: IRON_SWORD, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, GOLDEN_APPLE, COOKED_BEEF
       lore:
-      - '&cClick to go to fire games'
-    archer:
+      - '&cClick to go to iron sword kit'
+    Archer:
           item: BOW
           name: "Archer"
           items: IRON_SWORD, DIAMOND
           lore:
-          - '&cClick to go to fire games'
-    apple:
+          - '&cClick to go to bow kit'
+    Apple:
           item: APPLE
           name: "Apple"
           items: IRON_SWORD, GOLD_BLOCK
           lore:
-          - '&cClick to go to fire games'
-    diamond:
+          - '&cClick to go to apple kit'
+    Diamond:
           item: DIAMOND
           name: "Diamond"
           items: IRON_SWORD, DIAMOND_SPADE
           lore:
-          - '&cClick to go to fire games'
-    gold:
+          - '&cClick to go to diamond kit'
+    Gold:
           item: GOLD_INGOT
           name: "Gold"
-          items: IRON_SWORD, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, GOLDEN_APPLE, COOKED_BEEF
+          items: IRON_SWORD, GOLD_INGOT, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, COOKED_BEEF, GOLDEN_APPLE, COOKED_BEEF
           lore:
-          - '&cClick to go to fire games'
+          - '&cClick to go to gold kit'
 formats:
   prefix: "&6[&cKitPVP&6] "
   get-kit: "&cYou have got kit: &4<kit>."

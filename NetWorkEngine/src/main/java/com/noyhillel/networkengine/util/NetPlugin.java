@@ -43,13 +43,14 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     @Getter protected Provider provider;
     @Getter private final MainClass meta = getClass().getAnnotation(MainClass.class);
     @Getter private final PluginDescriptionFile pluginDescriptionFile = getDescription();
+    protected static final String RELOAD_MESSAGE = ChatColor.GRAY + "Server Reloading!";
 
     protected abstract void enable();
     protected abstract void disable();
 
     @Override
     public final void onEnable() {
-        logInfo(ChatColor.RED + "Attempting to link to engine...");
+        logInfoInColor(ChatColor.RED + "Attempting to link to engine...");
         try {
             NetPlugin.instance = this;
             NetPlugin.netPlayerManager = new NetPlayerManager();
@@ -64,6 +65,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
             ex.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(this);
         }
+        logInfoInColor(ChatColor.GREEN + "Linked!");
     }
 
     @Override

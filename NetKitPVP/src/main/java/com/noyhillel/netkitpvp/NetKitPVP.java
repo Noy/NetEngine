@@ -5,8 +5,9 @@ import com.noyhillel.netkitpvp.commands.KitCommand;
 import com.noyhillel.netkitpvp.commands.SetKitCommand;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
-import com.noyhillel.networkengine.util.utils.NetWorkCoolDown;
+import com.noyhillel.networkengine.util.utils.NetCoolDown;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -18,10 +19,13 @@ import java.lang.reflect.InvocationTargetException;
 public final class NetKitPVP extends NetPlugin {
 
     @Getter public static NetKitPVP instance;
-    @Getter public static NetWorkCoolDown netWorkCoolDown = new NetWorkCoolDown();
+    @Getter public static NetCoolDown coolDown = new NetCoolDown();
 
     @Override
     protected void enable() {
+        for (Player player : this.getServer().getOnlinePlayers()) {
+            player.kickPlayer(RELOAD_MESSAGE);
+        }
         NetKitPVP.instance = this;
         registerAllCommands();
     }

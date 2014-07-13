@@ -298,6 +298,10 @@ public final class NetPlayer {
         return this.getPlayer().getName();
     }
 
+    public String getDisplayName() {
+        return this.getPlayer().getDisplayName();
+    }
+
     public boolean isOp() {
         return this.getPlayer().isOp();
     }
