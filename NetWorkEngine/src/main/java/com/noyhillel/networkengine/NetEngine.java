@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 /**
  * Created by Noy on 25/05/2014.
  */
-@MainClass(name = "NetEngine", description = "The Net Engine Plugin")
+@MainClass(name = "NetEngine", description = "The NetEngine Plugin")
 public final class NetEngine extends NetPlugin {
 
     @Getter private static NetEngine instance;
