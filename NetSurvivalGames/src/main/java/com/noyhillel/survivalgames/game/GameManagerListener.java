@@ -133,6 +133,7 @@ public final class GameManagerListener implements Listener {
             case VOID:
             case SUICIDE:
             case CUSTOM:
+                event.setCancelled(false);
                 return;
             default:
                 event.setCancelled(true);
@@ -145,10 +146,9 @@ public final class GameManagerListener implements Listener {
         event.setCancelled(true);
     }
 
-    @SuppressWarnings("AccessStaticViaInstance")
     @EventHandler
     public void onItemMoveInventory(InventoryClickEvent event) {
-        if (gameManager.isPlayingGame() && !gameManager.getRunningSGGame().getSpectators().contains(resolveGPlayer((Player) event.getWhoClicked()))) return;
+        if (gameManager.isPlayingGame() && !SGGame.getSpectators().contains(resolveGPlayer((Player) event.getWhoClicked()))) return;
         event.setCancelled(true);
     }
 

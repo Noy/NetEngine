@@ -22,8 +22,8 @@ formats:
   kicked-for-vip: "&cYou have been kicked to make room for a donator/VIP"
   setlobby: "&6You have set the lobby to the location you're standing in!"
   unsetlobby: "&6You have unset the lobby!"
-  game-countdown: "&6&l<seconds> seconds &5left before the game begins!"
-  deathmatch-countdown: "&5Deathmatch starts in &6&l<seconds> seconds!"
+  game-countdown: "&7There are &e<seconds>&7 seconds until the game starts!"
+  deathmatch-countdown: "&7There are &e<seconds>&7 seconds until deathmatch starts!"
   deathmatch-start: "&6Deathmatch is starting! &4Good luck!"
   deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
   points-got: "&eYou have received &4<points> points &efor that kill!"
@@ -53,7 +53,7 @@ countdowns:
   pregame: 20
   pre-teleport-deathmatch: 20
   post-teleport-deathmatch: 20
-  server-shutdown: 20
+  server-shutdown: 10
 sounds:
   timer-sound: "CLICK"
   timer-sound-higher: "ORB_PICKUP"

@@ -438,6 +438,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onPlayerPickup(PlayerPickupItemEvent event) {
+        if (gameState == GameState.OVER) event.setCancelled(true);
         if (isSpectating(getGPlayer(event.getPlayer()))) event.setCancelled(true);
     }
 

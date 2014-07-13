@@ -1,23 +1,23 @@
 package com.noyhillel.networkengine.util.utils;
 
-import com.noyhillel.networkengine.util.NetPlugin;
-import com.noyhillel.networkengine.util.player.NetPlayer;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+        import com.noyhillel.networkengine.util.NetPlugin;
+        import com.noyhillel.networkengine.util.player.NetPlayer;
+        import lombok.Getter;
+        import lombok.Setter;
+        import lombok.ToString;
+        import org.bukkit.Bukkit;
+        import org.bukkit.ChatColor;
+        import org.bukkit.entity.Player;
+        import org.bukkit.event.EventHandler;
+        import org.bukkit.event.Listener;
+        import org.bukkit.event.inventory.InventoryClickEvent;
+        import org.bukkit.event.inventory.InventoryCloseEvent;
+        import org.bukkit.inventory.Inventory;
+        import org.bukkit.inventory.ItemStack;
+        import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 /**
  * Created by Noy on 26/05/2014.
@@ -63,7 +63,7 @@ public final class InventoryGUI implements Listener {
     public void updateInventoryItems(ArrayList<InventoryItem> items) {
         inventory.clear();
         if (items == null) return;
-        for (Integer i = 0; i < items.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {
             InventoryItem item = items.get(i);
             if (item == null) continue;
             item.setSlot(i);
@@ -134,7 +134,7 @@ public final class InventoryGUI implements Listener {
             if (!(event.getCurrentItem().equals(item.getItem()))) continue;
             this.delegate.onClickItem(this, item, netPlayer);
         }
-        event.setCancelled(true); // That;s why it didn't work...
+        event.setCancelled(true); // That's why it didn't work...
     }
 
     /**
@@ -177,7 +177,7 @@ public final class InventoryGUI implements Listener {
             ItemMeta meta = item.getItemMeta(); // The ItemMeta
             meta.setDisplayName(name); // Sets the display name as our constructor parameter.
             if (lore != null) { // Loop through lore Strings.
-                for (Integer i = 0; i < lore.size(); i++) {
+                for (int i = 0; i < lore.size(); i++) {
                     lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
                 }
                 meta.setLore(lore); // Set lore

@@ -184,6 +184,10 @@ public final class NetPlayer {
         return giveItem(type, amount, value, null);
     }
 
+    public ItemStack giveItem(Material type, Integer amount, Integer slot) {
+        return giveItem(type, amount, null, null, null, slot);
+    }
+
     public ItemStack giveItem(Material type, Integer amount) {
         return giveItem(type, amount, (short)0);
     }

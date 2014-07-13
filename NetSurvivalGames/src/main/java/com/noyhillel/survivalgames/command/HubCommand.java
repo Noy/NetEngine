@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
  * Created by Noy on 10/07/2014.
  */
 @CommandMeta(name = "hub", description = "The Hub Command", usage = "/hub")
-public class HubCommand extends NetAbstractCommandHandler {
+public final class HubCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {

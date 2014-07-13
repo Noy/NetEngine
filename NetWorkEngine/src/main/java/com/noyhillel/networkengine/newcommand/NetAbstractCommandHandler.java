@@ -54,11 +54,11 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
      * @param commandSender The sender which is executing the command.
      * @param command The command being executed.
      * @param label Any aliases of the command
-     * @param strings Any arguments of the command.
+     * @param args Any arguments of the command.
      * @return Overridden onCommand method
      */
     @Override
-    public final boolean onCommand(CommandSender commandSender, Command command, String label, String[] strings) {
+    public final boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         // Creating our try block, trying to execute our next try block
         try {
             // Creating our try block, checking if the CommandSender's are Players, The Console or a CommandBlock.
@@ -66,19 +66,19 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
                 // Checking if the thing whom executed the command is a CommandBlock.
                 if (commandSender instanceof BlockCommandSender) {
                     // If so, execute the method which we created.
-                    blockCommand((BlockCommandSender) commandSender, strings);
+                    blockCommand((BlockCommandSender) commandSender, args);
                 }
                 // Checking if the thing whom executed the command is a Player
                 if (commandSender instanceof Player) {
                     // Checking if the Player has permission from our @Permission annotation which we created, if not, throw a 'NewCommandException' which takes 2 parameters: String (Permission message, ErrorType)
                     if (permission != null && !commandSender.hasPermission(permission.value())) throw new NewNetCommandException(permission.permissionErrorMessage(), NewNetCommandException.ErrorType.Permission);
                     // If all goes well, execute the method which we created.
-                    playerCommand((Player) commandSender, strings);
+                    playerCommand((Player) commandSender, args);
                 }
                 // Checking if the thing whom executed the command is the Console
                 if (commandSender instanceof ConsoleCommandSender) {
                     // If so, execute the method which we created.
-                    consoleCommand((ConsoleCommandSender) commandSender, strings);
+                    consoleCommand((ConsoleCommandSender) commandSender, args);
                 }
                 // Was there an exception?
             } catch (Throwable t) {
@@ -97,7 +97,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
             // Was there an exception from this try block?
         } catch (NewNetCommandException ex) {
             // Creating a local variable of our CommandExecutionException which takes 5 parameters: A String, ErrorType, List<String>, Command and the CommandSender.
-            NetCommandExecutionException commandExecutionException = new NetCommandExecutionException(ex.getMessage(), ex.getErrorType(), strings, command, commandSender);
+            NetCommandExecutionException commandExecutionException = new NetCommandExecutionException(ex.getMessage(), ex.getErrorType(), args, command, commandSender);
             // If the CommandErrorHandlers are less than or equal to 1,
             if (commandErrorHandlers.size() >= 1) {
                 // Iterate through all CommandErrorHandlers.

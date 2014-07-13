@@ -23,16 +23,13 @@ public final class ConfigManager {
     /**
      * Our List which Stored the Inventory Item
      */
-    @Getter private ArrayList<InventoryGUI.InventoryItem> inventoryItems;
-    private HashMap<String, Location> locations;
+    @Getter private ArrayList<InventoryGUI.InventoryItem> inventoryItems = new ArrayList<>();
+    private HashMap<String, Location> locations = new HashMap<>();
 
     /**
      * Creating our constructor
      */
     public ConfigManager() {
-        // Initialise both.
-        inventoryItems = new ArrayList<>();
-        locations = new HashMap<>();
         // Creating local variable.
         ConfigurationSection section = NetHub.getInstance().getConfig().getConfigurationSection("hub.warps");
         Set<String> sectionKeys = section.getKeys(false); // Storing a String in a Set, just so it wouldn't create duplicates.

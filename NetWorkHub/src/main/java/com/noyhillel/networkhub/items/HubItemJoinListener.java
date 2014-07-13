@@ -45,7 +45,7 @@ public final class HubItemJoinListener extends ModuleListener {
                 if (hidingPlayer != null) {
                     hidingPlayer.hidePlayer(player.getPlayer());
                 } else {
-                    HidePlayersItem. hidingPlayers.remove(uuid);
+                    HidePlayersItem.hidingPlayers.remove(uuid);
                 }
             }
         }

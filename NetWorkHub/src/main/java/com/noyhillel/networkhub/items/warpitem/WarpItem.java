@@ -40,11 +40,7 @@ public final class WarpItem extends NetHubItemDelegate {
             @Override
             public void onClickItem(InventoryGUI gui, InventoryGUI.InventoryItem item, NetPlayer player) {
                 inventoryGUI.closeInventory(player);
-                try {
-                    player.teleport(config.getLocation(item.getName()));
-                }catch (Exception e) {
-                    e.printStackTrace();
-                }
+                player.teleport(config.getLocation(item.getName()));
                 player.sendMessage(MessageManager.getFormat("warp-item.warp-to", true, new String[]{"<warp>", item.getName()}));
             }
 
@@ -54,8 +50,7 @@ public final class WarpItem extends NetHubItemDelegate {
              * @param player The Player
              */
             @Override
-            public void onOpen(InventoryGUI gui, NetPlayer player) {
-            }
+            public void onOpen(InventoryGUI gui, NetPlayer player) {}
 
             /**
              * onClose Method - Unused.
@@ -63,8 +58,7 @@ public final class WarpItem extends NetHubItemDelegate {
              * @param player The Player
              */
             @Override
-            public void onClose(InventoryGUI gui, NetPlayer player) {
-            }
+            public void onClose(InventoryGUI gui, NetPlayer player) {}
         });
     }
 
