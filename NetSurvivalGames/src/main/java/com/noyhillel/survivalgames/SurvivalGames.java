@@ -2,7 +2,7 @@ package com.noyhillel.survivalgames;
 
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
-import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.ArenaManager;
 import com.noyhillel.survivalgames.arena.JSONArenaManager;

@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.game.impl;
 
-import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
 import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;

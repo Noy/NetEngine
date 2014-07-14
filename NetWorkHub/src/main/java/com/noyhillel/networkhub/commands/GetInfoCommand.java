@@ -21,11 +21,7 @@ import java.util.List;
  */
 @Permission("hub.getinfo")
 @CommandMeta(name = "getinfo", usage = "/getinfo <Online Player>", description = "The Get Usage command.")
-public class GetInfoCommand extends NetAbstractCommandHandler {
-
-
-    public GetInfoCommand() throws NewNetCommandException {
-    }
+public final class GetInfoCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {

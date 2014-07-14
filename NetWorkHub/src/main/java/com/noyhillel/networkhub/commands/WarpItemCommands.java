@@ -1,9 +1,6 @@
 package com.noyhillel.networkhub.commands;
 
-import com.noyhillel.networkengine.command.CommandHandler;
-import com.noyhillel.networkengine.command.CommandStatus;
-import com.noyhillel.networkengine.command.NetCommand;
-import com.noyhillel.networkengine.command.NetCommandSenders;
+import com.noyhillel.networkengine.command.*;
 import com.noyhillel.networkhub.MessageManager;
 import com.noyhillel.networkhub.NetHub;
 import org.bukkit.ChatColor;
@@ -18,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Noy on 23/12/13.
  */
-public final class WarpItemCommands implements CommandHandler {
+public final class WarpItemCommands extends AbstractCommandHandler {
 
     /**
      * Warp Item Commands class.
@@ -79,15 +76,10 @@ public final class WarpItemCommands implements CommandHandler {
         if (args.length == 0) return CommandStatus.FEW_ARGUMENTS;
         if (args.length > 1) return CommandStatus.MANY_ARGUMENTS;
         ConfigurationSection warp = NetHub.getInstance().getConfig().getConfigurationSection("hub.warps." + args[0]);
-        if (warp == null)  return CommandStatus.NULL;
+        if (warp == null) return CommandStatus.NULL;
         NetHub.getInstance().getConfig().set("hub.warps." + args[0], null);
         NetHub.getInstance().saveConfig();
         p.sendMessage(MessageManager.getFormats("formats.delete-warp"));
         return CommandStatus.SUCCESS;
-    }
-
-    @Override
-    public void handleCommand(CommandStatus status, CommandSender sender, NetCommandSenders senderType) {
-        NetHub.getInstance().handleCommand(status, sender, senderType);
     }
 }

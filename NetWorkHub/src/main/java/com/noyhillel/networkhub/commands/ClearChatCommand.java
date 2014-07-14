@@ -1,6 +1,8 @@
 package com.noyhillel.networkhub.commands;
 
 import com.noyhillel.networkengine.command.*;
+import com.noyhillel.networkengine.newcommand.CommandMeta;
+import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import com.noyhillel.networkhub.NetHub;
@@ -12,6 +14,7 @@ import org.bukkit.entity.Player;
 /**
  * Created by Noy on 2013/12/23.
  */
+@CommandMeta(name = "clearchat", description = "The ClearChat command", usage = "/clearchat")
 public final class ClearChatCommand extends AbstractCommandHandler {
 
     @NetCommand(

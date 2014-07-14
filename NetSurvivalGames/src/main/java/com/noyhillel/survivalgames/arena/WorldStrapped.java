@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.arena;
 
-import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.survivalgames.SurvivalGames;
 import lombok.Data;
 import lombok.NonNull;

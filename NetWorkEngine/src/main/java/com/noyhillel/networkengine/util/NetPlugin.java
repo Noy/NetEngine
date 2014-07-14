@@ -11,7 +11,6 @@ import com.noyhillel.networkengine.util.player.NetPlayerManager;
 import com.noyhillel.networkengine.util.player.NetPlayerManagerListener;
 import com.noyhillel.networkengine.mongo.NetDatabase;
 import com.noyhillel.networkengine.mongo.Provider;
-import com.noyhillel.networkengine.util.utils.UtilListener;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -57,7 +56,6 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
             NetPlugin.netPlayerManager = new NetPlayerManager();
             saveDefaultConfig();
             enable();
-            registerListener(new UtilListener());
             this.commandStructure = new CommandStructure(this);
             NetPlugin.netPlayerManager = new NetPlayerManager();
             registerListener(new NetPlayerManagerListener(netPlayerManager));

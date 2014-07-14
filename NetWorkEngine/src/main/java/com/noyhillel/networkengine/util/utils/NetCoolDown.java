@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Noy on 29/05/2014.
+ * Created by Joey on 29/05/2014.
  */
 public final class NetCoolDown {
 

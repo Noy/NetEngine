@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.player;
 
-import com.noyhillel.networkengine.util.RandomUtils;
+import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.utils.MessageManager;

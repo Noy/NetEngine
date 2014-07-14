@@ -14,11 +14,6 @@ import org.bukkit.entity.Player;
  */
 public final class CommandSpyCommand extends AbstractCommandHandler {
 
-    @Override
-    public void handleCommand(CommandStatus commandStatus, CommandSender commandSender, NetCommandSenders commandSenders) {
-        NetHub.getInstance().handleCommand(commandStatus, commandSender, commandSenders);
-    }
-
     @NetCommand(
             name = "commandspy",
             usage = "/cs",
@@ -40,6 +35,4 @@ public final class CommandSpyCommand extends AbstractCommandHandler {
         }
         return CommandStatus.SUCCESS;
     }
-
-
 }

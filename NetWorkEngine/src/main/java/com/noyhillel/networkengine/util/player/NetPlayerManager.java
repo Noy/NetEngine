@@ -27,12 +27,12 @@ public final class NetPlayerManager {
         return getOnlinePlayer(p.getName());
     }
 
-    void playerLoggedIn(Player player) {
+    public void playerLoggedIn(Player player) {
         NetPlayer onlinePlayer = new NetPlayer(player.getName(), player.getUniqueId());
         onlinePlayers.put(player.getName(), onlinePlayer);
     }
 
-    void playerLoggedOut(Player player) {
+    public void playerLoggedOut(Player player) {
         onlinePlayers.remove(player.getName());
     }
 }
