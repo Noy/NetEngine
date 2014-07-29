@@ -30,8 +30,8 @@ formats:
   quit-msg: "&3<player> &c&l<< &ehas left &6&lSG&e."
   heal-msg: "&6You have been healed!"
   healed-player: "&6You haved healed &4<target>"
-  chest-refil: "&cThe Chests have refilled!"
-  chest-refil-time: 900 #IN SECONDS AFTER GAME STARTS.
+  chest-refill: "&cThe Chests have refilled!"
+  chest-refill-time: 900 #IN SECONDS AFTER GAME STARTS.
   scoreboard:
     players: "&ePlayers"
     spectators: "&cSpectators:"

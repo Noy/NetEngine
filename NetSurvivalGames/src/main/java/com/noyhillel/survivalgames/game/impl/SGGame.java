@@ -7,6 +7,7 @@ import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.PointIterator;
+import com.noyhillel.survivalgames.command.LinkChestsCommand;
 import com.noyhillel.survivalgames.game.GameException;
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.game.PvPTracker;
@@ -184,6 +185,9 @@ public final class SGGame implements Listener {
             @Override
             public void run() {
                 makePlayerSpectator(gPlayer);
+                for (GPlayer player : spectators) {
+                    gPlayer.getPlayer().hidePlayer(player.getPlayer());
+                }
             }
         }, 20L); //SMD CORE
     }
@@ -554,9 +558,9 @@ public final class SGGame implements Listener {
                     @SneakyThrows
                     public void run() {
                         refillChests();
-                        broadcast(MessageManager.getFormat("formats.chest-refil", true));
+                        broadcast(MessageManager.getFormat("formats.chest-refill", true));
                     }
-                }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refil-time")*20);
+                }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refill-time")*20);
                 broadcastSound(Sound.WITHER_SPAWN);
                 for (GPlayer player : getAllPlayers()) {
                     player.resetPlayer();
@@ -666,7 +670,7 @@ public final class SGGame implements Listener {
         }
     }
 
-    @Data
+    @Value
     private static final class PregameCountdownResponder implements CountdownDelegate {
         private final SGGame game;
         private static Integer[] secondsToBroadcast = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
@@ -699,7 +703,7 @@ public final class SGGame implements Listener {
         }
     }
 
-    @Data
+    @Value
     private static final class PreDeathmatchCountdownResponder implements CountdownDelegate {
         private final SGGame game;
         private static Integer[] secondsToBroadcast = {60, 45, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
@@ -730,7 +734,7 @@ public final class SGGame implements Listener {
         }
     }
 
-    @Data
+    @Value
     private static final class DeathmatchCountdownResponder implements CountdownDelegate {
         private final SGGame game;
         private static Integer[] secondsToBroadcast = {15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};

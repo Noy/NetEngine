@@ -82,7 +82,7 @@ public final class SurvivalGames extends NetPlugin {
 
     private void tryDisable() throws StorageError, ArenaException {
         this.gPlayerManager.getStorage().shutdown();
-        if (this.gameManager != null) gameManager.disable();
+        gameManager.disable();
     }
 
     private void tryEnable() throws ArenaException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
