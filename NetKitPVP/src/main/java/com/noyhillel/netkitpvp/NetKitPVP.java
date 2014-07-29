@@ -3,6 +3,7 @@ package com.noyhillel.netkitpvp;
 import com.noyhillel.netkitpvp.commands.DeleteKitCommand;
 import com.noyhillel.netkitpvp.commands.KitCommand;
 import com.noyhillel.netkitpvp.commands.SetKitCommand;
+import com.noyhillel.netkitpvp.game.KitPVPGame;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.utils.NetCoolDown;
@@ -28,6 +29,7 @@ public final class NetKitPVP extends NetPlugin {
         }
         NetKitPVP.instance = this;
         registerAllCommands();
+        instance.registAllListeners();
     }
 
     @Override
@@ -43,5 +45,9 @@ public final class NetKitPVP extends NetPlugin {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
+    }
+
+    private void registAllListeners() {
+        registerListener(new KitPVPGame());
     }
 }

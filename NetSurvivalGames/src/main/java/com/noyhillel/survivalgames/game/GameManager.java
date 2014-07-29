@@ -137,7 +137,7 @@ public final class GameManager implements VotingSessionDisplay {
                 }
                 Bukkit.shutdown();
             }
-        }, shutdownCountdownLength*20L);
+        }, shutdownCountdownLength*60L);
     }
 
     public boolean isPlayingGame() {

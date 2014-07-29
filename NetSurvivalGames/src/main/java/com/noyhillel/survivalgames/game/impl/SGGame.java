@@ -129,6 +129,7 @@ public final class SGGame implements Listener {
         for (GPlayer gPlayer : getAllPlayers()) {
             gPlayer.teleport(cornicopiaSpawns.next().toLocation(arenaWorld));
             gPlayer.playSound(Sound.LEVEL_UP);
+            if (!(gPlayer.getPlayer().getGameMode() == GameMode.SURVIVAL)) gPlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
             gPlayer.setScoreboardTitle(MessageManager.getFormat("scoreboard.title"));
         }
     }
@@ -150,7 +151,7 @@ public final class SGGame implements Listener {
             for (GPlayer gPlayer : getAllPlayers()) {
                 gPlayer.sendMessage(message);
             }
-            Bukkit.getConsoleSender().sendMessage(messages);
+            SurvivalGames.getInstance().logInfoInColor(messages);
         }
     }
 
@@ -163,7 +164,7 @@ public final class SGGame implements Listener {
         return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
     }
 
-    public void crossOutOfBounds(GPlayer player, Location goingTo) {
+    private void crossOutOfBounds(GPlayer player, Location goingTo) {
         if (gameState != GameState.DEATHMATCH) return;
         if (isSpectating(player)) return;
         if (!players.contains(player)) return;
@@ -371,7 +372,7 @@ public final class SGGame implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         GPlayer gPlayer = getGPlayer(event.getPlayer());
-        boolean spectatorSent = spectators.contains(gPlayer);
+        boolean spectatorSent = isSpectating(gPlayer);
         String formatName = spectatorSent ? "chat.spectator-chat" : "chat.player-chat";
         event.setCancelled(true);
         String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}, new String[]{"<points>", gPlayer.getPoints().toString()}) + event.getMessage();

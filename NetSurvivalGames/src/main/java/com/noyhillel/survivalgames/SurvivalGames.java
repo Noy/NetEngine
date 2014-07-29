@@ -46,9 +46,9 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private SetupCommand setupCommand;
     @Getter private static Random random = new Random();
     @Getter private boolean isSetupOnly = false;
-    private static final String RELOAD_MESSAGE = ChatColor.RED + "SG Server Reloading!";
 
     /* constants */
+    private static final String RELOAD_MESSAGE = ChatColor.RED + "SG Server Reloading!";
     private static final String ARENA_DIRECTORY = "arenas";
 
     @Override
@@ -118,6 +118,7 @@ public final class SurvivalGames extends NetPlugin {
         setupCommands(SpawnCommand.class);
         setupCommands(SetSpawnCommand.class);
         setupCommands(HubCommand.class);
+        setupCommands(SpectateCommand.class);
         logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&eSurvivalGames&a has been fully enabled!"));
     }
 
@@ -169,6 +170,7 @@ public final class SurvivalGames extends NetPlugin {
         try {
             Connect c = getBukkitConnect();
             c.request(new RedirectRequest(server, player.getName())).registerListener(new FutureResultListener<RedirectResult>() {
+                @Override
                 public void onResult(RedirectResult redirectResult) {
                     if (redirectResult.getStatusCode() == StatusCode.SUCCESS) {
                         return;

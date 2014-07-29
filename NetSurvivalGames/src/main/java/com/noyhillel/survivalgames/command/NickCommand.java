@@ -1,7 +1,5 @@
 package com.noyhillel.survivalgames.command;
 
-
-import com.noyhillel.networkengine.command.CommandStatus;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
@@ -9,15 +7,14 @@ import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.game.impl.SGGame;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlayer;
 
-@Permission("survivalgames.disguise")
+@Permission("survivalgames.nick")
 @CommandMeta(name = "nick", description = "The Nick Command", usage = "/nick")
-public final class NickCommand extends NetAbstractCommandHandler { // Just for you <3
+public final class NickCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {

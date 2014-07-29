@@ -24,3 +24,5 @@ commands:
     aliases: [ss]
   hub:
     aliases: [lobby, back, leave]
+  spectate:
+    aliases: [spec, view]

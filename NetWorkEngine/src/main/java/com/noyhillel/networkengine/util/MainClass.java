@@ -28,7 +28,7 @@ public @interface MainClass {
      * These are the authors of the plugin, it is NOT needed in the plugin.yml.
      * @return the authors
      */
-    String[] authors() default "NoyHillel1";
+    String[] authors() default {"NoyHillel1"};
 
     /**
      * This is the website of the plugin creator, it is NOT needed in the plugin.yml.
