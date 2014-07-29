@@ -29,6 +29,7 @@ formats:
   points-got: "&eYou have received &4<points> points &efor that kill!"
   quit-msg: "&3<player> &c&l<< &ehas left &6&lSG&e."
   heal-msg: "&6You have been healed!"
+  ender-winner: "&cThe winner is &e<victor>&c! &cCongrats!"
   healed-player: "&6You haved healed &4<target>"
   chest-refill: "&cThe Chests have refilled!"
   chest-refill-time: 900 #IN SECONDS AFTER GAME STARTS.
@@ -76,6 +77,6 @@ chat:
   player-chat: "&6[&c<points>&6]&7<player>&a:&f "
   lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "
 enderbar:
-  lobby-time: "&cThere are &6&l<seconds> &cseconds left!"
-  game-countdown-time: "&6There are &c&l<seconds> &6seconds left!"
-  deathmatch-countdown-time: "&c&l<seconds> &5before deathmatch starts!"
+  lobby-time: "&cWelcome, &6<player>&c!"
+  game-countdown-time: "&6Game is about to start!"
+  deathmatch-countdown-time: "&cDeathmatch is about to start!"

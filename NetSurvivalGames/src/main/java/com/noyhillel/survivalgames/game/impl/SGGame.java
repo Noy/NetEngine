@@ -7,7 +7,6 @@ import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.PointIterator;
-import com.noyhillel.survivalgames.command.LinkChestsCommand;
 import com.noyhillel.survivalgames.game.GameException;
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.game.PvPTracker;
@@ -553,6 +552,10 @@ public final class SGGame implements Listener {
             case COUNTDOWN:
                 gameState = GameState.GAMEPLAY;
                 broadcast(MessageManager.getFormat("formats.game-start", true));
+                broadcastSound(Sound.WITHER_SPAWN);
+                for (GPlayer player : getAllPlayers()) {
+                    player.resetPlayer();
+                }
                 Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(), new Runnable() {
                     @Override
                     @SneakyThrows
@@ -561,10 +564,6 @@ public final class SGGame implements Listener {
                         broadcast(MessageManager.getFormat("formats.chest-refill", true));
                     }
                 }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refill-time")*20);
-                broadcastSound(Sound.WITHER_SPAWN);
-                for (GPlayer player : getAllPlayers()) {
-                    player.resetPlayer();
-                }
                 break;
             case GAMEPLAY:
                 gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;
@@ -604,6 +603,12 @@ public final class SGGame implements Listener {
         for (GPlayer player : spectators) showToAllPlayers(player);
         this.manager.gameEnded();
         victor.getPlayer().setAllowFlight(true);
+        for (GPlayer gPlayer : getAllPlayersForChat()) {
+            NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+            NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("formats.ender-winner", false, new String[]{"<victor>",victor.getDisplayableName()}));
+            NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, (float) victor.getPlayer().getHealth()/20);
+            NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, (float) victor.getPlayer().getHealth()/20);
+        }
         Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.getInstance(), new Runnable() {
             @Override
             public void run() {
@@ -689,7 +694,9 @@ public final class SGGame implements Listener {
                 for (GPlayer gPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
                     NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
-                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.game-countdown-time", false, new String[]{"<seconds>", secondsRemaining.toString()}));
+                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.game-countdown-time", false));
+                    gPlayer.getPlayer().setLevel(secondsRemaining);
+                    gPlayer.getPlayer().setExp(secondsRemaining.floatValue()/60);
                 }
             }
             if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
@@ -721,7 +728,7 @@ public final class SGGame implements Listener {
                 for (GPlayer gPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
                     NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
-                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false, new String[]{"<seconds>", secondsRemaining.toString()}));
+                    NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false));
                 }
             }
             if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));

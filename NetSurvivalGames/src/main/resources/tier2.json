@@ -122,7 +122,7 @@
         },
         {
             "material" : "GRILLED_PORK",
-            "name" : "&fCooked Porkchop",
+            "name" : "&fCooked Pork chop",
             "lore" : [],
             "quantity" : 1
         },
@@ -135,8 +135,8 @@
         {
             "material" : "PUMPKIN_PIE",
             "name" : "&cTesting names :D",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 2
+            "lore" : [],
+            "quantity" : 1
         },
         {
             "material" : "PUMPKIN_PIE",
@@ -154,7 +154,7 @@
             "material" : "ARROW",
             "name" : "&fArrow",
             "lore" : [],
-            "quantity" : 2
+            "quantity" : 5
         },
         {
             "material" : "BOW",

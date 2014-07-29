@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 @Permission("survivalgames.setspawn")
 @CommandMeta(name = "setspawn", description = "The SetSpawnCommand", usage = "/setspawn")
-public class SetSpawnCommand extends NetAbstractCommandHandler { // NEEDS TO BE DONE DURING SETUP
+public final class SetSpawnCommand extends NetAbstractCommandHandler { // NEEDS TO BE DONE DURING SETUP
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {

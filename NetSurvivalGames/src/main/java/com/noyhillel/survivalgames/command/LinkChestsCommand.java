@@ -30,21 +30,16 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
         if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
         GPlayer gPlayer = resolveGPlayer(sender);
-        if (!setupSessions.containsKey(gPlayer))
-            throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
+        if (!setupSessions.containsKey(gPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
         SetupSession sSes = setupSessions.get(gPlayer);
-        if (!(sSes instanceof ArenaSetup))
-            throw new NewNetCommandException("You are not currently setting up an Arena!", NewNetCommandException.ErrorType.Special);
+        if (!(sSes instanceof ArenaSetup)) throw new NewNetCommandException("You are not currently setting up an Arena!", NewNetCommandException.ErrorType.Special);
         ArenaSetup arenaSetup = (ArenaSetup) sSes;
-        if (args.length < 1)
-            throw new NewNetCommandException("You did not specify enough arguments!", NewNetCommandException.ErrorType.FewArguments);
+        if (args.length < 1) throw new NewNetCommandException("You did not specify enough arguments!", NewNetCommandException.ErrorType.FewArguments);
         String arg = args[0];
-        if (!(arg.equalsIgnoreCase("tier1") || arg.equalsIgnoreCase("tier2")))
-            throw new NewNetCommandException("You did not specify a valid argument, needs to be tier1 or tier2!", NewNetCommandException.ErrorType.Special);
+        if (!(arg.equalsIgnoreCase("tier1") || arg.equalsIgnoreCase("tier2"))) throw new NewNetCommandException("You did not specify a valid argument, needs to be tier1 or tier2!", NewNetCommandException.ErrorType.Special);
         Point l1 = arenaSetup.getL1();
         Point l2 = arenaSetup.getL2();
-        if (l1 == null || l2 == null)
-            throw new NewNetCommandException("You need to specify a region!", NewNetCommandException.ErrorType.Special);
+        if (l1 == null || l2 == null) throw new NewNetCommandException("You need to specify a region!", NewNetCommandException.ErrorType.Null);
         Double maxX = Math.max(l1.getX(), l2.getX());
         Double maxY = Math.max(l1.getY(), l2.getY());
         Double maxZ = Math.max(l1.getZ(), l2.getZ());
@@ -66,7 +61,7 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
                 }
             }
         }
-        sender.sendMessage(ChatColor.GREEN + "It's over!! Chests linked = " + pointList.size());
+        sender.sendMessage(ChatColor.GREEN + "It's over! Chests linked = " + pointList.size());
         if (arg.equalsIgnoreCase("tier1")) arenaSetup.setTier1(pointList);
         else if (arg.equalsIgnoreCase("tier2")) arenaSetup.setTier2(pointList);
         else

@@ -4,6 +4,8 @@ import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.storage.ForgetfulStorage;
+import com.noyhillel.survivalgames.storage.GStorage;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.entity.Player;
 

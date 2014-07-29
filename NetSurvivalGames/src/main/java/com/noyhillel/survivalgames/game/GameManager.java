@@ -135,7 +135,12 @@ public final class GameManager implements VotingSessionDisplay {
                 } catch (ArenaException e) {
                     e.printStackTrace();
                 }
-                Bukkit.shutdown();
+                Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Bukkit.shutdown();
+                    }
+                }, 40L);
             }
         }, shutdownCountdownLength*60L);
     }
@@ -194,7 +199,7 @@ public final class GameManager implements VotingSessionDisplay {
                 playerFromNetPlayer.setExperience(secondsRemain.floatValue()/60);
                 playerFromNetPlayer.getPlayer().setLevel(secondsRemain);
                 NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.floatValue()/60);
-                NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<seconds>", secondsRemain.toString()}));
+                NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", gPlayer.getDisplayableName()}));
             }
         }
     }

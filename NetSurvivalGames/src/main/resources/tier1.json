@@ -1,67 +1,165 @@
 {
     "items" : [
         {
-            "material" : "EGG",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 6
-        },{
-            "material" : "STONE_SWORD",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
+            "material" : "LEATHER_BOOTS",
+            "name" : "&fLeather Boots",
+            "lore" : [],
             "quantity" : 1
-        },{
-            "material" : "COOKED_BEEF",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 4
         },
         {
-            "material" : "GOLDEN_APPLE",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 2
-        },{
-            "material" : "COOKED_FISH",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 3
-        },{
+            "material" : "LEATHER_CHESTPLATE",
+            "name" : "&fLeather Chestplate",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "LEATHER_LEGGINGS",
+            "name" : "&fLeather Pants",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "RAW_BEEF",
+            "name" : "&fRaw Beef",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
             "material" : "RAW_FISH",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
+            "name" : "&fRaw Fish",
+            "lore" : [],
             "quantity" : 1
         },
         {
-            "material" : "SNOW_BALL",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 1
-        },{
-            "material" : "WOOD_SWORD",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
-            "quantity" : 1
-        },{
-            "material" : "GOLD_HELMET",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
+            "material" : "APPLE",
+            "name" : "&fApple",
+            "lore" : [],
             "quantity" : 1
         },
         {
-            "material" : "GOLD_CHESTPLATE",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
+            "material" : "STICK",
+            "name" : "&fStick",
+            "lore" : [],
             "quantity" : 1
-        },{
-            "material" : "GOLD_BOOTS",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
+        },
+        {
+            "material" : "STICK",
+            "name" : "&fStick",
+            "lore" : [],
+            "quantity" : 2
+        },
+        {
+            "material" : "IRON_INGOT",
+            "name" : "&fIron Ingot",
+            "lore" : [],
             "quantity" : 1
-        },{
-            "material" : "GOLD_LEGGINGS",
-            "name" : "&cTesting the names of this",
-            "lore" : ["Don't worry", "&3Noy&f does", "too."],
+        },
+        {
+            "material" : "IRON_BOOTS",
+            "name" : "&fIron Boots",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "IRON_CHESTPLATE",
+            "name" : "&fIron Chestplate",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "IRON_LEGGINGS",
+            "name" : "&fIron Leggings",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "CHAINMAIL_HELMET",
+            "name" : "&fChain Helmet",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "COOKED_CHICKEN",
+            "name" : "&fCooked Chicken",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "CHAINMAIL_CHESTPLATE",
+            "name" : "&fChain Chestplate.",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "CHAINMAIL_BOOTS",
+            "name" : "&fChain Boots",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "CHAINMAIL_LEGGINGS",
+            "name" : "&fChain Leggings",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "IRON_HELMET",
+            "name" : "&fChain Helmets",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "COOKED_BEEF",
+            "name" : "&fSteak",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "COOKED_BEEF",
+            "name" : "&fSteak",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "GRILLED_PORK",
+            "name" : "&fCooked Pork chop",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "GRILLED_PORK",
+            "name" : "&fCooked Porkchop",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "PUMPKIN_PIE",
+            "name" : "&cTesting names :D",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "PUMPKIN_PIE",
+            "name" : "&fPumpkin Pie",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "ARROW",
+            "name" : "&fArrow",
+            "lore" : [],
+            "quantity" : 5
+        },
+        {
+            "material" : "ARROW",
+            "name" : "&fArrow",
+            "lore" : [],
+            "quantity" : 5
+        },
+        {
+            "material" : "BOW",
+            "name" : "&fBow",
+            "lore" : [],
             "quantity" : 1
         }
     ]

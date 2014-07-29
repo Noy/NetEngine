@@ -34,6 +34,7 @@ public final class HealCommand extends NetAbstractCommandHandler {
             Player target = Bukkit.getServer().getPlayerExact(args[0]);
             GPlayer gTarget = resolveGPlayer(target);
             gTarget.heal();
+            Bukkit.broadcastMessage(ChatColor.RED + player.getDisplayableName() + ChatColor.GOLD + " healed " + ChatColor.RED + gTarget.getDisplayableName() + "!");
             player.sendMessage(MessageManager.getFormat("formats.healed-player", true, new String[]{"<target>", gTarget.getDisplayableName()}));
         } else if (args.length > 1) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
     }
