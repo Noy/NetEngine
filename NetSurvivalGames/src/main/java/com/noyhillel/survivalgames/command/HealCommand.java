@@ -7,6 +7,7 @@ import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -28,6 +29,7 @@ public final class HealCommand extends NetAbstractCommandHandler {
         GPlayer player = resolveGPlayer(sender);
         if (args.length == 0) {
             player.heal();
+            Bukkit.broadcastMessage(ChatColor.RED + player.getDisplayableName() + ChatColor.GOLD + " healed themselves!");
         } else if (args.length == 1) {
             Player target = Bukkit.getServer().getPlayerExact(args[0]);
             GPlayer gTarget = resolveGPlayer(target);
