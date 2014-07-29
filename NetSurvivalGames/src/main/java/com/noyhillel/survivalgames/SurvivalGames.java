@@ -48,7 +48,6 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private boolean isSetupOnly = false;
 
     /* constants */
-    private static final String RELOAD_MESSAGE = ChatColor.RED + "SG Server Reloading!";
     private static final String ARENA_DIRECTORY = "arenas";
 
     @Override
