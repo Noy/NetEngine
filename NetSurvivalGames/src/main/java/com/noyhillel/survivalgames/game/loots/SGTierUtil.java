@@ -8,6 +8,7 @@ import org.bukkit.World;
 import java.util.List;
 
 public class SGTierUtil {
+
     public static void setupPoints(SGGame game, List<Point> points, String filename) throws GameException {
         Tier tier = new Tier(filename);
         tier.load();

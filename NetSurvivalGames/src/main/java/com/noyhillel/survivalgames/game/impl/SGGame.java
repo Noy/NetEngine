@@ -17,10 +17,7 @@ import com.noyhillel.survivalgames.player.GPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import com.noyhillel.survivalgames.utils.inventory.InventoryGUI;
 import com.noyhillel.survivalgames.utils.inventory.InventoryGUIItem;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -88,8 +85,7 @@ public final class SGGame implements Listener {
     public void start() throws GameException {
         if (!arena.isLoaded()) throw new GameException(null, this, "The world for the arena is not loaded!");
         arenaWorld = arena.getLoadedWorld();
-        SGTierUtil.setupPoints(this, arena.getTier1().getPoints(), "tier1.json");
-        SGTierUtil.setupPoints(this, arena.getTier2().getPoints(), "tier2.json");
+        refillChests();
         teleportToCornicopia();
         String scoreboardTitle = MessageManager.getFormat("formats.scoreboard.title", false);
         for (GPlayer initialPlayer : initialPlayers) {
@@ -553,6 +549,14 @@ public final class SGGame implements Listener {
             case COUNTDOWN:
                 gameState = GameState.GAMEPLAY;
                 broadcast(MessageManager.getFormat("formats.game-start", true));
+                Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(), new Runnable() {
+                    @Override
+                    @SneakyThrows
+                    public void run() {
+                        refillChests();
+                        broadcast(MessageManager.getFormat("formats.chest-refil", true));
+                    }
+                }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refil-time")*20);
                 broadcastSound(Sound.WITHER_SPAWN);
                 break;
             case GAMEPLAY:
@@ -576,6 +580,11 @@ public final class SGGame implements Listener {
                 endGame();
                 break;
         }
+    }
+
+    private void refillChests() throws GameException {
+        SGTierUtil.setupPoints(this, arena.getTier2().getPoints(), "tier2.json");
+        SGTierUtil.setupPoints(this, arena.getTier1().getPoints(), "tier1.json");
     }
 
     private void endGame() {
@@ -725,14 +734,16 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
+        }
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
             if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
                 game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown", true, new String[]{"<seconds>", secondsRemaining.toString()}));
             }
-            if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
+            if (RandomUtils.contains(secondsRemaining, secondsToSound))
+                game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
         }
 
         @Override
