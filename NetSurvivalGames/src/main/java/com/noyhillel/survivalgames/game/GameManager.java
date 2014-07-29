@@ -191,6 +191,8 @@ public final class GameManager implements VotingSessionDisplay {
         if (secondsRemain <= 60 && secondsRemain >= 1) {
             for (GPlayer gPlayer : getPlayers()) {
                 NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+                playerFromNetPlayer.setExperience(secondsRemain.floatValue()/60);
+                playerFromNetPlayer.getPlayer().setLevel(secondsRemain);
                 NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.floatValue()/60);
                 NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<seconds>", secondsRemain.toString()}));
             }

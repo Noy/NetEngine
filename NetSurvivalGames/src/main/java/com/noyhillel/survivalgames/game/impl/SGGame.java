@@ -558,6 +558,9 @@ public final class SGGame implements Listener {
                     }
                 }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refil-time")*20);
                 broadcastSound(Sound.WITHER_SPAWN);
+                for (GPlayer player : getAllPlayers()) {
+                    player.resetPlayer();
+                }
                 break;
             case GAMEPLAY:
                 gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;

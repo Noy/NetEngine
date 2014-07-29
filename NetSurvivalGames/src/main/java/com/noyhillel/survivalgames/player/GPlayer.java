@@ -60,6 +60,8 @@ public final class GPlayer extends GOfflinePlayer {
 
     public void resetPlayer() {
         Player player = getPlayer();
+        player.setLevel(0);
+        player.setExp(0F);
         player.setAllowFlight(false);
         player.setFlying(false);
         player.setVelocity(new Vector());
