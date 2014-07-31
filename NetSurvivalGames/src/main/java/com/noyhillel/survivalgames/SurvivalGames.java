@@ -34,7 +34,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
 
 @MainClass(name = "NetSG", description = "The Net SurvivalGames plugin!", authors = {"Twister915", "NoyHillel1"})
 public final class SurvivalGames extends NetPlugin {
@@ -44,7 +43,6 @@ public final class SurvivalGames extends NetPlugin {
     @Getter private GameManager gameManager;
     @Getter private GPlayerManager gPlayerManager;
     @Getter private SetupCommand setupCommand;
-    @Getter private static Random random = new Random();
     @Getter private boolean isSetupOnly = false;
 
     /* constants */

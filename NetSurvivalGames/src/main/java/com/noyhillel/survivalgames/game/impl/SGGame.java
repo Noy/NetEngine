@@ -95,7 +95,7 @@ public final class SGGame implements Listener {
         }
         this.spectatorGUI = new InventoryGUI(getHeadItems(), new SGSpectatorDelegate(this), MessageManager.getFormat("formats.spectator-gui-name"));
         updateInterfaces();
-        SurvivalGames.getInstance().getLogger().info("Starting game with " + players.size() + " players!");
+        SurvivalGames.logInfo("Starting game with " + players.size() + " players!");
         updateState();
     }
 
@@ -165,10 +165,10 @@ public final class SGGame implements Listener {
         if (isSpectating(player)) return;
         if (!players.contains(player)) return;
         if (goingTo.distance(arenaWorld.getSpawnLocation()) >= 30) {
-            arenaWorld.strikeLightningEffect(player.getPlayer().getLocation());
+//            arenaWorld.strikeLightningEffect(player.getPlayer().getLocation());
             player.addPotionEffect(PotionEffectType.BLINDNESS, 1, 6);
             player.addPotionEffect(PotionEffectType.CONFUSION, 1, 6);
-            player.getPlayer().damage(1.5);
+            player.getPlayer().damage(0.5);
         }
     }
 
@@ -192,9 +192,7 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) {
-        crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo());
-    }
+    public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) { crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo()); }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -382,9 +380,7 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onHangingDestroyEvent(HangingBreakByEntityEvent event) {
-        event.setCancelled(true);
-    }
+    public void onHangingDestroyEvent(HangingBreakByEntityEvent event) { event.setCancelled(true); }
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
@@ -401,11 +397,6 @@ public final class SGGame implements Listener {
             if (isSpectating(gDamager)) event.setCancelled(true);
             if (!players.contains(gDamager)) event.setCancelled(true);
         }
-    }
-
-    private void playerDied(GPlayer player, EntityDamageEvent.DamageCause reason) {
-        if (gameState == GameState.OVER) throw new IllegalStateException("This state does not permit death processing!");
-        tributeFallen(player);
     }
 
     @EventHandler
@@ -461,7 +452,7 @@ public final class SGGame implements Listener {
                 event.setCancelled(false);
                 break;
             case PRE_DEATHMATCH_COUNTDOWN:
-                event.setCancelled(true);
+                event.setCancelled(false);
                 break;
             case DEATHMATCH_COUNTDOWN:
                 event.setCancelled(false);
@@ -473,6 +464,11 @@ public final class SGGame implements Listener {
                 event.setCancelled(true);
                 break;
         }
+    }
+
+    private void playerDied(GPlayer player, EntityDamageEvent.DamageCause reason) {
+        if (gameState == GameState.OVER) throw new IllegalStateException("This state does not permit death processing!");
+        tributeFallen(player);
     }
 
     private void tributeFallen(GPlayer player) {
@@ -662,6 +658,7 @@ public final class SGGame implements Listener {
         }
         return players;
     }
+
     private void hideFromAllPlayers(GPlayer player) {
         for (GPlayer gPlayer : getAllPlayers()) {
             gPlayer.getPlayer().hidePlayer(player.getPlayer());
@@ -717,7 +714,7 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) { game.broadcastSound(Sound.BLAZE_BREATH); }
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
@@ -748,8 +745,7 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
-        }
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {

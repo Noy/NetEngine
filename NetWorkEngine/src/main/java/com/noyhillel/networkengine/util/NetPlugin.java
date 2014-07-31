@@ -47,6 +47,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
 
     protected abstract void enable();
     protected abstract void disable();
+    protected void load() {}
 
     @Override
     public final void onEnable() {
@@ -69,7 +70,6 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     }
 
     @Override
-    @SneakyThrows
     public final void onDisable() {
         reloadConfig();
         disable();
@@ -83,8 +83,6 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
 
     @Override
     public final void onLoad() { load(); }
-
-    protected void load() {}
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "UnusedDeclaration"})
     public final void deleteDirectory(File file) {

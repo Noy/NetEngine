@@ -16,6 +16,10 @@
             <url>http://repo.md-5.net/content/groups/public/</url>
         </repository>
         <repository>
+            <id>lilypad</id>
+            <url>http://ci.lilypadmc.org/plugin/repository/everything</url>
+        </repository>
+        <repository>
             <id>comphenix-rep</id>
             <name>Comphenix Repository</name>
             <url>http://repo.comphenix.net/content/groups/public</url>
