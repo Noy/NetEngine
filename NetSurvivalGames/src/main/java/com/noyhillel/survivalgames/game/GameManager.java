@@ -132,15 +132,11 @@ public final class GameManager implements VotingSessionDisplay {
                 }
                 try {
                     runningSGGame.getArena().unloadWorld();
+                    SurvivalGames.logInfo("Unloaded world " + runningSGGame.getArena().getLoadedWorld());
                 } catch (ArenaException e) {
                     e.printStackTrace();
                 }
-                Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(), new Runnable() {
-                    @Override
-                    public void run() {
-                        Bukkit.shutdown();
-                    }
-                }, 40L);
+                Bukkit.shutdown();
             }
         }, shutdownCountdownLength*60L);
     }
