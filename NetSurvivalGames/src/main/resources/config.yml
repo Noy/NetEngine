@@ -32,6 +32,7 @@ formats:
   ender-winner: "&cThe winner is &e<victor>&c! &cCongrats!"
   healed-player: "&6You haved healed &4<target>"
   chest-refill: "&cThe Chests have refilled!"
+  start-game: "&cYou have forcestarted the game!"
   chest-refill-time: 900 #IN SECONDS AFTER GAME STARTS.
   scoreboard:
     players: "&ePlayers"

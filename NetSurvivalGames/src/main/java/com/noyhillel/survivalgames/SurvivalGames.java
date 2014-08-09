@@ -108,7 +108,6 @@ public final class SurvivalGames extends NetPlugin {
         setupCommand = registerListener(setupCommands(SetupCommand.class));
         setupCommands(VoteCommand.class);
         setupCommands(MapCommand.class);
-        setupCommands(HealCommand.class);
         setupCommands(LinkChestsCommand.class);
         setupCommands(NickCommand.class);
         setupCommands(StatsCommand.class);

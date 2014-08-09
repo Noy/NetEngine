@@ -85,7 +85,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     public final void onLoad() { load(); }
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "UnusedDeclaration"})
-    protected final void deleteDirectory(File file) {
+    public final void deleteDirectory(File file) {
         if (file.isDirectory()) {
             String[] children = file.list();
             for (String s : children) {

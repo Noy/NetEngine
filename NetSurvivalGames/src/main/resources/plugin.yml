@@ -16,8 +16,6 @@ commands:
     alaises: [stat]
   linkchests:
     aliases: [lc]
-  heal:
-    aliases: [health, h]
   spawn:
     aliases: [s]
   setspawn:

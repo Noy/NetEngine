@@ -24,10 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -66,10 +63,14 @@ public final class SGGame implements Listener {
 
     public static GameState gameState = GameState.PREGAME;
 
-    @Setter(AccessLevel.NONE) private InventoryGUI spectatorGUI;
-    @Setter(AccessLevel.NONE) @Getter(AccessLevel.NONE) private World arenaWorld;
+    @Setter(AccessLevel.NONE)
+    private InventoryGUI spectatorGUI;
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private World arenaWorld;
 
-    @Getter public final static Set<GPlayer> spectators = new HashSet<>();
+    @Getter
+    public final static Set<GPlayer> spectators = new HashSet<>();
     private final Set<GPlayer> players = new HashSet<>();
     private final Set<GPlayer> pendingSpectators = new HashSet<>();
     private final Set<MutatedPlayer> mutations = new HashSet<>();
@@ -108,7 +109,8 @@ public final class SGGame implements Listener {
         Player player1 = player.getPlayer();
         player1.setAllowFlight(true);
         player1.setFlying(true);
-        if (!player1.getWorld().equals(arenaWorld)) player1.teleport(arena.getCornicopiaSpawns().next().toLocation(arenaWorld));
+        if (!player1.getWorld().equals(arenaWorld))
+            player1.teleport(arena.getCornicopiaSpawns().next().toLocation(arenaWorld));
         updateInterfaces();
     }
 
@@ -125,7 +127,8 @@ public final class SGGame implements Listener {
         for (GPlayer gPlayer : getAllPlayers()) {
             gPlayer.teleport(cornicopiaSpawns.next().toLocation(arenaWorld));
             gPlayer.playSound(Sound.LEVEL_UP);
-            if (!(gPlayer.getPlayer().getGameMode() == GameMode.SURVIVAL)) gPlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
+            if (!(gPlayer.getPlayer().getGameMode() == GameMode.SURVIVAL))
+                gPlayer.getPlayer().setGameMode(GameMode.SURVIVAL);
             gPlayer.setScoreboardTitle(MessageManager.getFormat("scoreboard.title"));
         }
     }
@@ -133,7 +136,7 @@ public final class SGGame implements Listener {
     private List<InventoryGUIItem> getHeadItems() {
         List<InventoryGUIItem> guiItems = new ArrayList<>();
         for (GPlayer player : this.players) {
-            ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+            ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(player.getDisplayableName());
             itemStack.setItemMeta(itemMeta);
@@ -188,11 +191,13 @@ public final class SGGame implements Listener {
                     gPlayer.getPlayer().hidePlayer(player.getPlayer());
                 }
             }
-        }, 20L); //SMD CORE
+        }, 4L); //SMD CORE
     }
 
     @EventHandler
-    public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) { crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo()); }
+    public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) {
+        crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo());
+    }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
@@ -262,7 +267,7 @@ public final class SGGame implements Listener {
                 break;
         }
         if (event.getEntity().getKiller() == null) {
-            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? "The Environment" : event.getEntity().getKiller().getPlayerListName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? cause.toString() : event.getEntity().getKiller().getPlayerListName()}, new String[]{"<fallen>", player.getDisplayableName()}));
             playerDied(getGPlayer(event.getEntity()), cause);
             pendingSpectators.add(getGPlayer(event.getEntity()));
             return;
@@ -319,13 +324,25 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
-    public void onEggHatch(PlayerEggThrowEvent event) { event.setHatching(true); }
+    public void onEggHatch(PlayerEggThrowEvent event) {
+        event.setHatching(false);
+    }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (gameState == GameState.COUNTDOWN || gameState == GameState.DEATHMATCH_COUNTDOWN) event.setCancelled(true);
         GPlayer gPlayer = getGPlayer(event.getPlayer());
         if (!players.contains(gPlayer)) event.setCancelled(true);
+        ItemStack itemInHand = gPlayer.getPlayer().getItemInHand();
+        if (itemInHand != null && itemInHand.getType() == Material.FLINT_AND_STEEL) {
+            itemInHand.setDurability((short) (itemInHand.getDurability() + 16));
+        }
+    }
+
+    @EventHandler
+    public void onExplode(EntityExplodeEvent event) {
+        if (!event.getEntity().getWorld().equals(arenaWorld)) return;
+        event.blockList().clear();
     }
 
     @EventHandler
@@ -362,6 +379,11 @@ public final class SGGame implements Listener {
             case CAKE_BLOCK:
                 event.setCancelled(false);
                 return;
+            case TNT:
+                event.setCancelled(true);
+                Location location = event.getBlockPlaced().getLocation();
+                location.getWorld().spawnEntity(location, EntityType.PRIMED_TNT);
+                break;
         }
         event.setCancelled(true);
     }
@@ -374,13 +396,16 @@ public final class SGGame implements Listener {
         event.setCancelled(true);
         String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}, new String[]{"<points>", gPlayer.getPoints().toString()}) + event.getMessage();
         for (GPlayer player : getAllPlayersForChat()) {
-            if (gameState == GameState.OVER || (spectatorSent && (spectators.contains(player) || player.getPlayer().isOp())) || !spectatorSent) player.sendMessage(s);
+            if (gameState == GameState.OVER || (spectatorSent && (spectators.contains(player) || player.getPlayer().isOp())) || !spectatorSent)
+                player.sendMessage(s);
         }
         SurvivalGames.getInstance().logInfoInColor(s);
     }
 
     @EventHandler
-    public void onHangingDestroyEvent(HangingBreakByEntityEvent event) { event.setCancelled(true); }
+    public void onHangingDestroyEvent(HangingBreakByEntityEvent event) {
+        event.setCancelled(true);
+    }
 
     @EventHandler
     public void onPlayerDamage(EntityDamageEvent event) {
@@ -433,6 +458,8 @@ public final class SGGame implements Listener {
         if (isSpectating(getGPlayer(event.getPlayer()))) event.setCancelled(true);
     }
 
+    private Map<GPlayer, Integer> hungerFlags = new WeakHashMap<>();
+
     @EventHandler
     public void onPlayerHunger(FoodLevelChangeEvent event) {
         if (!players.contains(getGPlayer((Player) event.getEntity()))) {
@@ -441,33 +468,31 @@ public final class SGGame implements Listener {
         }
         if (isSpectating(getGPlayer((Player) event.getEntity()))) return;
         if (this.pendingSpectators.contains(getGPlayer((Player) event.getEntity()))) return;
+        GPlayer gPlayer = getGPlayer((Player) event.getEntity());
         switch (gameState) {
             case PREGAME:
-                event.setCancelled(true);
-                break;
             case COUNTDOWN:
+            case OVER:
                 event.setCancelled(true);
                 break;
             case GAMEPLAY:
-                event.setCancelled(false);
-                break;
             case PRE_DEATHMATCH_COUNTDOWN:
-                event.setCancelled(false);
-                break;
             case DEATHMATCH_COUNTDOWN:
-                event.setCancelled(false);
-                break;
             case DEATHMATCH:
-                event.setCancelled(false);
-                break;
-            case OVER:
-                event.setCancelled(true);
+                Integer integer = hungerFlags.get(gPlayer);
+                if (integer == null) integer = 0;
+                event.setCancelled(integer < 4);
+                integer++;
+                if (integer > 4) integer = 0;
+                hungerFlags.put(gPlayer, integer);
+                SurvivalGames.logInfo("Survivalgames - cancel hunger for " + gPlayer.getDisplayableName() + ":" + event.isCancelled());
                 break;
         }
     }
 
     private void playerDied(GPlayer player, EntityDamageEvent.DamageCause reason) {
-        if (gameState == GameState.OVER) throw new IllegalStateException("This state does not permit death processing!");
+        if (gameState == GameState.OVER)
+            throw new IllegalStateException("This state does not permit death processing!");
         tributeFallen(player);
     }
 
@@ -559,7 +584,7 @@ public final class SGGame implements Listener {
                         refillChests();
                         broadcast(MessageManager.getFormat("formats.chest-refill", true));
                     }
-                }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refill-time")*20);
+                }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refill-time") * 20);
                 break;
             case GAMEPLAY:
                 gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;
@@ -599,11 +624,12 @@ public final class SGGame implements Listener {
         for (GPlayer player : spectators) showToAllPlayers(player);
         this.manager.gameEnded();
         victor.getPlayer().setAllowFlight(true);
+        broadcastSound(Sound.WITHER_DEATH);
         for (GPlayer gPlayer : getAllPlayersForChat()) {
             NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-            NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("formats.ender-winner", false, new String[]{"<victor>",victor.getDisplayableName()}));
-            NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, (float) victor.getPlayer().getHealth()/20);
-            NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, (float) victor.getPlayer().getHealth()/20);
+            NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("formats.ender-winner", false, new String[]{"<victor>", victor.getDisplayableName()}));
+            NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, (float) victor.getPlayer().getHealth() / 20);
+            NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, (float) victor.getPlayer().getHealth() / 20);
         }
         Bukkit.getScheduler().scheduleSyncRepeatingTask(SurvivalGames.getInstance(), new Runnable() {
             @Override
@@ -680,7 +706,8 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSoundHigher = {5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
+        }
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
@@ -690,14 +717,16 @@ public final class SGGame implements Listener {
             if (secondsRemaining <= 60 && secondsRemaining >= 1) {
                 for (GPlayer gPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
+                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue() / 60);
                     NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.game-countdown-time", false));
                     gPlayer.getPlayer().setLevel(secondsRemaining);
-                    gPlayer.getPlayer().setExp(secondsRemaining.floatValue()/60);
+                    gPlayer.getPlayer().setExp(secondsRemaining.floatValue() / 60);
                 }
             }
-            if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
-            if (RandomUtils.contains(secondsRemaining, secondsToSoundHigher)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound-higher")), 1F);
+            if (RandomUtils.contains(secondsRemaining, secondsToSound))
+                game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
+            if (RandomUtils.contains(secondsRemaining, secondsToSoundHigher))
+                game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound-higher")), 1F);
         }
 
         @Override
@@ -714,7 +743,9 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) { game.broadcastSound(Sound.BLAZE_BREATH); }
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
+            game.broadcastSound(Sound.BLAZE_BREATH);
+        }
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
@@ -724,11 +755,12 @@ public final class SGGame implements Listener {
             if (secondsRemaining <= 60 && secondsRemaining >= 1) {
                 for (GPlayer gPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
-                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue()/60);
+                    NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemaining.floatValue() / 60);
                     NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false));
                 }
             }
-            if (RandomUtils.contains(secondsRemaining, secondsToSound)) game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
+            if (RandomUtils.contains(secondsRemaining, secondsToSound))
+                game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
         }
 
         @Override
@@ -745,7 +777,8 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
+        }
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {

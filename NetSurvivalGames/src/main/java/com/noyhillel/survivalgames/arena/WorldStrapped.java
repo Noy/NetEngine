@@ -51,28 +51,18 @@ public abstract class WorldStrapped {
         this.loadedWorld.setGameRuleValue("doMobLoot", "false");
         this.loadedWorld.setGameRuleValue("doMobSpawning", "false");
         this.loadedWorld.setGameRuleValue("keepInventory", "false");
-        SurvivalGames.getInstance().getLogger().info("Loaded world " + loadedWorld.getName());
+        SurvivalGames.logInfo("Loaded world " + loadedWorld.getName());
     }
 
     public void unloadWorld() throws ArenaException {
         Bukkit.unloadWorld(loadedWorld, false);
         try {
-            deleteDirectory(loadedWorld.getWorldFolder());
+            SurvivalGames.getInstance().deleteDirectory(loadedWorld.getWorldFolder());
+            SurvivalGames.logInfo("Unloaded world " + loadedWorld.getWorldFolder().getName());
         } catch (Exception e) {
             throw new ArenaException(this, e, "Could not delete world folder on unload!");
         }
         loadedWorld = null;
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void deleteDirectory(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children) {
-                deleteDirectory(new File(dir, aChildren));
-            }
-        }
-        dir.delete();
     }
 
     public void cleanupDrops() {

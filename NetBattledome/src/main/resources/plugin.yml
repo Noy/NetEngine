@@ -1,5 +1,5 @@
 name: NetBattledome
-main: com.noyhillel.battledome.Battledome
+main: com.noyhillel.battledome.NetBD
 version: 1.0
 
 commands:

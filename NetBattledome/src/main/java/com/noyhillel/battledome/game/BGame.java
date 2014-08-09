@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 
 import java.util.*;
@@ -256,6 +257,10 @@ public final class BGame implements Listener, GameCountdownHandler {
         return players;
     }
 
+    private void endGameForPlayerForce(NetPlayer player) {
+        player.getPlayer().kickPlayer(MessageManager.getFormat("formats.battledome-over", false));
+    }
+
     /* Events */
 
     @EventHandler
@@ -271,6 +276,20 @@ public final class BGame implements Listener, GameCountdownHandler {
                 player.playSound(Sound.ORB_PICKUP, 0.5F);
                 placeObsidian(team, player.getPlayer().getLocation());
             }
+        }
+    }
+
+    public void willFinishGame() {
+        if (playerSet.size() <= 1) {
+            broadcastMessage(ChatColor.RED + "Game has ended! The server will shut down in 5 seconds!");
+            Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    for (NetPlayer player : playerSet) {
+                        player.kick(MessageManager.getFormat("formats.battledome-end"));
+                    }
+                }
+            }, 100L);
         }
     }
 
@@ -298,33 +317,35 @@ public final class BGame implements Listener, GameCountdownHandler {
                 event.getPlayer().sendMessage(MessageManager.getFormat("formats.cannot-break-now"));
                 return;
             }
-//            for (NetPlayer player1 : getPlayersForTeam(destroyedTeam)) {
-//                endGameForPlayerForce(player1);
-//            }
+            for (NetPlayer player1 : getPlayersForTeam(destroyedTeam)) {
+                endGameForPlayerForce(player1);
+            }
             broadcastSound(Sound.ENDERDRAGON_GROWL, 1F);
             broadcastMessage(MessageManager.getFormat("formats.team-eliminated", true, new String[]{"<team-destroyed>", destroyedTeam.toString()}));
         }
     }
 
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent event) {
+    public void onPlayerRespawn(final PlayerRespawnEvent event) {
+        willFinishGame();
         final NetPlayer playerFromPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
-//        Team teamForPlayer = getTeamForPlayer(playerFromPlayer);
-//        if (playerFromPlayer == null) broadcastMessage("racism...");
-//        if (this.obsidianHolders.get(teamForPlayer).equals(playerFromPlayer)) {
-//            giveTeamObsiRandomly(getTeamForPlayer(playerFromPlayer));
-//            return;
-//        }
-        Bukkit.getScheduler().runTask(NetBD.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                if (phase.getGameListenerDelegate().makeSpectatorOnDeath()) {
-                    makePlayerSpectator(playerFromPlayer);
-                    //endGameForPlayerForce(playerFromPlayer);
+        if (!phase.getGameListenerDelegate().makeSpectatorOnDeath()) {
+            Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    event.setRespawnLocation(centerPoint.toLocation(world));
                 }
-            }
-        });
-        event.setRespawnLocation(centerPoint.toLocation(world));
+            }, 1L);
+        }
+        else {
+            Bukkit.getScheduler().runTask(NetBD.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    makePlayerSpectator(playerFromPlayer);
+                }
+            });
+            event.setRespawnLocation(centerPoint.toLocation(world));
+        }
     }
 
     @EventHandler

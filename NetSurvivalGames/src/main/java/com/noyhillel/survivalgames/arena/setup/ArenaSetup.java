@@ -42,8 +42,8 @@ public final class ArenaSetup implements SetupSession {
         p.setAllowFlight(true);
         p.setGameMode(GameMode.CREATIVE);
         player.playSound(Sound.LEVEL_UP);
-        p.getInventory().addItem(stackWithName(Material.DIAMOND_SPADE, ChatColor.RED + "Tier one selector")); // Tier 1
-        p.getInventory().addItem(stackWithName(Material.IRON_SPADE, ChatColor.RED + "Tier two selector")); // Tier 2
+        //p.getInventory().addItem(stackWithName(Material.DIAMOND_SPADE, ChatColor.RED + "Tier one selector")); // Tier 1
+        //p.getInventory().addItem(stackWithName(Material.IRON_SPADE, ChatColor.RED + "Tier two selector")); // Tier 2 | Leaving this out for now
         p.getInventory().addItem(stackWithName(Material.GOLD_SPADE, ChatColor.RED + "Cornicopia spawn selector")); // Corn
         p.getInventory().addItem(stackWithName(Material.DIAMOND_AXE, ChatColor.RED + "Region selector")); //region selector
     }
