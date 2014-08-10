@@ -24,7 +24,10 @@ formats:
   unsetlobby: "&6You have unset the lobby!"
   game-countdown: "&7There are &e<seconds>&7 seconds until the game starts!"
   deathmatch-countdown: "&7There are &e<seconds>&7 seconds until deathmatch starts!"
+  time-to-deathmatch-countdown: "&cDeatchmatch starts in &7<seconds>&c!"
+  deathmatch-countdown-start: "&aDeathmatch will start in 25 minutes!"
   deathmatch-start: "&6Deathmatch is starting! &4Good luck!"
+  end-deathmatch-countdown: "&eDeathmatch will end in &l&e<seconds>"
   deathmatch-start-unmutate: "&4DeathMatch is starting, you have been unmutated!"
   points-got: "&eYou have received &4<points> points &efor that kill!"
   quit-msg: "&3<player> &c&l<< &ehas left &6&lSG&e."
@@ -32,8 +35,9 @@ formats:
   ender-winner: "&cThe winner is &e<victor>&c! &cCongrats!"
   healed-player: "&6You haved healed &4<target>"
   chest-refill: "&cThe Chests have refilled!"
+  back-to-spawn: "&cYou're getting too far from spawn!"
   start-game: "&cYou have forcestarted the game!"
-  chest-refill-time: 900 #IN SECONDS AFTER GAME STARTS.
+  chest-refill-time: 20 #IN SECONDS AFTER GAME STARTS.
   scoreboard:
     players: "&ePlayers"
     spectators: "&cSpectators:"

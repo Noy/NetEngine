@@ -195,6 +195,24 @@ public final class SGGame implements Listener {
     }
 
     @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) {
+        Player player1 = event.getPlayer();
+        if (spectators.contains(getGPlayer(player1))) return;
+        if (pendingSpectators.contains(getGPlayer(player1))) return;
+        GPlayer player = getGPlayer(player1);
+        tributeFallen(player);
+    }
+
+    @EventHandler
+    public void onPlayerLeave(PlayerKickEvent event) {
+        Player player1 = event.getPlayer();
+        if (spectators.contains(getGPlayer(player1))) return;
+        if (pendingSpectators.contains(getGPlayer(player1))) return;
+        GPlayer player = getGPlayer(player1);
+        tributeFallen(player);
+    }
+
+    @EventHandler
     public void onPlayerMoveOutOfBounds(PlayerMoveEvent event) {
         crossOutOfBounds(getGPlayer(event.getPlayer()), event.getTo());
     }
@@ -266,8 +284,16 @@ public final class SGGame implements Listener {
             case CUSTOM:
                 break;
         }
+        StringBuilder sb = new StringBuilder();
+        for (String s1 : Arrays.asList(cause.toString())) {
+            char[] chars = s1.toLowerCase().toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                sb.append(i == 0 ? Character.toUpperCase(chars[i]) : chars[i]);
+            }
+            sb.append(" ");
+        }
         if (event.getEntity().getKiller() == null) {
-            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? cause.toString() : event.getEntity().getKiller().getPlayerListName()}, new String[]{"<fallen>", player.getDisplayableName()}));
+            event.setDeathMessage(MessageManager.getFormat("formats.tribute-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? sb.toString().trim() : event.getEntity().getKiller().getPlayerListName()}, new String[]{"<fallen>", player.getDisplayableName()}));
             playerDied(getGPlayer(event.getEntity()), cause);
             pendingSpectators.add(getGPlayer(event.getEntity()));
             return;
@@ -347,7 +373,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onBlockBreakEvent(BlockBreakEvent event) {
-        if (gameState != GameState.GAMEPLAY) return;
+        if (!(gameState == GameState.GAMEPLAY || gameState == GameState.DEATHMATCH)) return;
         switch (event.getBlock().getType()) {
             case LEAVES:
             case LEAVES_2:
@@ -468,25 +494,27 @@ public final class SGGame implements Listener {
         }
         if (isSpectating(getGPlayer((Player) event.getEntity()))) return;
         if (this.pendingSpectators.contains(getGPlayer((Player) event.getEntity()))) return;
-        GPlayer gPlayer = getGPlayer((Player) event.getEntity());
         switch (gameState) {
             case PREGAME:
+                event.setCancelled(true);
+                break;
             case COUNTDOWN:
-            case OVER:
                 event.setCancelled(true);
                 break;
             case GAMEPLAY:
-            case PRE_DEATHMATCH_COUNTDOWN:
-            case DEATHMATCH_COUNTDOWN:
-            case DEATHMATCH:
-                Integer integer = hungerFlags.get(gPlayer);
-                if (integer == null) integer = 0;
-                event.setCancelled(integer < 4);
-                integer++;
-                if (integer > 4) integer = 0;
-                hungerFlags.put(gPlayer, integer);
-                SurvivalGames.logInfo("Survivalgames - cancel hunger for " + gPlayer.getDisplayableName() + ":" + event.isCancelled());
+                event.setCancelled(false);
                 break;
+            case PRE_DEATHMATCH_COUNTDOWN:
+                event.setCancelled(false);
+                break;
+            case DEATHMATCH_COUNTDOWN:
+                event.setCancelled(false);
+                break;
+            case DEATHMATCH:
+                event.setCancelled(false);
+                break;
+            case OVER:
+                event.setCancelled(true);
         }
     }
 
@@ -585,6 +613,16 @@ public final class SGGame implements Listener {
                         broadcast(MessageManager.getFormat("formats.chest-refill", true));
                     }
                 }, SurvivalGames.getInstance().getConfig().getInt("formats.chest-refill-time") * 20);
+                Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(), new Runnable() {
+                    @Override
+                    public void run() {
+                        for (GPlayer player : spectators) {
+                            player.getPlayer().setAllowFlight(true);
+                        }
+                    }
+                }, 20L);
+                GameCountdown gameCountdown2 = new GameCountdown(new GameWillEnd(this), 1510);
+                gameCountdown2.start();
                 break;
             case GAMEPLAY:
                 gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;
@@ -601,6 +639,8 @@ public final class SGGame implements Listener {
                 gameState = GameState.DEATHMATCH;
                 broadcast(MessageManager.getFormat("formats.deathmatch-start", true));
                 broadcastSound(Sound.WITHER_SPAWN, 0.5F);
+                GameCountdown gameCountdown3 = new GameCountdown(new DeathMatchWillEnd(this), 240);
+                gameCountdown3.start();
                 break;
             case DEATHMATCH:
                 gameState = GameState.OVER;
@@ -615,13 +655,16 @@ public final class SGGame implements Listener {
     }
 
     private void endGame() {
-        if (this.getPlayers().size() != 1) throw new IllegalStateException("There is no victor!");
         gameState = GameState.OVER;
+        if (victor == null || this.getPlayers().size() != 1) {
+            broadcast(ChatColor.RED + "There is no victor! Server closing, Type /hub to leave now!");
+            broadcastSound(Sound.WITHER_DEATH);
+        }
         this.victor = (GPlayer) this.getPlayers().toArray()[0];
         broadcast(MessageManager.getFormat("formats.winner", new String[]{"<victor>", this.victor.getDisplayableName()}));
         for (MutatedPlayer mutation : this.mutations) mutation.unMutate();
         for (GPlayer gPlayer : getAllPlayers()) gPlayer.resetPlayer();
-        for (GPlayer player : spectators) showToAllPlayers(player);
+//        for (GPlayer player : spectators) showToAllPlayers(player);
         this.manager.gameEnded();
         victor.getPlayer().setAllowFlight(true);
         broadcastSound(Sound.WITHER_DEATH);
@@ -792,6 +835,77 @@ public final class SGGame implements Listener {
         @Override
         public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
             game.updateState();
+        }
+    }
+
+    @Value
+    private static final class GameWillEnd implements CountdownDelegate {
+        private final SGGame game;
+        private static Integer[] secondsToBroadcast = {1500, 1200, 900, 600, 300, 60, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
+        @Override
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
+            game.broadcast(MessageManager.getFormat("formats.deathmatch-countdown-start", true));
+        }
+
+        @Override
+        public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
+            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
+                game.broadcast(MessageManager.getFormat("formats.time-to-deathmatch-countdown", true, new String[]{"<seconds>", game.formatTime(secondsRemaining)}));
+            }
+            if (RandomUtils.contains(secondsRemaining, secondsToSound))
+                game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
+        }
+
+        @Override
+        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
+            gameState = GameState.PRE_DEATHMATCH_COUNTDOWN;
+            game.updateState();
+        }
+    }
+
+    @Value
+    private static final class DeathMatchWillEnd implements CountdownDelegate {
+        private final SGGame game;
+        private static Integer[] secondsToBroadcast = {120, 60, 30, 15, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+        private static Integer[] secondsToSound = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
+        @Override
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
+
+        @Override
+        public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {
+            if (RandomUtils.contains(secondsRemaining, secondsToBroadcast)) {
+                game.broadcast(MessageManager.getFormat("formats.end-deathmatch-countdown", true, new String[]{"<seconds>", game.formatTime(secondsRemaining)}));
+            }
+            if (RandomUtils.contains(secondsRemaining, secondsToSound))
+                game.broadcastSound(Sound.valueOf(game.getPlugin().getConfig().getString("sounds.timer-sound")));
+        }
+
+        @Override
+        public void countdownComplete(Integer maxSeconds, GameCountdown countdown) {
+            gameState = GameState.OVER;
+            game.endGame();
+            game.updateState();
+        }
+    }
+
+    private String formatTime(Integer seconds) {
+        Integer hours = seconds / 3600;
+        Integer remainder = seconds % 3600;
+        Integer mins = remainder / 60;
+        Integer secs = remainder % 60;
+        if (hours > 0) {
+            return hours + ":" + mins + ":" + secs;
+        }
+        else if (mins > 0) {
+            if (secs < 10) {
+                return mins + ":0" + secs + " minutes";
+            }
+            else return mins + ":" + secs + " minutes";
+        } else {
+            return secs.toString() + " seconds";
         }
     }
 }

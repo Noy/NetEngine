@@ -29,4 +29,11 @@ public final class Point {
     public Location toLocation(World world) {
         return new Location(world, x, y, z, pitch, yaw);
     }
+
+    public Double distanceSquared(Point point) {
+        Double x = Math.pow((this.x-point.getX()), 2);
+        Double y = Math.pow((this.y-point.getY()), 2);
+        Double z = Math.pow((this.z-point.getZ()), 2);
+        return x + y + z;
+    }
 }

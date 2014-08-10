@@ -29,4 +29,13 @@ public final class RandomUtils {
         }
         return false;
     }
+
+    public static <T> boolean contains(T[] ts, T t) {
+        if (t == null || ts == null) return false;
+        for (T t1 : ts) {
+            if (t1 == null) continue;
+            if (t1.equals(t)) return true;
+        }
+        return false;
+    }
 }

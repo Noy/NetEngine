@@ -25,6 +25,7 @@ public final class Loot {
         if (!(state instanceof Chest)) return;
         Chest chest = (Chest)state;
         Inventory inventory = chest.getInventory();
+        inventory.clear();
         Integer size = inventory.getSize();
         List<ItemStack> randomItems = getTier().getRandomItems(SurvivalGames.getRandom().nextInt(3)+4);
         Random random = SurvivalGames.getRandom();
