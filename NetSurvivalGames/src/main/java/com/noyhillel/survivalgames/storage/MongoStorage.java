@@ -1,11 +1,13 @@
 package com.noyhillel.survivalgames.storage;
 
-import com.noyhillel.survivalgames.player.GOfflinePlayer;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGOfflinePlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.player.PlayerNotFoundException;
 import com.noyhillel.survivalgames.player.StorageError;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 //TODO Mongo
 @GStorageKey({"mongo", "mango"})
@@ -45,17 +47,17 @@ public class MongoStorage implements GStorage {
     private final String password;
 
     @Override
-    public GOfflinePlayer getOfflinePlayerByUUID(String uuid) throws PlayerNotFoundException, StorageError {
+    public SGOfflinePlayer getOfflinePlayerByUUID(UUID uuid) throws PlayerNotFoundException, StorageError {
         return null;
     }
 
     @Override
-    public GOfflinePlayer getPlayerAllowNew(Player player) throws StorageError {
+    public SGOfflinePlayer getPlayerAllowNew(Player player) throws StorageError {
         return null;
     }
 
     @Override
-    public void savePlayer(GPlayer player) throws StorageError, PlayerNotFoundException {
+    public void savePlayer(SGPlayer player) throws StorageError, PlayerNotFoundException {
 
     }
 

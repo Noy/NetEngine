@@ -45,6 +45,8 @@ module-listener:
   chat-listener: TRUE
   bouncy-pads: TRUE
   below-zero: TRUE
+  block-break: TRUE
+  sign: TRUE
 
 whois:
   uuid: "&3<name>'s &eUUID is:<nl>&3<uuid>&e."
@@ -77,11 +79,11 @@ warp-item:
   click-item-sound: "enderman_teleport"
 spawn:
   world: world
-  x: 20.139715855253172
-  y: 77.0
-  z: 208.1614858668613
-  yaw: 3.9007003
-  pitch: 8.099926
+  x: 100.0
+  y: 50.0
+  z: 100
+  yaw: 1.0
+  pitch: 1.0
 hub:
   warps:
     spawn:
@@ -89,34 +91,11 @@ hub:
       name: Spawn
       lore:
       - '&3Click to go to spawn'
+      - '&aYou can use many lines'
       location:
         world: world
-        x: 20.139715855253172
-        y: 77.0
-        z: 208.1614858668613
+        x: 134.0
+        y: 17.0
+        z: -712.0
         yaw: 3.9007003
         pitch: 8.099926
-    firegames:
-      item: FIRE
-      name: '&aFireGames'
-      lore:
-      - '&cClick to go to fire games'
-      location:
-        world: world
-        x: 27.83432547974983
-        y: 70.0
-        z: 251.3249096579308
-        yaw: -166.04941
-        pitch: 14.24991
-    arianagrande:
-          item: WOOL
-          name: '&dAriana&5Grande'
-          lore:
-          - '&5I love &dAriana Grande'
-          location:
-            world: world
-            x: 50.77413743479612
-            y: 68.0
-            z: 235.15624258998258
-            yaw: -86.549355
-            pitch: -3.0000906

@@ -19,7 +19,7 @@ import java.util.List;
 public final class WarpItem extends NetHubItemDelegate {
 
     /**
-     * Private field,, the InventoryGUI
+     * Private field, the InventoryGUI
      */
     private InventoryGUI inventoryGUI;
 
@@ -94,7 +94,7 @@ public final class WarpItem extends NetHubItemDelegate {
     @Override
     protected void onRightClick(NetPlayer player) {
         inventoryGUI.openInventory(player);
-        player.playSound(Sound.ARROW_HIT, 0.5F);
+        player.playSound(Sound.UI_BUTTON_CLICK, 0.5F);
     }
 
     @Override

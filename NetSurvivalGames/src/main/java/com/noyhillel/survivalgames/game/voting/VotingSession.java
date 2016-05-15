@@ -3,7 +3,7 @@ package com.noyhillel.survivalgames.game.voting;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.game.countdown.CountdownDelegate;
 import com.noyhillel.survivalgames.game.countdown.GameCountdown;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -52,13 +52,13 @@ public final class VotingSession {
         this.display.clockUpdated(seconds);
     }
 
-    public void handleVote(Arena arena, GPlayer player) {
+    public void handleVote(Arena arena, SGPlayer player) {
         removeVote(player);
         this.votes.put(player.getUsername(), new Vote(arena, player, 1));
         this.display.votesUpdated(arena, getVotesFor(arena));
     }
 
-    public void removeVote(GPlayer player) {
+    public void removeVote(SGPlayer player) {
         Vote vote = this.votes.get(player.getUsername());
         if (vote != null) {
             this.votes.remove(player.getUsername());
@@ -68,14 +68,11 @@ public final class VotingSession {
 
     public List<Arena> getSortedArenas() {
         ArrayList<Arena> arenas1 = new ArrayList<>(this.arenas);
-        Collections.sort(arenas1, new Comparator<Arena>() {
-            @Override
-            public int compare(Arena o1, Arena o2) {
-                //positive o1,o2
-                //negative o2,o1
-                return getVotesFor(o1)- getVotesFor(o2);
+        Collections.sort(arenas1, (o1, o2) -> {
+            //positive o2,o1
+            //negative o1,o2
+            return getVotesFor(o2)- getVotesFor(o1);
 
-            }
         });
         return arenas1;
     }

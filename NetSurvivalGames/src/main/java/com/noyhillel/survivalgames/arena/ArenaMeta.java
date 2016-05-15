@@ -1,10 +1,12 @@
 package com.noyhillel.survivalgames.arena;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.List;
 
-@Value
+@Data
+@AllArgsConstructor
 public final class ArenaMeta {
     private String name;
     private List<String> authors;

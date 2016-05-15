@@ -1,6 +1,5 @@
 package com.noyhillel.survivalgames.utils;
 
-import com.noyhillel.survivalgames.SurvivalGames;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -31,8 +30,8 @@ public final class SignListener implements Listener {
                 case SIGN_POST:
                 case WALL_SIGN:
                     Sign sign = (Sign) event.getClickedBlock().getState();
-                    if (sign.getLine(0).equalsIgnoreCase(ChatColor.GRAY + "[" + ChatColor.YELLOW + "Hub" + ChatColor.GRAY + "]"))
-                        SurvivalGames.getInstance().sendToServer("hub", event.getPlayer());
+                    if (sign.getLine(0).equalsIgnoreCase(ChatColor.GRAY + "[" + ChatColor.YELLOW + "Hub" + ChatColor.GRAY + "]"));
+                        //SurvivalGames.getInstance().sendToServer("hub", event.getPlayer());
             }
         }
     }

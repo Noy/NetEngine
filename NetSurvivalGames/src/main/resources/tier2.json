@@ -115,26 +115,8 @@
             "quantity" : 1
         },
         {
-            "material" : "COOKED_BEEF",
-            "name" : "&fSteak",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "GRILLED_PORK",
-            "name" : "&fCooked Pork chop",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
             "material" : "GRILLED_PORK",
             "name" : "&fCooked Porkchop",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "PUMPKIN_PIE",
-            "name" : "&cTesting names :D",
             "lore" : [],
             "quantity" : 1
         },
@@ -154,11 +136,47 @@
             "material" : "ARROW",
             "name" : "&fArrow",
             "lore" : [],
-            "quantity" : 5
+            "quantity" : 3
         },
         {
             "material" : "BOW",
             "name" : "&fBow",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "CAKE",
+            "name" : "&cC&ea&6k&3e&4!",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "CAKE",
+            "name" : "&cC&ea&6k&3e&4!",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "COOKED_MUTTON",
+            "name" : "&fCooked Mutton",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "FLINT_AND_STEEL",
+            "name" : "&fFlint and Steel",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "EXP_BOTTLE",
+            "name" : "&fBottle o' Enchanting",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "TNT",
+            "name" : "&fTNT",
             "lore" : [],
             "quantity" : 1
         }

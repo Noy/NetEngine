@@ -37,7 +37,7 @@ public final class KitCommand extends NetAbstractCommandHandler {
 
             @Override
             public void onClickItem(InventoryGUI gui, InventoryGUI.InventoryItem item, NetPlayer player) {
-                player.playSound(Sound.CHEST_OPEN);
+                player.playSound(Sound.BLOCK_CHEST_OPEN);
                 List<ItemStack> items = new ArrayList<>();
                 for (String s : NetKitPVP.getInstance().getConfig().getString("kit.items." + item.getName() + ".items").split(", ")) {
                     try {

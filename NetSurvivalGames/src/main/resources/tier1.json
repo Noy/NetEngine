@@ -49,38 +49,8 @@
             "quantity" : 2
         },
         {
-            "material" : "IRON_INGOT",
-            "name" : "&fIron Ingot",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "IRON_BOOTS",
-            "name" : "&fIron Boots",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "IRON_CHESTPLATE",
-            "name" : "&fIron Chestplate",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "IRON_LEGGINGS",
-            "name" : "&fIron Leggings",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
             "material" : "CHAINMAIL_HELMET",
             "name" : "&fChain Helmet",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "COOKED_CHICKEN",
-            "name" : "&fCooked Chicken",
             "lore" : [],
             "quantity" : 1
         },
@@ -103,44 +73,8 @@
             "quantity" : 1
         },
         {
-            "material" : "IRON_HELMET",
-            "name" : "&fChain Helmets",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
             "material" : "COOKED_BEEF",
             "name" : "&fSteak",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "COOKED_BEEF",
-            "name" : "&fSteak",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "GRILLED_PORK",
-            "name" : "&fCooked Pork chop",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "GRILLED_PORK",
-            "name" : "&fCooked Porkchop",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "PUMPKIN_PIE",
-            "name" : "&cTesting names :D",
-            "lore" : [],
-            "quantity" : 1
-        },
-        {
-            "material" : "PUMPKIN_PIE",
-            "name" : "&fPumpkin Pie",
             "lore" : [],
             "quantity" : 1
         },
@@ -148,17 +82,29 @@
             "material" : "ARROW",
             "name" : "&fArrow",
             "lore" : [],
-            "quantity" : 5
-        },
-        {
-            "material" : "ARROW",
-            "name" : "&fArrow",
-            "lore" : [],
-            "quantity" : 5
+            "quantity" : 2
         },
         {
             "material" : "BOW",
             "name" : "&fBow",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "WOOD_SWORD",
+            "name" : "&fWood Sword",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "BOAT",
+            "name" : "&fBoat",
+            "lore" : [],
+            "quantity" : 1
+        },
+        {
+            "material" : "WEB",
+            "name" : "&fCobweb",
             "lore" : [],
             "quantity" : 1
         }

@@ -24,3 +24,9 @@ commands:
     aliases: [lobby, back, leave]
   spectate:
     aliases: [spec, view]
+  setcredits:
+    aliases: [sgsc]
+  setpoints:
+    aliases: [sgsp]
+  refillchests:
+    aliases: [rc]

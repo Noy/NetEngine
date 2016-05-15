@@ -17,6 +17,7 @@ import java.util.Random;
 public final class NetFireworkEffect {
 
     public static void shootFireWorks(NetPlayer player, Location location) {
+        if (player == null) return;
         Firework f = player.getPlayer().getWorld().spawn(location, Firework.class);
         FireworkMeta fm = f.getFireworkMeta();
         Random r = new Random();

@@ -8,7 +8,7 @@ import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
 import com.noyhillel.survivalgames.arena.setup.SetupSession;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.SneakyThrows;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,9 +29,9 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
         if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
-        GPlayer gPlayer = resolveGPlayer(sender);
-        if (!setupSessions.containsKey(gPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
-        SetupSession sSes = setupSessions.get(gPlayer);
+        SGPlayer SGPlayer = resolveGPlayer(sender);
+        if (!setupSessions.containsKey(SGPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
+        SetupSession sSes = setupSessions.get(SGPlayer);
         if (!(sSes instanceof ArenaSetup)) throw new NewNetCommandException("You are not currently setting up an Arena!", NewNetCommandException.ErrorType.Special);
         ArenaSetup arenaSetup = (ArenaSetup) sSes;
         if (args.length < 1) throw new NewNetCommandException("You did not specify enough arguments!", NewNetCommandException.ErrorType.FewArguments);
@@ -69,8 +69,8 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
     }
 
     @SneakyThrows
-    public static GPlayer resolveGPlayer(Player player) {
+    public static SGPlayer resolveGPlayer(Player player) {
         if (player == null) throw new NewNetCommandException("Player not found!", NewNetCommandException.ErrorType.Null);
-        return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
+        return SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer(player);
     }
 }

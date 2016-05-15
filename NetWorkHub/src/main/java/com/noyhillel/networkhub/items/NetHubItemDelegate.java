@@ -41,7 +41,7 @@ public abstract class NetHubItemDelegate implements Listener {
      * Creating our constructor.
      * @param shouldRegisterEvents Boolean to verify registering our events.
      */
-    public NetHubItemDelegate(Boolean shouldRegisterEvents) {
+    public NetHubItemDelegate(boolean shouldRegisterEvents) {
         if (shouldRegisterEvents) NetHub.getInstance().registerListener(this);
         // super(true) to register event below.
     }
@@ -58,7 +58,7 @@ public abstract class NetHubItemDelegate implements Listener {
         // If it's not a right click, don't do anything.
         if (!(action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) return;
         // If Null, don't do anything
-        if (itemInHand == null) return; // If Null, don't do anything
+        if (itemInHand == null) return;
         // If the Item does not have anything unique to it, don't do anything
         if (!(itemInHand.hasItemMeta())) return;
         // If the Item is not the Item from our getItem method, don't do anything

@@ -2,6 +2,7 @@ package com.noyhillel.battledome.commands;
 
 import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.MessageManager;
+import com.noyhillel.battledome.arena.Point;
 import com.noyhillel.battledome.exceptions.BattledomeException;
 import com.noyhillel.battledome.game.BGame;
 import com.noyhillel.battledome.game.BGameManager;
@@ -47,7 +48,10 @@ public final class BGameUtils implements CommandHandler, Listener {
             description = "This is the setworld command"
     )
     public CommandStatus setWorld(CommandSender sender, NetCommandSenders type, NetCommand meta, Command command, String[] args) {
-        if (BGameManager.getBGameManager() != null) return CommandStatus.NULL;
+        if (BGameManager.getBGameManager() != null) {
+            sender.sendMessage(ChatColor.RED + "World Already set!");
+            return CommandStatus.NULL;
+        }
         new BGameManager(((Player)sender).getWorld());
         sender.sendMessage(ChatColor.GOLD.toString() + ChatColor.BOLD + "Set the world!");
         return CommandStatus.SUCCESS;
@@ -82,8 +86,13 @@ public final class BGameUtils implements CommandHandler, Listener {
     )
     public CommandStatus heal(CommandSender sender, NetCommandSenders type, NetCommand meta, Command command, String[] args) {
         Player p = (Player) sender;
-        if (BGameManager.getBGameManager().getGame() == null) return CommandStatus.NULL;
-        if (BGameManager.getBGameManager().getGame().getPhase() == Phase.BATTLE) return CommandStatus.NULL;
+        BGame runningGame = BGameManager.getBGameManager().getGame();
+        if (BGameManager.getBGameManager() == null) return CommandStatus.NULL;
+        if (runningGame == null) return CommandStatus.NULL;
+        if (runningGame.getPhase() == Phase.BATTLE) {
+            p.sendMessage(ChatColor.RED + "You cannot heal in Battle mode! You cheater you ;)");
+            return CommandStatus.NULL;
+        }
         p.setHealth(p.getMaxHealth());
         p.setFoodLevel(20);
         p.sendMessage(MessageManager.getFormat("formats.heal"));
@@ -98,14 +107,43 @@ public final class BGameUtils implements CommandHandler, Listener {
             description = "The TP Command"
     )
     public CommandStatus tp(CommandSender sender, NetCommandSenders type, NetCommand meta, Command command, String[] args) {
-        Player p = (Player)sender;
+        Player p = (Player) sender;
         if (args.length < 1) return CommandStatus.FEW_ARGUMENTS;
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) return CommandStatus.NULL;
+        if (BGameManager.getBGameManager() == null) return CommandStatus.NULL;
         BGame runningGame = BGameManager.getBGameManager().getGame();
-        if (!p.isOp() && (runningGame.getPhase() == Phase.BATTLE || !runningGame.getTeamForPlayer(NetPlayer.getPlayerFromPlayer(p)).equals(runningGame.getTeamForPlayer(NetPlayer.getPlayerFromPlayer(target))))) return CommandStatus.PERMISSION;
+        if (runningGame == null) {
+            p.teleport(target.getLocation());
+            p.sendMessage("Teleported using no game");
+            return CommandStatus.SUCCESS;
+        }
+        if (!p.isOp() && (runningGame.getPhase() == Phase.BATTLE || !runningGame.getTeamForPlayer(NetPlayer.getPlayerFromPlayer(p))
+                .equals(runningGame.getTeamForPlayer(NetPlayer.getPlayerFromPlayer(target)))))
+            return CommandStatus.PERMISSION;
         p.teleport(target.getLocation());
         p.sendMessage(MessageManager.getFormat("formats.teleport", true, new String[]{"<player>", target.getName()}));
+        p.teleport(target.getLocation());
+        return CommandStatus.SUCCESS;
+    }
+
+    @NetCommand(
+            name = "spawn",
+            senders = {NetCommandSenders.PLAYER},
+            permission = "",
+            usage = "",
+            description = "The Spawn Command"
+    )
+    public CommandStatus spawn(CommandSender sender, NetCommandSenders type, NetCommand meta, Command command, String[] args) {
+        if (args.length > 1) return CommandStatus.NULL;
+        BGame runningGame = BGameManager.getBGameManager().getGame();
+        if (BGameManager.getBGameManager() == null) return CommandStatus.NULL;
+        if (runningGame == null) return CommandStatus.NULL;
+        Point centerPoint = runningGame.getCenterPoint();
+        if (centerPoint == null) return CommandStatus.NULL;
+        Player p = (Player) sender;
+        p.teleport(centerPoint.toLocation(p.getWorld()));
+        p.sendMessage(MessageManager.getFormat("formats.tp-spawn"));
         return CommandStatus.SUCCESS;
     }
 }

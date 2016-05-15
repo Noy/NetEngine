@@ -4,8 +4,8 @@ import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.config.YAMLConfigurationFile;
 import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
-import com.noyhillel.networkengine.mongo.DefaultProvider;
-import com.noyhillel.networkengine.mongo.Provider;
+import com.noyhillel.networkengine.storage.mongo.DefaultProvider;
+import com.noyhillel.networkengine.storage.Provider;
 import com.noyhillel.networkengine.util.utils.NetCoolDown;
 import com.noyhillel.networkhub.commands.*;
 import com.noyhillel.networkhub.items.HubItemJoinListener;
@@ -48,7 +48,7 @@ public final class NetHub extends NetPlugin {
 
     @Override
     protected void disable() {
-        logInfoInColor(ChatColor.DARK_RED + "Hub Plugin >> Successfully disabled!");
+        logInfoInColor(ChatColor.YELLOW + "Hub Plugin >> Successfully disabled!");
     }
 
     private void registerAllListeners() {
@@ -61,6 +61,7 @@ public final class NetHub extends NetPlugin {
         new ChatListener().register();
         new BouncyPads().register();
         new BelowZero().register();
+        new BlockBreakListener().register();
     }
 
     private void registerAllNetCommands() {

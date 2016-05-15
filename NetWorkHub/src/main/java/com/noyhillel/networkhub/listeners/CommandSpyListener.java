@@ -1,5 +1,6 @@
 package com.noyhillel.networkhub.listeners;
 
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,13 +19,13 @@ public final class CommandSpyListener extends ModuleListener {
         super("command-spy");
     }
 
-    public static List<Player> commandListeners = new ArrayList<>();
+    public static List<NetPlayer> commandListeners = new ArrayList<>();
 
     @EventHandler
     public void onCommandProcess(PlayerCommandPreprocessEvent event) {
         Player playerSending = event.getPlayer();
         String s = event.getMessage();
-        for (Player playerSentTo : commandListeners) {
+        for (NetPlayer playerSentTo : commandListeners) {
             playerSentTo.sendMessage(ChatColor.DARK_AQUA + playerSending.getName() + ": " + s);
         }
     }

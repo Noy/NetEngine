@@ -1,11 +1,13 @@
 package com.noyhillel.survivalgames.player;
 
-import com.noyhillel.networkengine.util.utils.RandomUtils;
+import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.utils.MessageManager;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.Bukkit;
@@ -17,24 +19,27 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
+import java.math.BigInteger;
 import java.util.List;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true, of = {"username"})
 @Data
-public final class GPlayer extends GOfflinePlayer {
+public final class SGPlayer extends SGOfflinePlayer {
 
     private final String username;
-    private Scoreboard playerScoreboard;
+    @Setter(AccessLevel.PRIVATE) private Scoreboard playerScoreboard;
     private Objective currentScoreboardObjective;
 
-    public GPlayer(String username, String uuid, List<String> usernames, Integer kills, Integer deaths, Integer wins, Integer plays, Integer mutation_credits, Integer points, String nick) {
+    public SGPlayer(String username, UUID uuid, List<String> usernames, Integer kills, Integer deaths, Integer wins, Integer plays, Integer mutation_credits, Integer points, String nick) {
         super(uuid, usernames, kills, deaths, wins, plays, mutation_credits, points, nick);
         this.username = username;
         this.playerScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-//        updateNick();
+        //updateNick();
     }
 
     public void updateNick() {
@@ -45,13 +50,13 @@ public final class GPlayer extends GOfflinePlayer {
             DisguiseAPI.undisguiseToAll(player);
             return;
         }
-        PlayerDisguise nickDisguise = new PlayerDisguise(nick, true);
+        PlayerDisguise nickDisguise = new PlayerDisguise(nick);
         DisguiseAPI.disguiseToAll(player, nickDisguise);
         player.setPlayerListName(nick);
     }
 
     public Player getPlayer() {
-        return Bukkit.getPlayerExact(this.username);
+        return Bukkit.getPlayer(this.getUuid());
     }
 
     public NetPlayer getPlayerFromNetPlayer() {
@@ -75,6 +80,13 @@ public final class GPlayer extends GOfflinePlayer {
         player.setTotalExperience(0);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[4]);
+    }
+
+    public void showToAll() {
+        Player player = getPlayer();
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.showPlayer(player);
+        }
     }
 
     public void heal() {
@@ -107,25 +119,35 @@ public final class GPlayer extends GOfflinePlayer {
         }
     }
 
-    public void setScoreboardSide(String key, Integer value) {
-        validateScoreboard();
-        this.currentScoreboardObjective.getScore(Bukkit.getOfflinePlayer(key)).setScore(value);
+    public boolean isOnline() {
+        return Bukkit.getOfflinePlayer(this.username).isOnline() && getPlayer() != null;
     }
 
-    public void unsetScoreboardSide(String key) {
-        validateScoreboard();
-        this.playerScoreboard.resetScores(Bukkit.getOfflinePlayer(key));
-    }
-
-    public Integer getScoreboardSide(String key) {
-        validateScoreboard();
-        return this.currentScoreboardObjective.getScore(Bukkit.getOfflinePlayer(key)).getScore();
-    }
-
-    public void resetScoreboardSide() {
-        validateScoreboard();
-        this.currentScoreboardObjective.unregister();
+    public void resetScoreboard() {
+        if (!this.isOnline()) return;
+        this.playerScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.currentScoreboardObjective = null;
+        this.getPlayer().setScoreboard(this.playerScoreboard);
+    }
+
+    public void setScoreboardSideTitle(String title) {
+        if (!isOnline()) return;
+        if (this.currentScoreboardObjective == null) {
+            String s = new BigInteger(13, NetPlugin.getRandom()).toString(5);
+            this.currentScoreboardObjective = this.playerScoreboard.registerNewObjective(s.substring(0, Math.min(s.length(), 15)), "dummy");
+            this.currentScoreboardObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }
+        this.currentScoreboardObjective.setDisplayName(title);
+    }
+
+    public void setScoreBoardSide(String key, Integer value) {
+        if (!this.isOnline()) return;
+        if (this.currentScoreboardObjective == null || this.playerScoreboard == null) {}
+            Score score = this.currentScoreboardObjective.getScore(Bukkit.getOfflinePlayer(key.substring(0, Math.min(key.length(), 15))));
+        score.setScore(value);
+        if (getPlayer() == null) return;
+        if (!getPlayer().isOnline()) return;
+        getPlayer().setScoreboard(this.playerScoreboard);
     }
 
     public void addPotionEffect(PotionEffectType effectType, Integer level, Integer length, boolean ambient) {
@@ -157,21 +179,8 @@ public final class GPlayer extends GOfflinePlayer {
         }
     }
 
-    public synchronized void setScoreboardTitle(String title) {
-        if (this.currentScoreboardObjective == null) {
-            this.currentScoreboardObjective = this.playerScoreboard.registerNewObjective(RandomUtils.getRandomString(5).substring(0, 5), "dummy");
-            this.currentScoreboardObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        }
-        this.currentScoreboardObjective.setDisplayName(title);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    private void validateScoreboard() {
-        if (this.currentScoreboardObjective == null || this.playerScoreboard == null) {}// throw new IllegalStateException("You cannot set a scoreboard value when there is no objective!");
-    }
-
     public void save() throws StorageError, PlayerNotFoundException {
-        SurvivalGames.getInstance().getGPlayerManager().getStorage().savePlayer(this);
+        SurvivalGames.getInstance().getSGPlayerManager().getStorage().savePlayer(this);
     }
 
     @Override
@@ -183,4 +192,39 @@ public final class GPlayer extends GOfflinePlayer {
     public String getDisplayableName() {
         return this.nick == null ? this.getUsername() : this.nick;
     }
+
+//    public void setScoreboardSide(String key, Integer value) {
+//        validateScoreboard();
+//        this.currentScoreboardObjective.getScore(Bukkit.getOfflinePlayer(key)).setScore(value);
+//    }
+//
+//    public void unsetScoreboardSide(String key) {
+//        validateScoreboard();
+//        this.playerScoreboard.resetScores(Bukkit.getOfflinePlayer(key));
+//    }
+//
+//    public Integer getScoreboardSide(String key) {
+//        validateScoreboard();
+//        return this.currentScoreboardObjective.getScore(Bukkit.getOfflinePlayer(key)).getScore();
+//    }
+//
+//    public void resetScoreboardSide() {
+//        validateScoreboard();
+//        this.currentScoreboardObjective.unregister();
+//        this.currentScoreboardObjective = null;
+//    }
+
+
+//    public synchronized void setScoreboardTitle(String title) {
+//        if (this.currentScoreboardObjective == null) {
+//            this.currentScoreboardObjective = this.playerScoreboard.registerNewObjective(RandomUtils.getRandomString(5).substring(0, 5), "dummy");
+//            this.currentScoreboardObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
+//        }
+//        this.currentScoreboardObjective.setDisplayName(title);
+//    }
+//
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    private void validateScoreboard() {
+//        if (this.currentScoreboardObjective == null || this.playerScoreboard == null) {}// throw new IllegalStateException("You cannot set a scoreboard value when there is no objective!");
+//    }
 }

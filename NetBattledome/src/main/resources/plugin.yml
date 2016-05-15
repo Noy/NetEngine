@@ -11,3 +11,5 @@ commands:
         aliases: [health]
     tp:
         aliases: [teleport]
+    spawn:
+        aliases: [s]

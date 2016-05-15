@@ -1,12 +1,10 @@
 package com.noyhillel.networkengine.util.effects;
 
-import com.noyhillel.networkengine.util.packets.FakeEntity;
 import com.noyhillel.networkengine.util.player.NetPlayer;
-import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,32 +19,39 @@ public final class NetEnderHealthBarEffect {
     }
 
     private static Map<NetPlayer, NetEnderHealthBarEffect> playerEnderBarMap;
-    private FakeEntity enderDragon;
 
-    private NetEnderHealthBarEffect(NetPlayer player) {
-        this.enderDragon = new FakeEntity(
-                player.getPlayer(),
-                EntityType.ENDER_DRAGON,
-                200,
-                player.getPlayer().getLocation().clone().subtract(0, 100, 0),
-                FakeEntity.EntityFlags.INVISIBLE
-        );
+    private final BossBar bossBar;
+
+    private NetEnderHealthBarEffect() {
+        this.bossBar = Bukkit.createBossBar("", BarColor.PURPLE, BarStyle.SOLID);
     }
 
     private static void showDragonFor(NetPlayer player) {
         NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
-        enderBarFor.enderDragon.create();
+        enderBarFor.bossBar.addPlayer(player.getPlayer());
     }
 
     public static void setTextFor(NetPlayer player, String string) {
         showDragonFor(player);
         NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
-        enderBarFor.enderDragon.setCustomName(string.substring(0, Math.min(string.length(), 63)));
+        enderBarFor.bossBar.setTitle(string.substring(0, Math.min(string.length(), 63)));
+    }
+
+    @Deprecated
+    public static void setHealthStatus(NetPlayer player, Float health) {
+        NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
+        Integer finHealth = Double.valueOf(health * 200).intValue();
+        enderBarFor.bossBar.setProgress(finHealth);
+    }
+
+    public static void setHealthPercent(NetPlayer player, Double health) {
+        NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
+        enderBarFor.bossBar.setProgress(health);
     }
 
     private static NetEnderHealthBarEffect getEnderBarFor(NetPlayer player) {
         if (!NetEnderHealthBarEffect.playerEnderBarMap.containsKey(player)) {
-            NetEnderHealthBarEffect enderBar = new NetEnderHealthBarEffect(player);
+            NetEnderHealthBarEffect enderBar = new NetEnderHealthBarEffect();
             NetEnderHealthBarEffect.playerEnderBarMap.put(player, enderBar);
             return enderBar;
         }
@@ -57,43 +62,37 @@ public final class NetEnderHealthBarEffect {
         return NetEnderHealthBarEffect.playerEnderBarMap.containsKey(player);
     }
 
-    public static void setHealthPercent(NetPlayer player, Float health) {
-        NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
-        Integer finHealth = Float.valueOf(health * 200).intValue();
-        enderBarFor.enderDragon.setHealth(finHealth);
-    }
-
-    public static void resetPlayers() {
+    private static void resetPlayers() {
         playerEnderBarMap = null;
         playerEnderBarMap = new HashMap<>();
     }
 
     public static void refreshForPlayer(NetPlayer player) {
         NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
-        enderBarFor.enderDragon.create();
+        enderBarFor.bossBar.removePlayer(player.getPlayer());
     }
 
     public static void remove(NetPlayer player) {
         NetEnderHealthBarEffect enderBarFor = getEnderBarFor(player);
-        enderBarFor.enderDragon.destroy();
+        enderBarFor.bossBar.removeAll();
         playerEnderBarMap.remove(player);
     }
 
-    public static class EnderBarListeners implements Listener {
+//    public static class EnderBarListeners implements Listener {
 
-        @EventHandler
-        public void onPlayerMove(PlayerMoveEvent event) {
-            NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
-            if (!hasEnderBarFor(netPlayer)) return;
-            NetEnderHealthBarEffect enderBarFor = getEnderBarFor(netPlayer);
-            Location enderLocation = enderBarFor.enderDragon.getLocation().clone();
-            Location playerLocation = event.getPlayer().getLocation().clone();
-            enderLocation.setY(0);
-            playerLocation.setY(0);
-            if (!enderLocation.getWorld().equals(playerLocation.getWorld()) || enderLocation.distance(playerLocation) >= 25d) {
-                enderBarFor.enderDragon.setLocation(playerLocation.subtract(0, 100, 0));
-            }
-        }
+//        @EventHandler
+//        public void onPlayerMove(PlayerMoveEvent event) {
+//            NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
+//            if (!hasEnderBarFor(netPlayer)) return;
+//            NetEnderHealthBarEffect enderBarFor = getEnderBarFor(netPlayer);
+//            Location enderLocation = enderBarFor.enderDragon.getLocation().clone();
+//            Location playerLocation = event.getPlayer().getLocation().clone();
+//            enderLocation.setY(0);
+//            playerLocation.setY(0);
+//            if (!enderLocation.getWorld().equals(playerLocation.getWorld()) || enderLocation.distance(playerLocation) >= 25d) {
+//                enderBarFor.bossBar.setLocation(playerLocation.subtract(0, 100, 0));
+//            }
+//        }
 //        @EventHandler
 //        public void onPlayerRespawn(PlayerRespawnEvent event) {
 //            final NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
@@ -105,5 +104,5 @@ public final class NetEnderHealthBarEffect {
 //                }
 //            }, 2L);
 //        }
-    }
+//    }
 }

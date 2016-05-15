@@ -2,7 +2,7 @@ package com.noyhillel.survivalgames.game.lobby;
 
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.game.GameManager;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.Data;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,15 +26,15 @@ public class LobbyItemListener implements Listener {
         LobbyItem lobbyItem1 = resolveLobbyItem(itemInHand, event.getPlayer().getInventory().getHeldItemSlot());
         if (lobbyItem1 == null) return;
         LobbyItemDefinition lobbyItem = lobbyItem1.getLobbyItemDefinition();
-        GPlayer gPlayer = resolveGPlayer(event.getPlayer());
+        SGPlayer SGPlayer = resolveGPlayer(event.getPlayer());
         switch (event.getAction()) {
             case LEFT_CLICK_AIR:
             case LEFT_CLICK_BLOCK:
-                lobbyItem.leftClick(gPlayer, gameManager);
+                lobbyItem.leftClick(SGPlayer, gameManager);
                 break;
             case RIGHT_CLICK_BLOCK:
             case RIGHT_CLICK_AIR:
-                lobbyItem.rightClick(gPlayer, gameManager);
+                lobbyItem.rightClick(SGPlayer, gameManager);
                 break;
         }
         event.setCancelled(true);
@@ -54,7 +54,7 @@ public class LobbyItemListener implements Listener {
         return itemMeta != null && lobbyItemDefinition.getType().equals(itemStack.getType()) && lobbyItemDefinition.getTitle().equalsIgnoreCase(lobbyItemDefinition.getTitle());
     }
 
-    private GPlayer resolveGPlayer(Player player) {
-        return SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player);
+    private SGPlayer resolveGPlayer(Player player) {
+        return SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer(player);
     }
 }

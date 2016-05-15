@@ -1,9 +1,10 @@
-package com.noyhillel.survivalgames.command;
+package com.noyhillel.survivalgames.command.setcommands;
 
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.newcommand.Permission;
+import com.noyhillel.survivalgames.SurvivalGames;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ public final class SetSpawnCommand extends NetAbstractCommandHandler { // NEEDS 
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
+        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
         if (args.length > 0) throw new NewNetCommandException("Too many arguemnts.", NewNetCommandException.ErrorType.ManyArguments);
         Location loc = player.getLocation();
         player.getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ());

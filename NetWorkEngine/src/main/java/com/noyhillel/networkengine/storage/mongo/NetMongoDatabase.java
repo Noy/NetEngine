@@ -1,10 +1,11 @@
-package com.noyhillel.networkengine.mongo;
+package com.noyhillel.networkengine.storage.mongo;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
+import com.noyhillel.networkengine.storage.NetDatabase;
 import com.noyhillel.networkengine.util.NetPlugin;
 import lombok.Data;
 import lombok.Getter;

@@ -145,7 +145,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
      * @param args Command Arguments
      * @throws com.noyhillel.networkengine.exceptions.NewNetCommandException
      */
-    @SuppressWarnings("UnusedParameters")
+    @SuppressWarnings({"UnusedParameters"})
     protected void blockCommand(BlockCommandSender sender, String[] args) throws NewNetCommandException {
         // If the CommandBlock did not execute this command, throw this exception.
         throw new NewNetCommandException("A block cannot execute this command!", NewNetCommandException.ErrorType.Special);

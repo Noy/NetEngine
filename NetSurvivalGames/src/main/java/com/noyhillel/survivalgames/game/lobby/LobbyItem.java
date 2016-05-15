@@ -2,7 +2,7 @@ package com.noyhillel.survivalgames.game.lobby;
 
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.game.impl.SGGame;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -33,13 +33,13 @@ public enum LobbyItem {
         }
 
         @Override
-        void leftClick(GPlayer player, GameManager manager) { rightClick(player, manager); }
+        void leftClick(SGPlayer player, GameManager manager) { rightClick(player, manager); }
 
         @Override
-        void rightClick(GPlayer player, GameManager manager) {}
+        void rightClick(SGPlayer player, GameManager manager) {}
 
         @Override
-        protected ItemStack getItem(GPlayer player, GameManager manager) {
+        protected ItemStack getItem(SGPlayer player, GameManager manager) {
             ItemStack book = new ItemStack(getType());
             BookMeta meta = (BookMeta) book.getItemMeta();
             meta.setTitle(getTitle());
@@ -66,49 +66,50 @@ public enum LobbyItem {
         }
 
         @Override
-        public void rightClick(GPlayer player, GameManager manager) {
+        public void rightClick(SGPlayer player, GameManager manager) {
             SGGame runningSGGame = manager.getRunningSGGame();
             if (runningSGGame == null) return;
             runningSGGame.getSpectatorGUI().open(player);
         }
         @Override
-        public void leftClick(GPlayer player, GameManager manager) {
+        public void leftClick(SGPlayer player, GameManager manager) {
             rightClick(player, manager);
         }
 
+    }),
+    MUTATION_INTERFACE(new LobbyItemDefinition() {
+        @Override
+        Integer getSlot() {
+            return 2;
+        }
+
+        @Override
+        Material getType() {
+            return Material.NETHER_STAR;
+        }
+
+        @Override
+        String getTitle() {
+            return MessageManager.getFormat("formats.mutation-interface-title", false);
+        }
+
+        @Override
+        public void rightClick(SGPlayer player, GameManager manager) {
+            SGGame runningSGGame = manager.getRunningSGGame();
+            if (runningSGGame == null) return;
+            if (player.getMutationCredits() == null || player.getMutationCredits() == 0) {
+                if (player.getPlayer().isOp()) return;
+                player.getPlayer().sendMessage(MessageManager.getFormat("formats.no-mutation-passes"));
+                return;
+            }
+            runningSGGame.mutatePlayer(player);
+        }
+
+        @Override
+        public void leftClick(SGPlayer player, GameManager manager) {
+            rightClick(player, manager);
+        }
     });
-//    MUTATION_INTERFACE(new LobbyItemDefinition() {
-//        @Override
-//        Integer getSlot() {
-//            return 2;
-//        }
-//
-//        @Override
-//        Material getType() {
-//            return Material.NETHER_STAR;
-//        }
-//
-//        @Override
-//        String getTitle() {
-//            return MessageManager.getFormat("formats.mutation-interface-title", false);
-//        }
-//
-//        @Override
-//        public void rightClick(GPlayer player, GameManager manager) {
-//            SGGame runningSGGame = manager.getRunningSGGame();
-//            if (runningSGGame == null) return;
-//            if (player.getMutationCredits() == null || player.getMutationCredits() == 0) {
-//                player.getPlayer().sendMessage(MessageManager.getFormat("formats.no-mutation-passes"));
-//                return;
-//            }
-//            runningSGGame.mutatePlayer(player);
-//        }
-//
-//        @Override
-//        public void leftClick(GPlayer player, GameManager manager) {
-//            rightClick(player, manager);
-//        }
-//    });
 
     @Getter private final LobbyItemDefinition lobbyItemDefinition;
     LobbyItem(LobbyItemDefinition definition) {

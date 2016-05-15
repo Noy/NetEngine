@@ -4,7 +4,6 @@ import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import com.noyhillel.networkhub.commands.SpawnCommand;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -23,7 +22,7 @@ public final class BelowZero extends ModuleListener {
         if (netPlayer.hasPermission("hub.below-zero")) return;
         if (netPlayer.getLocation().getY() < 0) {
             netPlayer.teleport(SpawnCommand.getLocation("spawn"));
-            netPlayer.playSound(Sound.CHICKEN_EGG_POP);
+            netPlayer.playSound(Sound.ENTITY_CHICKEN_EGG);
             netPlayer.sendMessage(MessageManager.getFormats("formats.tpd-spawn"));
         }
     }

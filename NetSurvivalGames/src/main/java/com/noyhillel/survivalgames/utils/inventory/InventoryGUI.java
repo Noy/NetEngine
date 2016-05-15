@@ -1,7 +1,7 @@
 package com.noyhillel.survivalgames.utils.inventory;
 
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.bukkit.Bukkit;
@@ -28,7 +28,7 @@ public class InventoryGUI implements Listener {
     private List<InventoryGUIItem> items;
     private boolean eventsRegistered = false;
 
-    private List<GPlayer> playersWithInventories = new ArrayList<>();
+    private List<SGPlayer> playersWithInventories = new ArrayList<>();
 
     public InventoryGUI(List<InventoryGUIItem> guiItems, InventoryGUIDelegate delegate, String name) {
         this.items = guiItems;
@@ -61,7 +61,7 @@ public class InventoryGUI implements Listener {
             else this.inv.setItem(slot, representationItem);
         }
         if (reopen) {
-            for (GPlayer playersWithInventory : playersWithInventories) {
+            for (SGPlayer playersWithInventory : playersWithInventories) {
                 Player player = playersWithInventory.getPlayer();
                 player.closeInventory();
                 player.openInventory(this.inv);
@@ -70,10 +70,10 @@ public class InventoryGUI implements Listener {
     }
 
     public void open(Player player) {
-        open(SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer(player));
+        open(SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer(player));
     }
 
-    public void open(GPlayer player) {
+    public void open(SGPlayer player) {
         if (this.playersWithInventories.contains(player)) return;
         this.playersWithInventories.add(player);
         player.getPlayer().openInventory(inv);
@@ -83,7 +83,7 @@ public class InventoryGUI implements Listener {
         }
     }
 
-    void closed(GPlayer player) {
+    void closed(SGPlayer player) {
         this.playersWithInventories.remove(player);
         if (this.playersWithInventories.size() == 0) {
             HandlerList.unregisterAll(this);
@@ -92,13 +92,13 @@ public class InventoryGUI implements Listener {
     }
 
     public void closeAll() {
-        for (GPlayer player : this.playersWithInventories) {
+        for (SGPlayer player : this.playersWithInventories) {
             player.getPlayer().closeInventory();
             closed(player);
         }
     }
 
-    public void close(GPlayer player) {
+    public void close(SGPlayer player) {
         player.getPlayer().closeInventory();
         closed(player);
     }
@@ -117,8 +117,8 @@ public class InventoryGUI implements Listener {
     public void onPlayerInventoryClick(InventoryClickEvent event) {
         HumanEntity whoClicked = event.getWhoClicked();
         if (!(whoClicked instanceof Player)) return;
-        GPlayer gPlayer = SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer((Player) whoClicked);
-        if (!this.playersWithInventories.contains(gPlayer)) return;
+        SGPlayer SGPlayer = SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer((Player) whoClicked);
+        if (!this.playersWithInventories.contains(SGPlayer)) return;
         event.setCancelled(true);
         event.setResult(Event.Result.DENY);
         InventoryGUIItem finalItem = null;
@@ -128,15 +128,15 @@ public class InventoryGUI implements Listener {
                 break;
             }
         }
-        this.delegate.playerClickedItem(gPlayer, finalItem, this);
+        this.delegate.playerClickedItem(SGPlayer, finalItem, this);
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity player = event.getPlayer();
         if (!(player instanceof Player)) return;
-        GPlayer gPlayer = SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayer((Player) player);
-        if (!this.playersWithInventories.contains(gPlayer)) return;
-        closed(gPlayer);
+        SGPlayer SGPlayer = SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer((Player) player);
+        if (!this.playersWithInventories.contains(SGPlayer)) return;
+        closed(SGPlayer);
     }
 }

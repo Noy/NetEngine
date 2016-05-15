@@ -1,14 +1,12 @@
 package com.noyhillel.battledome.game;
 
 
-import com.noyhillel.battledome.exceptions.BattledomeException;
 import com.noyhillel.battledome.arena.Point;
+import com.noyhillel.battledome.exceptions.BattledomeException;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-
-import java.util.Arrays;
 
 /**
  * Created by Noy on 6/23/2014.
@@ -26,13 +24,13 @@ public final class BGameManager {
 
     public void start(Location location) throws BattledomeException {
         if (game == null) throw new  BattledomeException("Cannot start game!");
-        game = new BGame(Arrays.asList(Bukkit.getOnlinePlayers()), pointFromLocation(location), world);
+        game = new BGame(Bukkit.getOnlinePlayers(), pointFromLocation(location), world);
         game.startGame();
     }
 
     public void startGame(Location startLocation) throws BattledomeException {
         if (game != null) throw new BattledomeException("Could not start a game, a game is already running!");
-        game = new BGame(Arrays.asList(Bukkit.getOnlinePlayers()), pointFromLocation(startLocation), world);
+        game = new BGame(Bukkit.getOnlinePlayers(), pointFromLocation(startLocation), world);
         game.startGame();
     }
 

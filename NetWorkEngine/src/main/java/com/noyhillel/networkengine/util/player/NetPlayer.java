@@ -1,7 +1,9 @@
 package com.noyhillel.networkengine.util.player;
 
 import com.noyhillel.networkengine.util.NetPlugin;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -27,7 +29,7 @@ public final class NetPlayer {
 
     private final String playerName;
     private final UUID uuid;
-    private Scoreboard scoreboard;
+    @Setter(AccessLevel.PRIVATE) private Scoreboard scoreboard;
     private Objective sidebar = null;
     private final NetPlayerManager playerManager = null;
 
@@ -82,8 +84,8 @@ public final class NetPlayer {
         this.getPlayer().playSound(getPlayer().getLocation(), sound, volume, pitch);
     }
 
-    public String getIP(Player p) {
-        return p.getAddress().getHostString();
+    public String getIP() {
+        return getPlayer().getAddress().getHostString();
     }
 
     public void clearChat() {
@@ -219,7 +221,7 @@ public final class NetPlayer {
     }
 
     public void teleport(Location location) {
-        this.playSound(Sound.ENDERMAN_TELEPORT);
+        this.playSound(Sound.ENTITY_ENDERMEN_TELEPORT);
         this.getPlayer().teleport(location);
     }
 
@@ -306,12 +308,21 @@ public final class NetPlayer {
         return this.getPlayer().isOp();
     }
 
+    @Deprecated
     public ItemStack getItemInHand() {
         return this.getPlayer().getItemInHand();
     }
 
     public void openInventory(Inventory inventory) {
         this.getPlayer().openInventory(inventory);
+    }
+
+    public void damage(double amount) {
+        getPlayer().damage(amount);
+    }
+
+    public void strikeLightning(Location loc) {
+        getPlayer().getWorld().strikeLightningEffect(loc);
     }
 
     public void closeInventory() {

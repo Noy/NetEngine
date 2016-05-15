@@ -6,8 +6,8 @@ import org.bukkit.ChatColor;
  * Created by Noy on 6/23/2014.
  */
 public enum Team {
-    BLUE(ChatColor.AQUA, "Aqua"),
-    RED(ChatColor.GREEN, "Green");
+    AQUA(ChatColor.AQUA, "Aqua"),
+    GREEN(ChatColor.GREEN, "Green");
 
     private final String name;
     private final ChatColor color;

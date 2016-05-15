@@ -153,7 +153,7 @@ public final class CommandStructure implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatColor.RED + "You have provided too few arguments!");
                     break;
                 case HELP: // If the Sender provides an argument which returns our help center, help them.
-                    sender.sendMessage(ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "Help" + ChatColor.DARK_GREEN + "] " + ChatColor.LIGHT_PURPLE + " >> " + ChatColor.BOLD + annotation.usage());
+                    sender.sendMessage(ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "Help" + ChatColor.DARK_GREEN + "] " + ChatColor.LIGHT_PURPLE + " >> " + annotation.usage());
                     break;
                 case NULL: // If the Sender provides an argument which is null, let them know.
                     sender.sendMessage(ChatColor.RED + "An argument you have provided was null!");
@@ -220,7 +220,7 @@ public final class CommandStructure implements CommandExecutor, TabCompleter {
      * @param command The command.
      * @return The getHandler method.
      */
-    public CommandHandler getHandler(Command command) {
+    private CommandHandler getHandler(Command command) {
         return handlers.get(command);
     }
 
@@ -229,7 +229,7 @@ public final class CommandStructure implements CommandExecutor, TabCompleter {
      * @param command The command.
      * @return The getMethod method.
      */
-    public Method getMethod(Command command) {
+    private Method getMethod(Command command) {
         return methods.get(command);
     }
 
@@ -238,7 +238,7 @@ public final class CommandStructure implements CommandExecutor, TabCompleter {
      * @param command The command.
      * @return The annotation.
      */
-    public NetCommand getAnnotation(Command command) {
+    private NetCommand getAnnotation(Command command) {
         return commandMetaAnnotationMap.get(command);
     }
 

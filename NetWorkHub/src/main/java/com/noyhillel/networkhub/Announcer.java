@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Noy on 30/05/2014.
  */
-public final class Announcer implements Runnable {
+final class Announcer implements Runnable {
 
     /**
      * The List of messages that the announcer will announce.
@@ -28,7 +28,7 @@ public final class Announcer implements Runnable {
      * Creating our constructor
      * @param hub Main class.
      */
-    public Announcer(NetHub hub) {
+    Announcer(NetHub hub) {
         this.messages = hub.getConfig().getStringList("announcer.announcements");
         this.running = hub.getConfig().getBoolean("announcer.running");
     }

@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 public final class NetEngine extends NetPlugin {
 
     @Getter private static NetEngine instance;
-    private final static String RELOAD_MESSAGE = ChatColor.RED + "Server is reloading!";
 
     @Override
     protected void enable() {

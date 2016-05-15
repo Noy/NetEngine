@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public final class PlayerNotFoundException extends Exception {
     private final String message;
-    private final GOfflinePlayer player;
+    private final SGOfflinePlayer player;
     private final Exception cause;
 }

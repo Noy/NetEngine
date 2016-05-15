@@ -8,22 +8,20 @@ import com.noyhillel.survivalgames.arena.ArenaManager;
 import com.noyhillel.survivalgames.arena.JSONArenaManager;
 import com.noyhillel.survivalgames.arena.setup.SetupModeListener;
 import com.noyhillel.survivalgames.command.*;
+import com.noyhillel.survivalgames.command.setcommands.SetMutationCreditsCommand;
+import com.noyhillel.survivalgames.command.setcommands.SetPointsCommand;
+import com.noyhillel.survivalgames.command.setcommands.SetSpawnCommand;
 import com.noyhillel.survivalgames.game.GameException;
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.game.GameManagerListener;
-import com.noyhillel.survivalgames.player.GPlayerManager;
-import com.noyhillel.survivalgames.player.GPlayerManagerListener;
+import com.noyhillel.survivalgames.player.SGPlayerManager;
+import com.noyhillel.survivalgames.player.SGPlayerManagerListener;
 import com.noyhillel.survivalgames.player.StorageError;
 import com.noyhillel.survivalgames.storage.ForgetfulStorage;
 import com.noyhillel.survivalgames.storage.GStorage;
 import com.noyhillel.survivalgames.storage.GStorageKey;
 import com.noyhillel.survivalgames.storage.StorageTypes;
 import com.noyhillel.survivalgames.utils.SignListener;
-import lilypad.client.connect.api.Connect;
-import lilypad.client.connect.api.request.impl.RedirectRequest;
-import lilypad.client.connect.api.result.FutureResultListener;
-import lilypad.client.connect.api.result.StatusCode;
-import lilypad.client.connect.api.result.impl.RedirectResult;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,13 +33,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
-@MainClass(name = "NetSG", description = "The Net SurvivalGames plugin!", authors = {"Twister915", "NoyHillel1"})
+@MainClass(name = "NetSG", description = "The Net SurvivalGames plugin!", authors = {"NoyHillel1", "Twister915"})
 public final class SurvivalGames extends NetPlugin {
 
     @Getter private static SurvivalGames instance;
     @Getter private ArenaManager arenaManager;
     @Getter private GameManager gameManager;
-    @Getter private GPlayerManager gPlayerManager;
+    @Getter private SGPlayerManager SGPlayerManager;
     @Getter private SetupCommand setupCommand;
     @Getter private boolean isSetupOnly = false;
 
@@ -53,6 +51,7 @@ public final class SurvivalGames extends NetPlugin {
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.kickPlayer(RELOAD_MESSAGE);
         }
+        if (new File(getDataFolder(), "SETUP_LOCK").exists()) isSetupOnly = true;
         logInfoInColor(ChatColor.YELLOW + "Enabling SurvivalGames...");
         try {
             saveDefaultConfig();
@@ -79,7 +78,7 @@ public final class SurvivalGames extends NetPlugin {
     }
 
     private void tryDisable() throws StorageError, ArenaException {
-        this.gPlayerManager.getStorage().shutdown();
+        this.SGPlayerManager.getStorage().shutdown();
         gameManager.disable();
     }
 
@@ -95,14 +94,14 @@ public final class SurvivalGames extends NetPlugin {
         }
         GStorage storage = getStorage();
         if (storage == null) fallbackStorage();
-        else this.gPlayerManager = new GPlayerManager(storage);
+        else this.SGPlayerManager = new SGPlayerManager(storage);
         try {
-            this.gPlayerManager.enable();
+            this.SGPlayerManager.enable();
         } catch (StorageError error) {
             error.printStackTrace();
             fallbackStorage();
         }
-        registerListener(new GPlayerManagerListener(this.gPlayerManager));
+        registerListener(new SGPlayerManagerListener(this.SGPlayerManager));
         registerListener(new SignListener());
         registerListener(new SetupModeListener());
         setupCommand = registerListener(setupCommands(SetupCommand.class));
@@ -115,14 +114,17 @@ public final class SurvivalGames extends NetPlugin {
         setupCommands(SetSpawnCommand.class);
         setupCommands(HubCommand.class);
         setupCommands(SpectateCommand.class);
+        setupCommands(SetPointsCommand.class);
+        setupCommands(RefillChestsCommand.class);
+        setupCommands(SetMutationCreditsCommand.class);
         logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&eSurvivalGames&a has been fully enabled!"));
     }
 
     private void fallbackStorage() {
         getLogger().severe("Could not connect to MySQL, defaulting to no-save storage!");
-        this.gPlayerManager = new GPlayerManager(new ForgetfulStorage());
+        this.SGPlayerManager = new SGPlayerManager(new ForgetfulStorage());
         try {
-            this.gPlayerManager.enable();
+            this.SGPlayerManager.enable();
         } catch (StorageError error) {
             error.printStackTrace();
         }
@@ -158,24 +160,27 @@ public final class SurvivalGames extends NetPlugin {
         return builder.toString();
     }
 
-    public Connect getBukkitConnect() {
-        return getServer().getServicesManager().getRegistration(Connect.class).getProvider();
-    }
 
-    public void sendToServer(String server, final Player player) {
-        try {
-            Connect c = getBukkitConnect();
-            c.request(new RedirectRequest(server, player.getName())).registerListener(new FutureResultListener<RedirectResult>() {
-                @Override
-                public void onResult(RedirectResult redirectResult) {
-                    if (redirectResult.getStatusCode() == StatusCode.SUCCESS) {
-                        return;
-                    }
-                    player.sendMessage("Could not connect");
-                }
-            });
-        } catch (Exception exception) {
-            player.sendMessage("Could not connect");
-        }
-    }
+
+    /**
+     * @Deprecated
+     * Lilypad
+     */
+//    private Connect getBukkitConnect() {
+//        return getServer().getServicesManager().getRegistration(Connect.class).getProvider();
+//    }
+//
+//    public void sendToServer(String server, final Player player) {
+//        try {
+//            Connect c = getBukkitConnect();
+//            c.request(new RedirectRequest(server, player.getName())).registerListener(redirectResult -> {
+//                if (redirectResult.getStatusCode() == StatusCode.SUCCESS) {
+//                    return;
+//                }
+//                player.sendMessage("Could not connect");
+//            });
+//        } catch (Exception exception) {
+//            player.sendMessage("Could not connect");
+//        }
+//    }
 }

@@ -7,7 +7,6 @@ import com.noyhillel.networkhub.NetHub;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -20,7 +19,7 @@ public final class HidePlayersItem extends NetHubItemDelegate {
 
     public static Set<UUID> hidingPlayers = new HashSet<>();
 
-    public HidePlayersItem() {
+    HidePlayersItem() {
         super(true);
     }
 
@@ -63,23 +62,15 @@ public final class HidePlayersItem extends NetHubItemDelegate {
         }
         if (!hidingPlayers.contains(player.getUuid())) {
             hidingPlayers.add(player.getUuid());
-            for (Player online : Bukkit.getOnlinePlayers()) {
-                if (!online.hasPermission("hub.staff")) {
-                    player.getPlayer().hidePlayer(online);
-                }
-            }
+            Bukkit.getOnlinePlayers().stream().filter(online -> !online.hasPermission("hub.staff")).forEach(online -> player.getPlayer().hidePlayer(online));
             player.sendMessage(MessageManager.getFormats("hide-item.hide"));
-            player.playSound(Sound.CLICK, 0.5F);
+            player.playSound(Sound.UI_BUTTON_CLICK, 0.5F);
         }
         else if (hidingPlayers.contains(player.getUuid())) {
             hidingPlayers.remove(player.getUuid());
-            for (Player online : Bukkit.getOnlinePlayers()) {
-                if (!player.getPlayer().canSee(online)) {
-                    player.getPlayer().showPlayer(online);
-                }
-            }
+            Bukkit.getOnlinePlayers().stream().filter(online -> !player.getPlayer().canSee(online)).forEach(online -> player.getPlayer().showPlayer(online));
             player.sendMessage(MessageManager.getFormats("hide-item.unhide"));
-            player.playSound(Sound.CLICK, 1F);
+            player.playSound(Sound.UI_BUTTON_CLICK, 1F);
         }
     }
 

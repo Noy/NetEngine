@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+
 /**
  * Created by Noy on 26/05/2014.
  */
@@ -63,5 +65,10 @@ public final class SpawnCommand extends AbstractCommandHandler {
         configurationSection.set("z", location.getZ());
         configurationSection.set("pitch", location.getPitch());
         configurationSection.set("yaw", location.getYaw());
+        try {
+            NetHub.getInstance().getConfig().save(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,12 +5,11 @@ import com.noyhillel.networkengine.command.CommandStatus;
 import com.noyhillel.networkengine.command.CommandStructure;
 import com.noyhillel.networkengine.command.NetCommandSenders;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
+import com.noyhillel.networkengine.storage.NetDatabase;
+import com.noyhillel.networkengine.storage.Provider;
 import com.noyhillel.networkengine.util.config.YAMLConfigurationFile;
-import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
 import com.noyhillel.networkengine.util.player.NetPlayerManager;
 import com.noyhillel.networkengine.util.player.NetPlayerManagerListener;
-import com.noyhillel.networkengine.mongo.NetDatabase;
-import com.noyhillel.networkengine.mongo.Provider;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -60,7 +59,6 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
             this.commandStructure = new CommandStructure(this);
             NetPlugin.netPlayerManager = new NetPlayerManager();
             registerListener(new NetPlayerManagerListener(netPlayerManager));
-            registerListener(new NetEnderHealthBarEffect.EnderBarListeners());
             registerPluginMeta();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -104,7 +102,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
         return sgCommand.getDeclaredConstructor().newInstance();
     }
 
-    public final void registerCommands(CommandHandler handler) {
+    protected final void registerCommands(CommandHandler handler) {
         getCommandStructure().registerHandler(handler);
     }
 

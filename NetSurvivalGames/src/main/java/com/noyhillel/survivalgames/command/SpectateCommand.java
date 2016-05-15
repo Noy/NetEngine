@@ -4,7 +4,7 @@ import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.survivalgames.game.impl.SGGame;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * <p/>
@@ -27,8 +29,8 @@ public final class SpectateCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        GPlayer gPlayer = LinkChestsCommand.resolveGPlayer(sender);
-        if (!SGGame.getSpectators().contains(gPlayer)) throw new NewNetCommandException("You need to be a spectator to perform this command!", NewNetCommandException.ErrorType.Special);
+        SGPlayer SGPlayer = LinkChestsCommand.resolveGPlayer(sender);
+        if (!SGGame.getSpectators().contains(SGPlayer)) throw new NewNetCommandException("You need to be a spectator to perform this command!", NewNetCommandException.ErrorType.Special);
         if (args.length == 0) throw new NewNetCommandException("You need to provide a player!", NewNetCommandException.ErrorType.FewArguments);
         if (args.length > 1) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.FewArguments);
         Player target = Bukkit.getPlayer(args[0]);
@@ -45,14 +47,12 @@ public final class SpectateCommand extends NetAbstractCommandHandler {
     }
 
     @Override
-    public List<String> completeArgs(CommandSender sender, String[] args) {
+    protected List<String> completeArgs(CommandSender sender, String[] args) {
         List<String> names = new ArrayList<>();
         if (args[0].equals("")) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getName().startsWith(args[0])) {
-                    names.add(player.getName());
-                }
-            }
+            names.addAll(Bukkit.getOnlinePlayers().stream().filter
+                    (player -> player.getName().startsWith(args[0])).map((Function<Player, String>)
+                    Player::getName).collect(Collectors.toList()));
             Collections.sort(names);
             return names;
         }

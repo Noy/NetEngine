@@ -16,7 +16,7 @@ public final class CommandSpyCommand extends AbstractCommandHandler {
 
     @NetCommand(
             name = "commandspy",
-            usage = "/cs",
+            usage = "/cw",
             description = "The Command Spy plugin",
             permission = "hub.command-spy",
             senders = {NetCommandSenders.PLAYER}
@@ -25,12 +25,12 @@ public final class CommandSpyCommand extends AbstractCommandHandler {
         if (args.length > 0) return CommandStatus.HELP;
         Player p = (Player) sender;
         NetPlayer netPlayer = NetHub.getNetPlayerManager().getOnlinePlayer(p);
-        if (CommandSpyListener.commandListeners.contains(p)) {
-            CommandSpyListener.commandListeners.remove(p);
+        if (CommandSpyListener.commandListeners.contains(netPlayer)) {
+            CommandSpyListener.commandListeners.remove(netPlayer);
             netPlayer.sendMessage(MessageManager.getFormats("formats.spy-off"));
             return CommandStatus.SUCCESS;
         } else {
-            CommandSpyListener.commandListeners.add(p);
+            CommandSpyListener.commandListeners.add(netPlayer);
             netPlayer.sendMessage(MessageManager.getFormats("formats.spy-on"));
         }
         return CommandStatus.SUCCESS;

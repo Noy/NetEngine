@@ -2,11 +2,13 @@ package com.noyhillel.survivalgames.storage;
 
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
-import com.noyhillel.survivalgames.player.GOfflinePlayer;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.SurvivalGames;
+import com.noyhillel.survivalgames.player.SGOfflinePlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.player.PlayerNotFoundException;
 import com.noyhillel.survivalgames.player.StorageError;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
@@ -18,11 +20,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
-@GStorageKey({"mysql", "sql"})
+@GStorageKey({"storage", "sql"})
 @RequiredArgsConstructor
 public final class MySQLStorage implements GStorage {
-    private static enum DatabaseKeys {
+    private enum DatabaseKeys {
         PLAYERS_TABLE("players"),
         UUID("id"),
         USERNAMES("usernames"),
@@ -31,7 +34,7 @@ public final class MySQLStorage implements GStorage {
         DEATHS("deaths"),
         WINS("wins"),
         TOTAL_GAMES("totalgames"),
-        MUTATION_CREDITS("mutationcredits"),
+        MUTATION_CREDITS("mutationpasses"),
         NICK("nick");
         private String key;
         DatabaseKeys(String key) {
@@ -57,15 +60,13 @@ public final class MySQLStorage implements GStorage {
     private BoneCP connectionPool;
 
     @Override
-    public GOfflinePlayer getOfflinePlayerByUUID(String uuid) throws PlayerNotFoundException, StorageError {
+    public SGOfflinePlayer getOfflinePlayerByUUID(UUID uuid) throws PlayerNotFoundException, StorageError {
         try (Connection connection = connectionPool.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+ DatabaseKeys.PLAYERS_TABLE +" WHERE ? = ?");
-            preparedStatement.setString(1, DatabaseKeys.UUID.getKey());
-            preparedStatement.setString(2, uuid);
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM "+ DatabaseKeys.PLAYERS_TABLE +" WHERE id = ? LIMIT 1");
+            preparedStatement.setString(1, uuid.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.getFetchSize() == 0) throw new PlayerNotFoundException("Could not find offline player!", null, null);
-            resultSet.first();
-            List<String> usernames = decodeUsernames(resultSet.getString(DatabaseKeys.USERNAMES.getKey()));
+            if (!resultSet.first()) throw new PlayerNotFoundException("Could not find offline player!", null, null);
+            List<String> usernames = decodeLists(resultSet.getString(DatabaseKeys.USERNAMES.getKey()));
             int kills = resultSet.getInt(DatabaseKeys.KILLS.getKey());
             int deaths = resultSet.getInt(DatabaseKeys.DEATHS.getKey());
             int wins = resultSet.getInt(DatabaseKeys.WINS.getKey());
@@ -73,50 +74,43 @@ public final class MySQLStorage implements GStorage {
             int mutation_credits = resultSet.getInt(DatabaseKeys.MUTATION_CREDITS.getKey());
             int points = resultSet.getInt(DatabaseKeys.POINTS.getKey());
             String nick = resultSet.getString(DatabaseKeys.NICK.getKey());
-            return new GOfflinePlayer(uuid, usernames, kills, deaths, wins, totalgames, mutation_credits, points, nick);
+            return new SGOfflinePlayer(uuid, usernames, kills, deaths, wins, totalgames, mutation_credits, points, nick);
         } catch (SQLException e) {
             throw new StorageError("Could not complete some part of the SQL chain while getting an offline player", e);
         }
     }
 
     @Override
-    public GOfflinePlayer getPlayerAllowNew(Player player) throws StorageError {
-        String uuid = player.getUniqueId().toString();
-        List<String> usernames = Arrays.asList( player.getName());
+    public SGOfflinePlayer getPlayerAllowNew(Player player) throws StorageError {
+        UUID uuid = player.getUniqueId();
+        List<String> usernames = Arrays.asList(player.getName());
         try {
             return getOfflinePlayerByUUID(uuid);
         } catch (PlayerNotFoundException ignored) {}//Ignored because it would have returned if successful, and failure code is to be executed below.
         try (Connection connection = connectionPool.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + DatabaseKeys.PLAYERS_TABLE + " (?, ?) VALUES (?, ?)");
-            preparedStatement.setString(1, DatabaseKeys.UUID.getKey());
-            preparedStatement.setString(2, DatabaseKeys.USERNAMES.getKey());
-            preparedStatement.setString(3, uuid);
-            preparedStatement.setString(4, encodeUsernames(usernames));
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + DatabaseKeys.PLAYERS_TABLE + " (id, usernames) VALUES (?, ?)");
+            preparedStatement.setString(1, uuid.toString());
+            preparedStatement.setString(2, encodeLists(usernames));
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new StorageError("Could not establish connection to the SQL server!", e);
         }
-        return new GOfflinePlayer(uuid, usernames, 0, 0, 0, 0, 0, 0, null);
+        return new SGOfflinePlayer(uuid, usernames, 0, 0, 0, 0, 0, 0, null);
     }
 
     @Override
-    public void savePlayer(GPlayer player) throws StorageError, PlayerNotFoundException {
+    public void savePlayer(SGPlayer player) throws StorageError, PlayerNotFoundException {
         getOfflinePlayerByUUID(player.getUuid());
         try (Connection connection = connectionPool.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + DatabaseKeys.PLAYERS_TABLE + " SET ?=?,?=?,?=?,?=?,?=?,?=?,?=? WHERE ?=?");
-            preparedStatement.setString(1, DatabaseKeys.DEATHS.getKey());
-            preparedStatement.setInt(2, player.getDeaths());
-            preparedStatement.setString(3, DatabaseKeys.TOTAL_GAMES.getKey());
-            preparedStatement.setInt(4, player.getTotalGames());
-            preparedStatement.setString(5, DatabaseKeys.MUTATION_CREDITS.getKey());
-            preparedStatement.setInt(6, player.getMutationCredits());
-            preparedStatement.setString(7, DatabaseKeys.KILLS.getKey());
-            preparedStatement.setInt(8, player.getKills());
-            preparedStatement.setString(9, DatabaseKeys.WINS.getKey());
-            preparedStatement.setInt(10, player.getWins());
-            preparedStatement.setString(11, DatabaseKeys.POINTS.getKey());
-            preparedStatement.setInt(12, player.getPoints());
-            preparedStatement.setString(13, DatabaseKeys.NICK.getKey());
-            preparedStatement.setString(14, player.getNick());
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + DatabaseKeys.PLAYERS_TABLE + " SET deaths=?,totalgames=?,mutationpasses=?,kills=?,wins=?,points=?,nick=? WHERE id=?");
+            preparedStatement.setInt(1, player.getDeaths());
+            preparedStatement.setInt(2, player.getTotalGames());
+            preparedStatement.setInt(3, player.getMutationCredits());
+            preparedStatement.setInt(4, player.getKills());
+            preparedStatement.setInt(5, player.getWins());
+            preparedStatement.setInt(6, player.getPoints());
+            preparedStatement.setString(7, player.getNick());
+            preparedStatement.setString(8, String.valueOf(player.getUuid()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new StorageError("Could not communicate with the SQL Server!", e);
@@ -131,6 +125,7 @@ public final class MySQLStorage implements GStorage {
         config.setUsername(this.username);
         try {
             this.connectionPool = new BoneCP(config);
+            SurvivalGames.getInstance().logInfoInColor(ChatColor.RED + "Connected to Database: " + ChatColor.DARK_GRAY + this.database);
         } catch (SQLException e) {
             throw new StorageError("Could not connect to MySQL!", e);
         }
@@ -142,27 +137,17 @@ public final class MySQLStorage implements GStorage {
                 PreparedStatement preparedStatement =
                         connection.prepareStatement(
                                 "CREATE TABLE " + DatabaseKeys.PLAYERS_TABLE + " (" +
-                                        "? MEDIUMTEXT NOT NULL DEFAULT 'NULL'," +
-                                        "? MEDIUMTEXT NOT NULL DEFAULT '[]'," +
-                                        "? BIGINT NULL DEFAULT 0," +
-                                        "? BIGINT NULL DEFAULT 0," +
-                                        "? BIGINT NULL DEFAULT 0," +
-                                        "? BIGINT NULL DEFAULT 0," +
-                                        "? BIGINT NULL DEFAULT 0," +
-                                        "? BIGINT NULL DEFAULT 0," +
-                                        "? MEDIUMTEXT NULL DEFAULT ''," +
-                                        "PRIMARY KEY (?)" +
+                                        "id VARCHAR(36) NOT NULL," +
+                                        "usernames MEDIUMTEXT NOT NULL," +
+                                        "points BIGINT NULL DEFAULT 0," +
+                                        "kills BIGINT NULL DEFAULT 0," +
+                                        "deaths BIGINT NULL DEFAULT 0," +
+                                        "wins BIGINT NULL DEFAULT 0," +
+                                        "totalgames BIGINT NULL DEFAULT 0," +
+                                        "mutationpasses BIGINT NULL DEFAULT 0," +
+                                        "nick MEDIUMTEXT NULL," +
+                                        "PRIMARY KEY (id)" +
                                         ");");
-                preparedStatement.setString(1, DatabaseKeys.UUID.getKey());
-                preparedStatement.setString(2, DatabaseKeys.USERNAMES.getKey());
-                preparedStatement.setString(3, DatabaseKeys.KILLS.getKey());
-                preparedStatement.setString(4, DatabaseKeys.DEATHS.getKey());
-                preparedStatement.setString(5, DatabaseKeys.WINS.getKey());
-                preparedStatement.setString(6, DatabaseKeys.TOTAL_GAMES.getKey());
-                preparedStatement.setString(7, DatabaseKeys.MUTATION_CREDITS.getKey());
-                preparedStatement.setString(8, DatabaseKeys.POINTS.getKey());
-                preparedStatement.setString(9, DatabaseKeys.NICK.getKey());
-                preparedStatement.setString(10, DatabaseKeys.UUID.getKey());
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -175,11 +160,24 @@ public final class MySQLStorage implements GStorage {
         this.connectionPool.close();
     }
 
+//    @Override
+//    public boolean isInDatabase(SGPlayer player) throws SQLException {
+//        Connection connection = this.connectionPool.getConnection();
+//        String query = "SELECT * FROM `players` WHERE id = " + "'" + player.getUuid() + "'"; // gets uuid
+//        PreparedStatement st = connection.prepareStatement(query); // prepares for the running of the query
+//        ResultSet rs = st.executeQuery(); // runs the query
+//        if (!rs.first()) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+
     /*
     impl
      */
 
-    private static List<String> decodeUsernames(String s) throws StorageError {
+    private static List<String> decodeLists(String s) throws StorageError {
         try {
             JSONArray usernames = (JSONArray) JSONValue.parse(s);
             ArrayList<String> strings = new ArrayList<>();
@@ -194,11 +192,9 @@ public final class MySQLStorage implements GStorage {
     }
 
     @SuppressWarnings("unchecked")
-    private static String encodeUsernames(List<String> usernames) {
+    private static String encodeLists(List<String> usernames) {
         JSONArray array = new JSONArray();
-        for (String username : usernames) {
-            array.add(username);
-        }
+        array.addAll(usernames);
         return array.toJSONString();
     }
 }

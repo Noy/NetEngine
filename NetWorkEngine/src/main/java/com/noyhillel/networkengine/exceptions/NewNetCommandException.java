@@ -22,7 +22,7 @@ public class NewNetCommandException extends Exception {
     /**
      * This enumerator represents all the Error Types.
      */
-    public static enum ErrorType {
+    public enum ErrorType {
         /**
          * Special Error Type, for example: If an exceptions occurred, It will be a 'Special' Error Type.
          */

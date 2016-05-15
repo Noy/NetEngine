@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Random;
 
 @Data
-public final class Loot {
+final class Loot {
     private final Tier tier;
     private final Location chestLocation;
 
-    public void fillChest() {
+    void fillChest() {
         Block block = chestLocation.getBlock();
         block.setType(Material.CHEST);
         BlockState state = block.getState();

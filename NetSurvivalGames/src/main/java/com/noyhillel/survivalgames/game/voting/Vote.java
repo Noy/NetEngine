@@ -1,12 +1,12 @@
 package com.noyhillel.survivalgames.game.voting;
 
 import com.noyhillel.survivalgames.arena.Arena;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.Data;
 
 @Data
-public final class Vote {
+final class Vote {
     private final Arena arena;
-    private final GPlayer player;
+    private final SGPlayer player;
     private final Integer multiplier;
 }

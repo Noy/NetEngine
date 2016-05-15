@@ -1,7 +1,7 @@
 package com.noyhillel.survivalgames.utils.inventory;
 
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 
 public interface InventoryGUIDelegate {
-    void playerClickedItem(GPlayer player, InventoryGUIItem item, InventoryGUI gui);
+    void playerClickedItem(SGPlayer player, InventoryGUIItem item, InventoryGUI gui);
 }

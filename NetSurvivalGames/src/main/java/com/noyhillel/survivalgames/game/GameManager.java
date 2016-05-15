@@ -1,8 +1,7 @@
 package com.noyhillel.survivalgames.game;
 
-import com.noyhillel.networkengine.util.utils.RandomUtils;
-import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
+import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.ArenaException;
@@ -14,11 +13,10 @@ import com.noyhillel.survivalgames.game.voting.VotingRestartException;
 import com.noyhillel.survivalgames.game.voting.VotingRestartReason;
 import com.noyhillel.survivalgames.game.voting.VotingSession;
 import com.noyhillel.survivalgames.game.voting.VotingSessionDisplay;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.player.PlayerNotFoundException;
 import com.noyhillel.survivalgames.player.StorageError;
 import com.noyhillel.survivalgames.utils.MessageManager;
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,7 +24,10 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public final class GameManager implements VotingSessionDisplay {
     @Getter private SGGame runningSGGame = null;
@@ -35,7 +36,7 @@ public final class GameManager implements VotingSessionDisplay {
     @Getter private List<Arena> allAreans;
 
     private SurvivalGames plugin;
-    @Getter(AccessLevel.PACKAGE) private VotingSession votingSession;
+    @Getter private VotingSession votingSession;
 
     @Getter private Integer maxPlayers;
     @Getter private Integer minPlayers;
@@ -87,8 +88,8 @@ public final class GameManager implements VotingSessionDisplay {
     }
 
     public void startGame(Arena arena) throws GameStartException {
-        //Creates a list of GPlayers from the players
-        Set<GPlayer> players = getPlayers();
+        //Creates a list of SGPlayers from the players
+        Set<SGPlayer> players = getPlayers();
 
         //Loads the arena
         try {
@@ -112,32 +113,29 @@ public final class GameManager implements VotingSessionDisplay {
     public void gameEnded() {
         this.lobbyState = LobbyState.POST_GAME;
         updateItemStates();
-        final GPlayer victor = this.runningSGGame.getVictor();
+        final SGPlayer victor = this.runningSGGame.getVictor();
         victor.setPoints(victor.getPoints() + 100);
-        int shutdownCountdownLength = SurvivalGames.getInstance().getConfig().getInt("countdowns.server-shutdown");
+        int shutdownCountdownLength = SurvivalGames.getInstance().getConfig().getInt("countdowns.server-shutdown", 12);
         broadcast(MessageManager.getFormat("formats.shutdown", new String[]{"<seconds>", String.valueOf(shutdownCountdownLength)}));
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            @Override
-            public void run() {
-                String format = MessageManager.getFormat("formats.kick-game-over", false, new String[]{"<victor>", victor.getDisplayableName()});
-                for (GPlayer gPlayer : getPlayers()) {
-                    try {
-                        gPlayer.save();
-                    } catch (StorageError | PlayerNotFoundException storageError) {
-                        storageError.printStackTrace();
-                        gPlayer.sendMessage(ChatColor.RED + "Unable to save your player data!");
-                    }
-                    gPlayer.sendMessage(format);
-                    SurvivalGames.getInstance().sendToServer("hub", gPlayer.getPlayer());
-                }
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            String format = MessageManager.getFormat("formats.kick-game-over", false, new String[]{"<victor>", victor.getDisplayableName()});
+            for (SGPlayer SGPlayer : getPlayers()) {
                 try {
-                    runningSGGame.getArena().unloadWorld();
-                    SurvivalGames.logInfo("Unloaded world " + runningSGGame.getArena().getLoadedWorld());
-                } catch (ArenaException e) {
-                    e.printStackTrace();
+                    SGPlayer.save();
+                } catch (StorageError | PlayerNotFoundException storageError) {
+                    storageError.printStackTrace();
+                    SGPlayer.sendMessage(ChatColor.RED + "Unable to save your player data!");
                 }
-                Bukkit.shutdown();
+                SGPlayer.sendMessage(format);
+                //SurvivalGames.getInstance().sendToServer("hub", SGPlayer.getPlayer());
             }
+            try {
+                runningSGGame.getArena().unloadWorld();
+                SurvivalGames.logInfo("Unloaded world " + runningSGGame.getArena().getLoadedWorld());
+            } catch (ArenaException e) {
+                e.printStackTrace();
+            }
+            Bukkit.shutdown();
         }, shutdownCountdownLength*60L);
     }
 
@@ -145,24 +143,24 @@ public final class GameManager implements VotingSessionDisplay {
         return this.runningSGGame != null;
     }
 
-    Set<GPlayer> getPlayers() {
-        Set<GPlayer> players = new HashSet<>();
+    public Set<SGPlayer> getPlayers() {
+        Set<SGPlayer> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            players.add(plugin.getGPlayerManager().getOnlinePlayer(player));
+            players.add(plugin.getSGPlayerManager().getOnlinePlayer(player));
         }
         return players;
     }
 
     @Override
     public void votingStarted() {
-        for (GPlayer gPlayer : getPlayers()) {
-            setupScoreboard(gPlayer);
+        for (SGPlayer SGPlayer : getPlayers()) {
+            setupScoreboard(SGPlayer);
         }
     }
 
     @Override
     public void votingEnded(Arena arena) throws VotingRestartException {
-        Set<GPlayer> players = getPlayers();
+        Set<SGPlayer> players = getPlayers();
         if (players.size() > this.maxPlayers) throw new VotingRestartException(VotingRestartReason.MANY_PLAYERS);
         if (players.size() < this.minPlayers) throw new VotingRestartException(VotingRestartReason.FEW_PLAYERS);
         if (arena.getCornicopiaSpawns().getPoints().size() < players.size()) throw new VotingRestartException(VotingRestartReason.INVALID_ARENA);
@@ -177,11 +175,12 @@ public final class GameManager implements VotingSessionDisplay {
     @Override
     public void votesUpdated(Arena arena, Integer votes) {
         String name = arena.getMeta().getName();
-        for (GPlayer gPlayer : getPlayers()) {
-            gPlayer.setScoreboardSide(name, votes);
+        for (SGPlayer SGPlayer : getPlayers()) {
+            SGPlayer.setScoreBoardSide(ChatColor.GOLD + name, votes);
         }
-
     }
+
+
 
     @Override
     public void clockUpdated(Integer secondsRemain) {
@@ -190,12 +189,12 @@ public final class GameManager implements VotingSessionDisplay {
             broadcastSound(Sound.CLICK);
         }
         if (secondsRemain <= 60 && secondsRemain >= 1) {
-            for (GPlayer gPlayer : getPlayers()) {
-                NetPlayer playerFromNetPlayer = gPlayer.getPlayerFromNetPlayer();
+            for (SGPlayer SGPlayer : getPlayers()) {
+                NetPlayer playerFromNetPlayer = SGPlayer.getPlayerFromNetPlayer();
                 playerFromNetPlayer.setExperience(secondsRemain.floatValue()/60);
                 playerFromNetPlayer.getPlayer().setLevel(secondsRemain);
-                NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.floatValue()/60);
-                NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", gPlayer.getDisplayableName()}));
+                //NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", SGPlayer.getDisplayableName()}));
+                //NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.doubleValue()/60);
             }
         }
     }
@@ -220,37 +219,37 @@ public final class GameManager implements VotingSessionDisplay {
         }
     }
 
+
     public void voteFor(Player player, Arena arena) {
-        this.votingSession.handleVote(arena, plugin.getGPlayerManager().getOnlinePlayer(player));
+        this.votingSession.handleVote(arena, plugin.getSGPlayerManager().getOnlinePlayer(player));
     }
 
-    public void setupScoreboard(GPlayer player) {
-        player.setScoreboardTitle(MessageManager.getFormat("formats.voting-scoreboard-title"));
+    public void setupScoreboard(SGPlayer player) {
+        player.setScoreboardSideTitle(MessageManager.getFormat("formats.voting-scoreboard-title"));
         for (Arena arena : votingSession.getSortedArenas()) {
-            player.setScoreboardSide(arena.getMeta().getName(), votingSession.getVotesFor(arena));
+            player.setScoreBoardSide(ChatColor.GOLD + arena.getMeta().getName(), votingSession.getVotesFor(arena));
         }
     }
 
     void broadcast(String message) {
-        for (GPlayer gPlayer : getPlayers()) {
-            gPlayer.sendMessage(message);
+        for (SGPlayer SGPlayer : getPlayers()) {
+            SGPlayer.sendMessage(message);
         }
         SurvivalGames.getInstance().getServer().getConsoleSender().sendMessage(message);
     }
 
     void broadcastSound(Sound sound) {
-        for (GPlayer p : getPlayers()) {
+        for (SGPlayer p : getPlayers()) {
             p.playSound(sound);
         }
     }
 
     /* Game listener methods */
-    void playerJoined(GPlayer player) {
+    void playerJoined(SGPlayer player) {
         if (player == null) return;
         player.resetPlayer();
         player.teleport(lobby.getSpawnPoints().next().toLocation(lobby.getLoadedWorld()));
-        if (isPlayingGame()) this.runningSGGame.makePlayerSpectator(player);
-        else setupScoreboard(player);
+        setupScoreboard(player);
         this.lobbyState.giveItems(player, this);
     }
 
@@ -258,9 +257,9 @@ public final class GameManager implements VotingSessionDisplay {
         switch (this.lobbyState) {
             case PRE_GAME:
             case POST_GAME:
-                for (GPlayer gPlayer : this.getPlayers()) {
-                    gPlayer.resetPlayer();
-                    this.lobbyState.giveItems(gPlayer, this);
+                for (SGPlayer SGPlayer : this.getPlayers()) {
+                    SGPlayer.resetPlayer();
+                    this.lobbyState.giveItems(SGPlayer, this);
                 }
                 break;
         }
@@ -274,7 +273,7 @@ public final class GameManager implements VotingSessionDisplay {
         return lobby.getSpawnPoints().random().toLocation(lobby.getLoadedWorld());
     }
 
-    void playerLeft(GPlayer player) {
+    void playerLeft(SGPlayer player) {
         try {
             player.save();
         } catch (StorageError | PlayerNotFoundException storageError) {

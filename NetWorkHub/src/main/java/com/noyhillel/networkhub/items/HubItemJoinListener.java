@@ -35,9 +35,7 @@ public final class HubItemJoinListener extends ModuleListener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         player.resetPlayer();
-        for (NetHubItemDelegate item : items) {
-            if (shouldAdd(player, item.getItem())) player.getPlayer().getInventory().setItem(item.getItemSlot(), item.getItem());
-        }
+        items.stream().filter(item -> shouldAdd(player, item.getItem())).forEach(item -> player.getPlayer().getInventory().setItem(item.getItemSlot(), item.getItem()));
         if (!HidePlayersItem.hidingPlayers.isEmpty()) {
             if (player.getPlayer().hasPermission("hub.staff")) return;
             for (UUID uuid : HidePlayersItem.hidingPlayers) {
@@ -50,7 +48,8 @@ public final class HubItemJoinListener extends ModuleListener {
             }
         }
         event.setJoinMessage(MessageManager.getFormat("formats.join-message", false));
-        event.getPlayer().teleport(SpawnCommand.getLocation("spawn"));
+        if (SpawnCommand.getLocation("spawn") == null) return;
+        if (!player.isOp()) player.teleport(SpawnCommand.getLocation("spawn"));
     }
 
     private boolean shouldAdd(NetPlayer player, ItemStack item) {

@@ -2,7 +2,7 @@ package com.noyhillel.survivalgames.game;
 
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.game.impl.SGGame;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.Data;
 import org.bukkit.ChatColor;
@@ -30,7 +30,7 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
-        Set<GPlayer> players = gameManager.getPlayers();
+        Set<SGPlayer> players = gameManager.getPlayers();
         String permission = "survivalgames.vip";
         if (((players.size()+4) == gameManager.getMaxPlayers()) && !event.getPlayer().hasPermission(permission)) {
             event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
@@ -39,8 +39,8 @@ public final class GameManagerListener implements Listener {
         }
         if((players.size()+1) == gameManager.getMaxPlayers()) {
             if (event.getPlayer().hasPermission(permission)) {
-                for (GPlayer gPlayer : players) {
-                    Player player = gPlayer.getPlayer();
+                for (SGPlayer SGPlayer : players) {
+                    Player player = SGPlayer.getPlayer();
                     if(player.hasPermission(permission)) continue;
                     player.kickPlayer(MessageManager.getFormat("formats.kicked-for-vip", false));
                     break;
@@ -97,11 +97,11 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        GPlayer gPlayer = resolveGPlayer(event.getPlayer());
+        SGPlayer SGPlayer = resolveGPlayer(event.getPlayer());
         String formatName = "chat.lobby-chat";
         event.setCancelled(true);
-        String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", gPlayer.getDisplayableName()}) + event.getMessage();
-        for (GPlayer player : SurvivalGames.getInstance().getGPlayerManager().getOnlinePlayers().values()) {
+        String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", SGPlayer.getDisplayableName()}) + event.getMessage();
+        for (SGPlayer player : SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayers().values()) {
             player.sendMessage(s);
         }
     }
@@ -109,9 +109,9 @@ public final class GameManagerListener implements Listener {
     @EventHandler
     public void onPlaceBlock(BlockPlaceEvent event) {
         if (event.getPlayer().isOp()) {
-            if (event.getBlock().getType() == Material.SIGN) return;
             if (event.getBlock().getType() == Material.SIGN_POST) return;
             if (event.getBlock().getType() == Material.WALL_SIGN) return;
+            if (event.getBlock().getType() == Material.SIGN) return;
         }
         event.setCancelled(true);
     }
@@ -152,7 +152,7 @@ public final class GameManagerListener implements Listener {
         event.setCancelled(true);
     }
 
-    private GPlayer resolveGPlayer(Player player) {
-        return plugin.getGPlayerManager().getOnlinePlayer(player);
+    private SGPlayer resolveGPlayer(Player player) {
+        return plugin.getSGPlayerManager().getOnlinePlayer(player);
     }
 }

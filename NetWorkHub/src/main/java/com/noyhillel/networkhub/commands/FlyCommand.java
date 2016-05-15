@@ -1,6 +1,10 @@
 package com.noyhillel.networkhub.commands;
 
-import com.noyhillel.networkengine.command.*;
+import com.noyhillel.networkengine.command.AbstractCommandHandler;
+import com.noyhillel.networkengine.command.CommandStatus;
+import com.noyhillel.networkengine.command.NetCommand;
+import com.noyhillel.networkengine.command.NetCommandSenders;
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -24,13 +28,14 @@ public final class FlyCommand extends AbstractCommandHandler {
     public CommandStatus fly(CommandSender sender, NetCommandSenders senders, NetCommand meta, Command command, String[] args) {
         if (args.length > 1) return CommandStatus.MANY_ARGUMENTS;
         Player player = (Player) sender;
+        NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(player); // testing
         if (args.length == 0) {
-            if (!player.getAllowFlight()) {
-                player.setAllowFlight(true);
+            if (!netPlayer.getPlayer().getAllowFlight()) {
+                netPlayer.turnOnFly();
                 player.sendMessage(MessageManager.getFormats("formats.fly-on"));
                 return CommandStatus.SUCCESS;
             } else {
-                player.setAllowFlight(false);
+                netPlayer.turnOffFly();
                 player.sendMessage(MessageManager.getFormats("formats.fly-off"));
                 return CommandStatus.SUCCESS;
             }

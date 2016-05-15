@@ -21,7 +21,7 @@ public final class WhoIsCommand extends AbstractCommandHandler {
             usage = "/whois",
             description = "Find out who a player is from their nick name.",
             permission = "hub.nick",
-            senders = {NetCommandSenders.PLAYER}
+            senders = {NetCommandSenders.PLAYER, NetCommandSenders.CONSOLE}
     )
     public CommandStatus whois(CommandSender sender, NetCommandSenders senders, NetCommand netCommand, Command command, String[] args) {
         Player player = (Player) sender;

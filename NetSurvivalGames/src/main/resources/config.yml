@@ -1,10 +1,10 @@
 voting-length: 20 #Number of seconds until the game attempts to start
 maximum-playes: 24 #Never set this higher than the number of cornicopia points in any map, because the game will not start if there are too many players for the map to handler
 minimum-players: 2 #Default, adjust as needed! :3
-deathmatch-size: 4
-storage: debug
+deathmatch-size: 2
+storage: storage
 formats:
-  prefix: "&e&l[&6&lSurvivalGames&e&l] "
+  prefix: "&e&l[&6&lSG&e&l] "
   join-msg: "&3<player> &b&l>> &ehas joined &6&lSG&e."
   voted-for-map: "&8You have voted for &6<map>&7!"
   voting-scoreboard-title: "&eType &c/vote [name]"
@@ -14,7 +14,12 @@ formats:
   shutdown: "&cThe server will be shutting down in <seconds> seconds!"
   kick-game-over: "&3The game has ended! The winner was <victor>"
   disguised-player: "&6You have been disguised as; &5&l<nickname>&6!"
+  sendpoints: "&e<player> &ahas set your points to &c<points>!"
+  setpoints: "&aYou have set &e<player>'s &apoints to &c<points>!"
+  setcredits: "&e<player> &ahas set your points to &c<credits>!"
+  sendcredits: "&aYou have set &e<player>'s &acredits to &c<credits>!"
   nick-off: "&cYou have undisguised"
+  mutated: "&c<player> has now muted and seeks revenge on <killer>."
   no-mutation-passes: "&cYou do not have any mutation passes to mutate with!"
   tribute-fallen: "&5<fallen> &6was killed by &5<killer>"
   game-start: "&6A new game of SurvivalGames has begun! Good luck!"
@@ -22,9 +27,11 @@ formats:
   kicked-for-vip: "&cYou have been kicked to make room for a donator/VIP"
   setlobby: "&6You have set the lobby to the location you're standing in!"
   unsetlobby: "&6You have unset the lobby!"
+  deathmatch-starting: "&cThe deathmatch countdown is now starting!"
   game-countdown: "&7There are &e<seconds>&7 seconds until the game starts!"
   deathmatch-countdown: "&7There are &e<seconds>&7 seconds until deathmatch starts!"
   time-to-deathmatch-countdown: "&cDeatchmatch starts in &7<seconds>&c!"
+  force-dmatch: "&cYou have forced the Death Match to start!"
   deathmatch-countdown-start: "&aDeathmatch will start in 25 minutes!"
   deathmatch-start: "&6Deathmatch is starting! &4Good luck!"
   end-deathmatch-countdown: "&eDeathmatch will end in &l&e<seconds>"
@@ -37,12 +44,13 @@ formats:
   chest-refill: "&cThe Chests have refilled!"
   back-to-spawn: "&cYou're getting too far from spawn!"
   start-game: "&cYou have forcestarted the game!"
-  chest-refill-time: 20 #IN SECONDS AFTER GAME STARTS.
+  chest-refill-time: 720 #IN SECONDS AFTER GAME STARTS.
+  refill-chests: "&6Refilled the chests!"
   scoreboard:
-    players: "&ePlayers"
+    players: "&eTributes Left"
     spectators: "&cSpectators:"
     mutations: "&aMutations:"
-    title: "&SG"
+    title: "&e&l[&6SG&e&l]"
   spectator-compass-title: "&aSpectator Compass"
   spectator-gui-name: "&5Who to?"
   teleport-spectator: "&6Teleported you to &b<target>!"
@@ -55,7 +63,7 @@ database: #MUST CONFIGURE FOR PLUGIN TO WORK PROPERLY
   host: "localhost"
   port: '3306'
   username: "root"
-  password: "root"
+  password: "Google123"
   database: "minecraft"
 countdowns:
   pregame: 20
@@ -63,16 +71,18 @@ countdowns:
   post-teleport-deathmatch: 20
   server-shutdown: 10
 sounds:
-  timer-sound: "CLICK"
-  timer-sound-higher: "ORB_PICKUP"
+  timer-sound: "UI_BUTTON_CLICK"
+  timer-sound-higher: "ENTITY_EXPERIENCE_ORB_PICKUP"
 mutation:
   disguise: "ZOMBIE"
   potion-effect-level: 3
 pregame-book:
-pregame-book:
   title: "&cSurvivalGames"
   author: "NWSG" #Author, should change
-  pages: [This is SurvivalGames! Hope you enjoy the game!] #Fill in
+  pages:
+    - Welcome to &cThe Server!
+    - <Insert Message Here>
+    - You can edit the colors &ein the config! #Fill in
 arena:
   name: "&cThis map is called: &6<name>"
   author: "&cThis map was made by: &6<author>"
@@ -82,6 +92,6 @@ chat:
   player-chat: "&6[&c<points>&6]&7<player>&a:&f "
   lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "
 enderbar:
-  lobby-time: "&cWelcome, &6<player>&c!"
-  game-countdown-time: "&6Game is about to start!"
-  deathmatch-countdown-time: "&cDeathmatch is about to start!"
+  lobby-time: "&cWelcome, &6<player>&c"
+  game-countdown-time: "&6Game starts in &c<time>"
+  deathmatch-countdown-time: "&6Deathmatch starts in &c<time>"

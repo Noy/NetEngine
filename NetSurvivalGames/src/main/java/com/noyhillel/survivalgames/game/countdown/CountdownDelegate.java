@@ -6,5 +6,5 @@ public interface CountdownDelegate {
 
     void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown);
 
-    void countdownComplete(Integer maxSeconds, GameCountdown countdown);
+    void countdownComplete(Integer maxSeconds, GameCountdown countdow);
 }

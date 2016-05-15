@@ -7,12 +7,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"uuid"})
-public class GOfflinePlayer {
-    private final String uuid;
+public class SGOfflinePlayer {
+    private final UUID uuid;
     private List<String> usernames;
 
     /* Stats to store */
@@ -28,16 +29,16 @@ public class GOfflinePlayer {
     /* Utils */
     protected String nick;
 
-    public GPlayer getOnlinePlayer() {
+    public SGPlayer getOnlinePlayer() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            GPlayer onlinePlayer = getOnlinePlayer(player);
+            SGPlayer onlinePlayer = getOnlinePlayer(player);
             if (onlinePlayer != null) return onlinePlayer;
         }
         return null;
     }
 
-    public GPlayer getOnlinePlayer(Player player) {
-        if (player.getUniqueId().toString().equals(uuid)) return new GPlayer(player.getName(), uuid, usernames, kills, deaths, wins, totalGames, mutationCredits, points, nick);
+    public SGPlayer getOnlinePlayer(Player player) {
+        if (player.getUniqueId().equals(uuid)) return new SGPlayer(player.getName(), uuid, usernames, kills, deaths, wins, totalGames, mutationCredits, points, nick);
         return null;
     }
 }

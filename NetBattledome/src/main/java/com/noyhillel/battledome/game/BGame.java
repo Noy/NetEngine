@@ -1,11 +1,12 @@
 package com.noyhillel.battledome.game;
 
-import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.MessageManager;
+import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.arena.Point;
 import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
 import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
+import com.noyhillel.networkengine.util.utils.RandomUtils;
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 
@@ -27,7 +29,8 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     private final Set<NetPlayer> playerSet;
     private final Set<NetPlayer> spectators = new HashSet<>();
-    private final Point centerPoint;
+    private final Set<NetPlayer> pendingSpectators = new HashSet<>();
+    @Getter private final Point centerPoint;
     private final World world;
     @Getter private Phase phase;
     private Map<NetPlayer, Team> teams;
@@ -37,7 +40,7 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     private GameCountdown gameCountdown;
 
-    BGame(Collection<Player> players, Point centerPoint, World world) {
+    BGame(Collection<? extends Player> players, Point centerPoint, World world) {
         this.playerSet = new HashSet<>();
         this.centerPoint = centerPoint;
         this.world = world;
@@ -52,6 +55,10 @@ public final class BGame implements Listener, GameCountdownHandler {
     }
 
     void startGame() {
+        if (playerSet.size() <= 1) {
+            broadcastMessage(ChatColor.RED + "Cannot start game with only one player!");
+            return;
+        }
         NetBD.getInstance().registerListener(this);
         randomisePlayersIntoTeams();
         for (NetPlayer player : playerSet) {
@@ -109,23 +116,21 @@ public final class BGame implements Listener, GameCountdownHandler {
     private void performPhaseUpdate() {
         if (this.phase.getLength() == -1) this.gameCountdown = null;
         else (this.gameCountdown = new GameCountdown(phase.getLength(), this, NetBD.getInstance())).start();
-        broadcastSound(Sound.WITHER_DEATH, 0.5F);
+        broadcastSound(Sound.ENTITY_WITHER_DEATH, 0.5F);
         broadcastMessage(MessageManager.getFormat("formats.phase-start", true, new String[]{"<phase>", this.phase.getName()}));
         updateInterfaces();
     }
 
     private void updateInterfaces() {
+        if (this.teams == null) return;
+        if (playerSet == null) return;
         String enderBarText = MessageManager.getFormat("formats.ender-bar-ingame", false, new String[]{"<phase>", this.phase.getName()});
-        if (this.gameCountdown != null) enderBarText = enderBarText + MessageManager.getFormat("formats.ender-bar-time-ingame", false, new String[]{"<time>", formatTime(this.gameCountdown.getSeconds() - this.gameCountdown.getPassed())});
+        if (this.gameCountdown != null) enderBarText = enderBarText + MessageManager.getFormat("formats.ender-bar-time-ingame", false, new String[]{"<time>", RandomUtils.formatTime(this.gameCountdown.getSeconds() - this.gameCountdown.getPassed())});
         Float percentEnderBar = this.gameCountdown == null ? 1 : ((float)this.gameCountdown.getSeconds()-(float)this.gameCountdown.getPassed())/(float)this.gameCountdown.getSeconds();
         for (NetPlayer player : playerSet) {
             NetEnderHealthBarEffect.setTextFor(player, enderBarText.replaceAll("<team>", getTeamForPlayer(player).toString()));
-            NetEnderHealthBarEffect.setHealthPercent(player, percentEnderBar);
+            //NetEnderHealthBarEffect.setHealthPercent(player, percentEnderBar);
         }
-    }
-
-    private String formatTime(Integer seconds) {
-        return (seconds > 60) ? (int)Math.floor(seconds/60) + ":" + seconds % 60 : seconds.toString();
     }
 
     private void checkForWins() {
@@ -136,7 +141,7 @@ public final class BGame implements Listener, GameCountdownHandler {
         }
         if (teamsRemaining.size() == 1) teamWon(teamsRemaining.get(0));
         else if (teamsRemaining.size() > 1) return;
-        finishGame();
+        willFinishGame();
     }
 
     public String getStatusString() {
@@ -207,18 +212,7 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     private void teamWon(Team team) {
         broadcastMessage(team, MessageManager.getFormat("formats.game-won"));
-        broadcastSound(Sound.LEVEL_UP, 0.5F);
-    }
-
-    private void finishGame() {
-        broadcastMessage(MessageManager.getFormat("formats.game-ending"));
-        Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                Bukkit.shutdown();
-            }
-        }, 200);
-        broadcastSound(Sound.LEVEL_UP, 1F);
+        broadcastSound(Sound.ENTITY_PLAYER_LEVELUP, 0.5F);
     }
 
     void placeObsidian(Team team, Location location) {
@@ -234,7 +228,7 @@ public final class BGame implements Listener, GameCountdownHandler {
         throw new ArrayIndexOutOfBoundsException();
     }
 
-    public void makePlayerSpectator(NetPlayer player) {
+    private void makePlayerSpectator(NetPlayer player) {
         if (this.spectators.contains(player)) throw new IllegalStateException("You cannot make a spectator twice.");
         hideFromAllPlayers(player);
         this.spectators.add(player);
@@ -253,6 +247,9 @@ public final class BGame implements Listener, GameCountdownHandler {
         }
         for (NetPlayer player : playerSet) {
             players.add(player);
+        }
+        for (NetPlayer pendingSpecs : pendingSpectators) {
+            players.add(pendingSpecs);
         }
         return players;
     }
@@ -273,22 +270,23 @@ public final class BGame implements Listener, GameCountdownHandler {
                 event.setCancelled(true);
                 player.sendMessage(MessageManager.getFormat("formats.no-place-obsidian"));
             } else {
-                player.playSound(Sound.ORB_PICKUP, 0.5F);
+                player.playSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.5F);
                 placeObsidian(team, player.getPlayer().getLocation());
             }
         }
     }
 
-    public void willFinishGame() {
+    private void willFinishGame() {
         if (playerSet.size() <= 1) {
             broadcastMessage(ChatColor.RED + "Game has ended! The server will shut down in 5 seconds!");
-            Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    for (NetPlayer player : playerSet) {
-                        player.kick(MessageManager.getFormat("formats.battledome-end"));
-                    }
+            Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), () -> {
+                for (NetPlayer player : playerSet) {
+                    Team team = getTeamForPlayer(player);
+                    broadcastMessage(MessageManager.getFormat("formats.team-won", new String[]{"<team>", team.toString()}));
                 }
+                broadcastMessage(MessageManager.getFormat("formats.game-ending"));
+                Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), Bukkit::shutdown, 200);
+                broadcastSound(Sound.ENTITY_PLAYER_LEVELUP, 1F);
             }, 100L);
         }
     }
@@ -301,55 +299,146 @@ public final class BGame implements Listener, GameCountdownHandler {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
+        if (isSpectating(player)) event.setCancelled(true);
         if (event.getBlock().getType().equals(Material.OBSIDIAN)) {
-            NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
-            if (isSpectating(player)) event.setCancelled(true);
-            Team destroyedTeam = null;
-            for (Map.Entry<Team, Location> teamLocationEntry : this.obsidianLocations.entrySet()) {
-                if (teamLocationEntry.getValue().equals(event.getBlock().getLocation())) {
-                    destroyedTeam = teamLocationEntry.getKey();
-                    break;
+            if (phase == Phase.BUILD) {
+                if (!this.phase.getGameListenerDelegate().canBreakObsi()) {
+                    event.setCancelled(true);
+                    player.sendMessage(MessageManager.getFormat("formats.cannot-break-now"));
                 }
             }
-            if (destroyedTeam == null) return;
-            if (destroyedTeam.equals(getTeamForPlayer(NetPlayer.getPlayerFromPlayer(event.getPlayer()))) || !this.phase.getGameListenerDelegate().canBreakObsi()) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(MessageManager.getFormat("formats.cannot-break-now"));
-                return;
+            if (phase == Phase.BATTLE) {
+                Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), () -> {
+                    for (NetPlayer allPlayers : getAllPlayers()) {
+                        allPlayers.kick(MessageManager.getFormat("formats.battledome-end"));
+                    }
+                }, 200L);
+                broadcastMessage(MessageManager.getFormat("formats.team-eliminated", true,
+                        new String[]{"<player>", player.getName()}));
+                broadcastSound(Sound.ENTITY_ENDERDRAGON_GROWL, 1F);
+                Team losingTeam = null;
+                for (Map.Entry<Team, Location> teamLocationEntry : this.obsidianLocations.entrySet()) {
+                    if (teamLocationEntry.getValue().equals(event.getBlock().getLocation())) {
+                        losingTeam = teamLocationEntry.getKey();
+                        break;
+                    }
+                }
+                if (losingTeam == null) return;
+                for (NetPlayer player1 : getPlayersForTeam(losingTeam)) {
+                    endGameForPlayerForce(player1);
+                }
             }
-            for (NetPlayer player1 : getPlayersForTeam(destroyedTeam)) {
-                endGameForPlayerForce(player1);
+        }
+    }
+
+    @SuppressWarnings({"ConstantConditions", "Duplicates"})
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getEntity());
+        for (int x = 0; x <= 20; x++) {
+            if (!player.getPlayer().getName().equalsIgnoreCase("NoyHillel1")) continue;
+            player.playSound(Sound.ENTITY_COW_HURT);
+            player.sendMessage(ChatColor.RED + "ha u bad, ha you dead");
+        }
+        EntityDamageEvent lastDamageCause = event.getEntity().getLastDamageCause();
+        EntityDamageEvent.DamageCause cause = lastDamageCause.getCause();
+        switch (cause) {
+            case CONTACT:
+                break;
+            case ENTITY_ATTACK:
+                break;
+            case PROJECTILE:
+                break;
+            case SUFFOCATION:
+                break;
+            case FALL:
+                break;
+            case FIRE:
+                break;
+            case FIRE_TICK:
+                break;
+            case MELTING:
+                break;
+            case LAVA:
+                break;
+            case DROWNING:
+                break;
+            case BLOCK_EXPLOSION:
+                break;
+            case ENTITY_EXPLOSION:
+                break;
+            case VOID:
+                break;
+            case LIGHTNING:
+                break;
+            case SUICIDE:
+                break;
+            case STARVATION:
+                break;
+            case POISON:
+                break;
+            case MAGIC:
+                break;
+            case WITHER:
+                break;
+            case FALLING_BLOCK:
+                break;
+            case THORNS:
+                break;
+            case CUSTOM:
+                break;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String s1 : Arrays.asList(cause.toString())) {
+            char[] chars = s1.toLowerCase().toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                sb.append(i == 0 ? Character.toUpperCase(chars[i]) : chars[i]);
             }
-            broadcastSound(Sound.ENDERDRAGON_GROWL, 1F);
-            broadcastMessage(MessageManager.getFormat("formats.team-eliminated", true, new String[]{"<team-destroyed>", destroyedTeam.toString()}));
+            sb.append(" ");
+        }
+        if (event.getEntity().getKiller() == null) {
+            event.setDeathMessage(MessageManager.getFormat("formats.player-fallen", true, new String[]{"<killer>", event.getEntity().getKiller() == null ? sb.toString().trim() : event.getEntity().getKiller().getPlayerListName()}, new String[]{"<fallen>", player.getDisplayName()}));
+            tributeFallen(player);
+            pendingSpectators.add(NetPlayer.getPlayerFromPlayer(event.getEntity()));
+            return;
+        }
+        checkForWins();
+        NetPlayer killer = NetPlayer.getPlayerFromPlayer(event.getEntity().getKiller());
+        event.setDeathMessage(MessageManager.getFormat("formats.player-fallen", true, new String[]{"<killer>", killer.getDisplayName() == null ? "The Environment" : killer.getDisplayName()}, new String[]{"<fallen>", player.getDisplayName()}));
+        tributeFallen(player);
+        pendingSpectators.add(NetPlayer.getPlayerFromPlayer(event.getEntity()));
+    }
+
+    private void tributeFallen(NetPlayer player) {
+        if (phase != Phase.BATTLE) return;
+        if (!playerSet.contains(player)) return;
+        playerSet.remove(player);
+        Player bukkitPlayer = player.getPlayer();
+        if (bukkitPlayer != null) world.strikeLightningEffect(bukkitPlayer.getLocation());
+        updateInterfaces();
+        if (getAllPlayers().size() <= 1) {
+            willFinishGame();
         }
     }
 
     @EventHandler
     public void onPlayerRespawn(final PlayerRespawnEvent event) {
-        willFinishGame();
-        final NetPlayer playerFromPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
+        final NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(event.getPlayer());
+        if (!pendingSpectators.contains(netPlayer)) return;
+        pendingSpectators.remove(netPlayer);
         if (!phase.getGameListenerDelegate().makeSpectatorOnDeath()) {
-            Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    event.setRespawnLocation(centerPoint.toLocation(world));
-                }
-            }, 1L);
+            Bukkit.getScheduler().runTaskLater(NetBD.getInstance(), () -> event.setRespawnLocation(centerPoint.toLocation(world)), 1L);
         }
         else {
-            Bukkit.getScheduler().runTask(NetBD.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                    makePlayerSpectator(playerFromPlayer);
-                }
-            });
+            Bukkit.getScheduler().runTask(NetBD.getInstance(), () -> makePlayerSpectator(netPlayer));
             event.setRespawnLocation(centerPoint.toLocation(world));
         }
     }
 
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
         NetPlayer playerFromPlayer = NetPlayer.getPlayerFromPlayer((Player) event.getEntity());
         if (isSpectating(playerFromPlayer)) event.setCancelled(true);
         if (!(event.getEntity() instanceof Player && event.getDamager() instanceof Player)) return;
@@ -357,12 +446,20 @@ public final class BGame implements Listener, GameCountdownHandler {
     }
 
     @EventHandler
+    public void onPlayerDamage2(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        NetPlayer playerFromPlayer = NetPlayer.getPlayerFromPlayer((Player) event.getEntity());
+        if (playerFromPlayer == null) return;
+        if (isSpectating(playerFromPlayer))event.setCancelled(true);
+    }
+
+    @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         if (isCrossingOutsideBounds(player, event.getTo())) {
-            event.getPlayer().damage(1);
+            player.damage(1);
+            player.strikeLightning(player.getLocation());
             player.sendMessage(MessageManager.getFormat("formats.do-not-cross"));
-            player.playSound(Sound.STEP_STONE);
         }
     }
 
@@ -408,13 +505,13 @@ public final class BGame implements Listener, GameCountdownHandler {
         if (seconds <= 10 && seconds >= 6) {
             for (NetPlayer player : playerSet) {
                 player.sendMessage(MessageManager.getFormat("formats.seconds-left", true, new String[]{"<seconds>", seconds.toString()}));
-                player.playSound(Sound.ENDERDRAGON_HIT, 1F);
+                player.playSound(Sound.BLOCK_STONE_BUTTON_CLICK_OFF, 1F);
             }
         }
         if (seconds <= 5) {
             for (NetPlayer player : playerSet) {
                 player.sendMessage(MessageManager.getFormat("formats.seconds-left", true, new String[]{"<seconds>", seconds.toString()}));
-                player.playSound(Sound.ENDERDRAGON_HIT, 0.5F);
+                player.playSound(Sound.BLOCK_STONE_BUTTON_CLICK_OFF, 0.5F);
             }
         }
         updateInterfaces();

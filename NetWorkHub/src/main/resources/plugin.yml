@@ -1,6 +1,6 @@
 name: NetHub
 main: com.noyhillel.networkhub.NetHub
-version: 1.0
+version: 1.8
 
 commands:
     setwarp:
@@ -21,8 +21,6 @@ commands:
         aliases: [name]
     giveme:
         aliases: [i]
-        usage: /giveme <item> [amount] [durability]
-        description: The giveme command
     getinfo:
         aliases: [gi]
     whois:

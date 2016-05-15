@@ -1,4 +1,4 @@
-package com.noyhillel.networkengine.mongo;
+package com.noyhillel.networkengine.storage;
 
 import com.noyhillel.networkengine.exceptions.DatabaseConnectException;
 

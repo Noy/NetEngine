@@ -48,9 +48,11 @@ public abstract class WorldStrapped {
         this.loadedWorld.setTime(0);
         this.loadedWorld.setAutoSave(false);
         this.loadedWorld.setStorm(false);
-        this.loadedWorld.setGameRuleValue("doMobLoot", "false");
+        //this.loadedWorld.setGameRuleValue("doMobLoot", "false");
         this.loadedWorld.setGameRuleValue("doMobSpawning", "false");
         this.loadedWorld.setGameRuleValue("keepInventory", "false");
+        this.loadedWorld.setGameRuleValue("doDaylightCycle", "true");
+        this.loadedWorld.setGameRuleValue("doFireTick", "false");
         SurvivalGames.logInfo("Loaded world " + loadedWorld.getName());
     }
 
@@ -66,9 +68,7 @@ public abstract class WorldStrapped {
     }
 
     public void cleanupDrops() {
-        for (Item item : loadedWorld.getEntitiesByClass(Item.class)) {
-            item.remove();
-        }
+        loadedWorld.getEntitiesByClass(Item.class).forEach(Item::remove);
     }
 
     public boolean isLoaded() {

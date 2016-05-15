@@ -4,7 +4,7 @@ import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.game.lobby.GameLobby;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.Data;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -19,11 +19,11 @@ import static com.noyhillel.survivalgames.arena.setup.ArenaSetup.stackWithName;
 
 @Data
 public final class LobbySetup implements SetupSession {
-    private final GPlayer player;
+    private final SGPlayer player;
     private final World world;
     private List<Point> lobbySpawns = new ArrayList<>();
 
-    public LobbySetup(GPlayer player, World world) {
+    public LobbySetup(SGPlayer player, World world) {
         this.player = player;
         this.world = world;
         Bukkit.getPluginManager().registerEvents(this, SurvivalGames.getInstance());
@@ -43,7 +43,7 @@ public final class LobbySetup implements SetupSession {
         p.setAllowFlight(true);
         p.setGameMode(GameMode.CREATIVE);
         player.playSound(Sound.LEVEL_UP);
-        p.getInventory().addItem(stackWithName(Material.WOOD_SPADE, ChatColor.RED + "Spawn point selector")); // Tier 1
+        p.getInventory().addItem(stackWithName(Material.WOOD_SPADE, ChatColor.RED + "Spawn point selector"));
     }
 
     @EventHandler

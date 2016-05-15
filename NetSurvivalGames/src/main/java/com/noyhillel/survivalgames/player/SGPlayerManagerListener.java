@@ -12,8 +12,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 
 @Data
-public final class GPlayerManagerListener implements Listener {
-    private final GPlayerManager manager;
+public final class SGPlayerManagerListener implements Listener {
+    private final SGPlayerManager manager;
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerJoin(PlayerLoginEvent event) {

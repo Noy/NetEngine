@@ -1,12 +1,12 @@
 package com.noyhillel.survivalgames.game.lobby;
 
 import com.noyhillel.survivalgames.game.GameManager;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.AccessLevel;
 import lombok.Getter;
 
 public enum LobbyState {
-    SPECTATING(LobbyItem.SPECTATOR_COMPASS/*LobbyItem.MUTATION_INTERFACE*/),
+    SPECTATING(LobbyItem.SPECTATOR_COMPASS/*, LobbyItem.MUTATION_INTERFACE*/),
     PRE_GAME(LobbyItem.PREGAME_BOOK),
     POST_GAME();
 
@@ -15,7 +15,7 @@ public enum LobbyState {
         this.items = items;
     }
 
-    public void giveItems(GPlayer player, GameManager manager) {
+    public void giveItems(SGPlayer player, GameManager manager) {
         for (LobbyItem item : items) {
             item.getLobbyItemDefinition().givePlayerItem(player, manager);
         }

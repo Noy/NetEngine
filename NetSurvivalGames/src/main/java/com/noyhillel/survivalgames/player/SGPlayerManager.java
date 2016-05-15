@@ -4,22 +4,24 @@ import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.storage.GStorage;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Data
-public final class GPlayerManager {
+public final class SGPlayerManager {
     @NonNull private final GStorage storage;
 
-    private Map<String, GPlayer> onlinePlayers = new HashMap<>();
+    private Map<String, SGPlayer> onlinePlayers = new HashMap<>();
 
     public void enable() throws StorageError {
         storage.startup();
     }
 
-    public GOfflinePlayer getOfflinePlayer(String uuid) throws StorageError {
+    public SGOfflinePlayer getOfflinePlayer(UUID uuid) throws StorageError {
         try {
             return storage.getOfflinePlayerByUUID(uuid);
         } catch (PlayerNotFoundException e) {
@@ -27,20 +29,22 @@ public final class GPlayerManager {
         }
     }
 
-    public GPlayer getOnlinePlayer(String name) {
+    public SGPlayer getOnlinePlayer(String name) {
         return onlinePlayers.get(name);
     }
 
-    public GPlayer getOnlinePlayer(Player p) {
+    public SGPlayer getOnlinePlayer(Player p) {
         return getOnlinePlayer(p.getName());
     }
 
+    @SneakyThrows
     void playerLoggedIn(Player player) throws StorageError {
-        GPlayer onlinePlayer = storage.getPlayerAllowNew(player).getOnlinePlayer(player);
+        SGPlayer onlinePlayer = storage.getPlayerAllowNew(player).getOnlinePlayer(player);
         onlinePlayers.put(player.getName(), onlinePlayer);
         //onlinePlayer.updateNick();
         //onlinePlayer.resetScoreboardSide();
     }
+
 
     void playerLoggedOut(Player player) {
         try {

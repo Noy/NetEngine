@@ -16,9 +16,10 @@ import org.json.simple.JSONValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Data
-public final class Tier {
+final class Tier {
     @NonNull private final String filename;
     private List<RawTierItem> rawItems;
 
@@ -33,7 +34,7 @@ public final class Tier {
         return items;
     }
 
-    public void load() throws GameException {
+    void load() throws GameException {
         try {
             this.rawItems = getAllRawTierItems((JSONArray) getValueOfResourceFile(filename).get("items"));
         } catch (Exception e) {
@@ -41,7 +42,7 @@ public final class Tier {
         }
     }
 
-    static JSONObject getValueOfResourceFile(String filename) {
+    private static JSONObject getValueOfResourceFile(String filename) {
         String fileData = SurvivalGames.getInstance().getFileData(filename);
         if (fileData == null) return null;
         try {
@@ -52,7 +53,7 @@ public final class Tier {
         }
     }
 
-    static List<RawTierItem> getAllRawTierItems(JSONArray object) {
+    private static List<RawTierItem> getAllRawTierItems(JSONArray object) {
         List<RawTierItem> rawTierItems = new ArrayList<>();
         for (Object o : object) {
             if (!(o instanceof JSONObject)) continue;
@@ -91,7 +92,7 @@ public final class Tier {
         return rawTierItems;
     }
 
-    public static <T> T getJSONValue(JSONObject object, String key, Class<T> expected, T defaultValue) {
+    private static <T> T getJSONValue(JSONObject object, String key, Class<T> expected, T defaultValue) {
         try {
             //noinspection unchecked
             return (T) object.get(key);
@@ -100,7 +101,7 @@ public final class Tier {
         }
     }
 
-    public static <T> T getJSONValue(JSONObject object, String key, Class<T> expected) {
+    private static <T> T getJSONValue(JSONObject object, String key, Class<T> expected) {
         return getJSONValue(object, key, expected, null);
     }
 
@@ -112,7 +113,7 @@ public final class Tier {
         private final String name;
         private final List<String> lore;
 
-        public ItemStack getItemStack() {
+        ItemStack getItemStack() {
             ItemStack result = new ItemStack(material, quantity);
             if (this.itemEnchants != null) {
                 for (RawItemEnchant itemEnchant : itemEnchants) {
@@ -124,10 +125,7 @@ public final class Tier {
                 meta.setDisplayName(colorize(name));
             }
             if (this.lore != null) {
-                List<String> lorez = new ArrayList<>();
-                for (String s : lore) {
-                    lorez.add(colorize(s));
-                }
+                List<String> lorez = lore.stream().map(RawTierItem::colorize).collect(Collectors.toList());
                 meta.setLore(lorez);
             }
             result.setItemMeta(meta);

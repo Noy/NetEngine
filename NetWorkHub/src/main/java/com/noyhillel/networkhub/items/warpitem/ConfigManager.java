@@ -32,6 +32,10 @@ public final class ConfigManager {
     public ConfigManager() {
         // Creating local variable.
         ConfigurationSection section = NetHub.getInstance().getConfig().getConfigurationSection("hub.warps");
+        if (section == null) {
+            System.out.println("Please set some locations");
+            return;
+        }
         Set<String> sectionKeys = section.getKeys(false); // Storing a String in a Set, just so it wouldn't create duplicates.
         for (String s1 : sectionKeys) {
             ConfigurationSection section1 = section.getConfigurationSection(s1);
@@ -83,7 +87,7 @@ public final class ConfigManager {
      * @param s String
      * @return null
      */
-    public Location getLocation(String s) {
+    Location getLocation(String s) {
         if (locations.containsKey(s.toLowerCase())) return locations.get(s.toLowerCase());
         return null;
     }

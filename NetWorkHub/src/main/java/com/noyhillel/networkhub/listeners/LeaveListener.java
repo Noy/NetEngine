@@ -1,8 +1,8 @@
 package com.noyhillel.networkhub.listeners;
 
+import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkhub.MessageManager;
 import com.noyhillel.networkhub.items.HidePlayersItem;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,20 +18,24 @@ public final class LeaveListener extends ModuleListener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+        NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         if (CommandSpyListener.commandListeners.contains(player)) {
             CommandSpyListener.commandListeners.remove(player);
         }
         event.setQuitMessage(MessageManager.getFormat("formats.leave-message", false));
-        HidePlayersItem.hidingPlayers.remove(player.getUniqueId());
+        if (HidePlayersItem.hidingPlayers.contains(player.getUuid())) {
+            HidePlayersItem.hidingPlayers.remove(player.getUuid());
+        }
     }
 
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event) {
-        Player player = event.getPlayer();
+        NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         if (CommandSpyListener.commandListeners.contains(player)) {
             CommandSpyListener.commandListeners.remove(player);
         }
-        HidePlayersItem.hidingPlayers.remove(player.getUniqueId());
+        if (HidePlayersItem.hidingPlayers.contains(player.getUuid())) {
+            HidePlayersItem.hidingPlayers.remove(player.getUuid());
+        }
     }
 }

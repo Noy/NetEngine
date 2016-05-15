@@ -20,7 +20,7 @@ public final class JSONArenaManager implements ArenaManager {
 
     /* Constant Key Enum */
 
-    private static enum ArenaKeys {
+    private enum ArenaKeys {
         X("x"),
         Y("y"),
         Z("z"),

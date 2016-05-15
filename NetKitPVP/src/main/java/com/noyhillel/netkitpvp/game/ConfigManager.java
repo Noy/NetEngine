@@ -19,7 +19,6 @@ public class ConfigManager {
 
     @Getter
     private ArrayList<InventoryGUI.InventoryItem> inventoryItems = new ArrayList<>();
-    ;
 
     public ConfigManager() {
         // Creating local variable.

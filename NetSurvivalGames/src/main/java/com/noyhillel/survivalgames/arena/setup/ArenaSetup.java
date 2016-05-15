@@ -5,7 +5,8 @@ import com.noyhillel.survivalgames.arena.Arena;
 import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.ArenaMeta;
 import com.noyhillel.survivalgames.arena.Point;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.command.SetupCommand;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.Data;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -15,11 +16,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public final class ArenaSetup implements SetupSession {
-    private final GPlayer player;
+    private final SGPlayer player;
     private final World world;
     private Point l1 = null; //Regions for chest detection
     private Point l2 = null;
@@ -27,9 +29,9 @@ public final class ArenaSetup implements SetupSession {
     private List<Point> tier1 = new ArrayList<>();
     private List<Point> tier2 = new ArrayList<>();
     private List<Point> cornicopiaSpawns = new ArrayList<>();
-    public static ArenaMeta arenaMeta = new ArenaMeta("Map", Arrays.asList("BuildTeam"), "Ask an admin for this");
+    public static ArenaMeta arenaMeta = new ArenaMeta(SetupCommand.name, SetupCommand.authors, SetupCommand.socialLink);
 
-    public ArenaSetup(GPlayer player, World world) {
+    public ArenaSetup(SGPlayer player, World world) {
         this.player = player;
         this.world = world;
         Bukkit.getPluginManager().registerEvents(this, SurvivalGames.getInstance());

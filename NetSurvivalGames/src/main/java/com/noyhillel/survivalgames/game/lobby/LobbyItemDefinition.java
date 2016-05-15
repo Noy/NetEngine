@@ -2,7 +2,7 @@ package com.noyhillel.survivalgames.game.lobby;
 
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.game.GameManager;
-import com.noyhillel.survivalgames.player.GPlayer;
+import com.noyhillel.survivalgames.player.SGPlayer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,20 +15,20 @@ public abstract class LobbyItemDefinition {
     abstract String getTitle();
 
     /* delegation methods */
-    void rightClick(GPlayer player, GameManager manager) {}
-    void leftClick(GPlayer player, GameManager manager) {}
+    void rightClick(SGPlayer player, GameManager manager) {}
+    void leftClick(SGPlayer player, GameManager manager) {}
 
-    protected String[] getLore(GPlayer player, GameManager manager) {return new String[0];}
-    protected Integer getQuantity(GPlayer player, GameManager manager) {return 1;}
-    protected LobbyItemEnchantment[] getEnchantments(GPlayer player, GameManager manager) {return null;}
+    protected String[] getLore(SGPlayer player, GameManager manager) {return new String[0];}
+    protected Integer getQuantity(SGPlayer player, GameManager manager) {return 1;}
+    protected LobbyItemEnchantment[] getEnchantments(SGPlayer player, GameManager manager) {return null;}
 
-    final void givePlayerItem(GPlayer player, GameManager gameManager) {
+    final void givePlayerItem(SGPlayer player, GameManager gameManager) {
         Integer slot = getSlot();
         if (slot < 1 || slot > 9) throw new IllegalArgumentException("The slot is out of range!");
         player.getPlayer().getInventory().setItem(slot-1, getItem(player, gameManager));
     }
 
-    protected ItemStack getItem(GPlayer player, GameManager gameManager) {
+    protected ItemStack getItem(SGPlayer player, GameManager gameManager) {
         ItemStack itemStack = new ItemStack(getType(), getQuantity(player, gameManager));
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(getTitle());
