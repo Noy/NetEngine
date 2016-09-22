@@ -1,6 +1,6 @@
 formats:
   prefix: "&c[&6Battledome&c] "
-  build-phase-time: 20
+  build-phase-time: 600
   start-game: "&aThe game has started! Good luck!"
   join-message: "&6&l<name> &6has joined the game!"
   quit-message: "&6&l<name> &6has left the game!"

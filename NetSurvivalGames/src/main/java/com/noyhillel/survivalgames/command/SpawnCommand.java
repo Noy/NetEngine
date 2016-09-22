@@ -16,7 +16,7 @@ public final class SpawnCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (args.length > 0) throw new NewNetCommandException("Too many arguemnts.", NewNetCommandException.ErrorType.ManyArguments);
+        if (args.length > 0) throw new NewNetCommandException("Too many arguemnts.", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         player.teleport(player.getWorld().getSpawnLocation());
         player.sendMessage(ChatColor.GREEN + "You have teleported to spawn!");
     }

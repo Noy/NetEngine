@@ -7,16 +7,19 @@ import com.noyhillel.networkengine.exceptions.CooldownUnexpiredException;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
+import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.InventoryGUI;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 /**
  * Created by noyhillel1 on 01/07/2014.
@@ -25,21 +28,34 @@ import java.util.List;
 public final class KitCommand extends NetAbstractCommandHandler {
 
     private InventoryGUI kitInventoryGUI;
+    private Set<UUID> cooldown = new HashSet<>();
 
     public KitCommand() {
         final ConfigManager configManager = new ConfigManager();
-        kitInventoryGUI = new InventoryGUI(configManager.getInventoryItems(), "Test", new InventoryGUI.InventoryGUIDelegate() {
+        kitInventoryGUI = new InventoryGUI(configManager.getInventoryItems(), ChatColor.GOLD + "Kits!", new InventoryGUI.InventoryGUIDelegate() {
             @Override
-            public void onOpen(InventoryGUI gui, NetPlayer player) {}
+            public void onOpen(InventoryGUI gui, NetPlayer player) {
+                NetFireworkEffect.shootFireWorks(player, player.getLocation());
+
+            }
 
             @Override
             public void onClose(InventoryGUI gui, NetPlayer player) {}
 
             @Override
             public void onClickItem(InventoryGUI gui, InventoryGUI.InventoryItem item, NetPlayer player) {
-                player.playSound(Sound.BLOCK_CHEST_OPEN);
+                if (cooldown.contains(player.getUuid())) {
+                    player.sendMessage(ChatColor.RED + "You cannot get this kit now.");
+                    player.closeInventory();
+                    return;
+                }
+                player.playSound(Sound.CHEST_OPEN);
                 List<ItemStack> items = new ArrayList<>();
                 for (String s : NetKitPVP.getInstance().getConfig().getString("kit.items." + item.getName() + ".items").split(", ")) {
+                    if (s == null) {
+                        player.sendMessage(ChatColor.RED + "No Items set! Go to the config and set the items!");
+                        return;
+                    }
                     try {
                         if (s.contains(":")) {
                             ItemStack temp = new ItemStack(Material.valueOf(s.split(":")[0]), 1);
@@ -59,27 +75,27 @@ public final class KitCommand extends NetAbstractCommandHandler {
                 }
                 player.closeInventory();
                 player.sendMessage(MessageManager.getFormat("formats.get-kit", true, new String[]{"<kit>", item.getName()}));
+                cooldown.add(player.getUuid());
+                Bukkit.getScheduler().scheduleSyncDelayedTask(NetKitPVP.getInstance(), () -> {
+                    cooldown.remove(player.getUuid());
+                    NetKitPVP.logInfo("removed them from the set");
+                }, 100L);
+
             }
         });
     }
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        if (args.length > 0) throw new NewNetCommandException("Too few Arguments.", NewNetCommandException.ErrorType.ManyArguments);
-        try {
-            NetKitPVP.getCoolDown().testCooldown(sender.getName(), 20L);
-        } catch (CooldownUnexpiredException e) {
-            sender.sendMessage("you cant do that for that amount of seconds nigga");
-            return;
+        if (args.length > 0) throw new NewNetCommandException("Too many Arguments.", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
+        if (!sender.isOp()) {
+            try {
+                NetKitPVP.getCoolDown().testCooldown(sender.getName(), 20L);
+            } catch (CooldownUnexpiredException e) {
+                sender.sendMessage("cooldown works lol");
+                return;
+            }
         }
         kitInventoryGUI.openInventory(NetPlayer.getPlayerFromPlayer(sender));
-    }
-
-    public void givePlayerKit(NetPlayer player) {
-        player.giveItem(Material.ACACIA_STAIRS);
-        player.giveItem(Material.COOKED_BEEF);
-        player.giveItem(Material.COOKED_CHICKEN);
-        player.giveItem(Material.COOKED_FISH);
-        player.giveItem(Material.GOLDEN_APPLE, 64, (short)2);
     }
 }

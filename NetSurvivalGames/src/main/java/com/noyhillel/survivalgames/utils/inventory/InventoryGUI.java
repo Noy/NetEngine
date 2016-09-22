@@ -70,7 +70,7 @@ public class InventoryGUI implements Listener {
     }
 
     public void open(Player player) {
-        open(SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer(player));
+        open(SurvivalGames.getInstance().getSgPlayerManager().getOnlinePlayer(player));
     }
 
     public void open(SGPlayer player) {
@@ -117,8 +117,8 @@ public class InventoryGUI implements Listener {
     public void onPlayerInventoryClick(InventoryClickEvent event) {
         HumanEntity whoClicked = event.getWhoClicked();
         if (!(whoClicked instanceof Player)) return;
-        SGPlayer SGPlayer = SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer((Player) whoClicked);
-        if (!this.playersWithInventories.contains(SGPlayer)) return;
+        SGPlayer sgPlayer = SurvivalGames.getInstance().getSgPlayerManager().getOnlinePlayer((Player) whoClicked);
+        if (!this.playersWithInventories.contains(sgPlayer)) return;
         event.setCancelled(true);
         event.setResult(Event.Result.DENY);
         InventoryGUIItem finalItem = null;
@@ -128,15 +128,15 @@ public class InventoryGUI implements Listener {
                 break;
             }
         }
-        this.delegate.playerClickedItem(SGPlayer, finalItem, this);
+        this.delegate.playerClickedItem(sgPlayer, finalItem, this);
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         HumanEntity player = event.getPlayer();
         if (!(player instanceof Player)) return;
-        SGPlayer SGPlayer = SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer((Player) player);
-        if (!this.playersWithInventories.contains(SGPlayer)) return;
-        closed(SGPlayer);
+        SGPlayer sgPlayer = SurvivalGames.getInstance().getSgPlayerManager().getOnlinePlayer((Player) player);
+        if (!this.playersWithInventories.contains(sgPlayer)) return;
+        closed(sgPlayer);
     }
 }

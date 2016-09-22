@@ -19,9 +19,9 @@ public final class RefillChestsCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        if (args.length > 0) throw new NewNetCommandException("Too many arguments.", NewNetCommandException.ErrorType.ManyArguments);
+        if (args.length > 0) throw new NewNetCommandException("Too many arguments.", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         SGGame runningSGGame = SurvivalGames.getInstance().getGameManager().getRunningSGGame();
-        if (runningSGGame == null) throw new NewNetCommandException("There is no active game right now!", NewNetCommandException.ErrorType.Null);
+        if (runningSGGame == null) throw new NewNetCommandException("There is no active game right now!", NewNetCommandException.ErrorType.NULL);
         try {
             runningSGGame.refillChests();
             sender.sendMessage(MessageManager.getFormat("formats.refill-chests", true));

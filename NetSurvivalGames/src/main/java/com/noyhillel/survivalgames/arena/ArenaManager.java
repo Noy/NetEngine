@@ -1,6 +1,7 @@
 package com.noyhillel.survivalgames.arena;
 
-import com.noyhillel.survivalgames.game.lobby.GameLobby;
+import com.noyhillel.networkengine.exceptions.ArenaException;
+import com.noyhillel.networkengine.game.arena.lobby.GameLobby;
 
 import java.util.List;
 

@@ -23,10 +23,10 @@ public final class DeleteKitCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player p, String[] args) throws NewNetCommandException {
-        if (args.length == 0) throw new NewNetCommandException("Too few arguments!", NewNetCommandException.ErrorType.FewArguments);
-        if (args.length > 2) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
+        if (args.length == 0) throw new NewNetCommandException("Too few arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
+        if (args.length > 2) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         ConfigurationSection kit = NetKitPVP.getInstance().getConfig().getConfigurationSection("kit.items." + args[0]);
-        if (kit == null)  throw new NewNetCommandException("Invalid kit!", NewNetCommandException.ErrorType.Null);
+        if (kit == null)  throw new NewNetCommandException("Invalid kit!", NewNetCommandException.ErrorType.NULL);
         NetKitPVP.getInstance().getConfig().set("kit.items." + args[0], null);
         NetKitPVP.getInstance().saveConfig();
         p.sendMessage(MessageManager.getFormats("formats.delete-kit"));

@@ -1,6 +1,5 @@
 package com.noyhillel.battledome.game;
 
-
 import com.noyhillel.battledome.arena.Point;
 import com.noyhillel.battledome.exceptions.BattledomeException;
 import lombok.Getter;

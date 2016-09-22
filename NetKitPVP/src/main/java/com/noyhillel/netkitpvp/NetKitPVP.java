@@ -19,8 +19,8 @@ import java.lang.reflect.InvocationTargetException;
 @MainClass(name = "NetKitPVP", description = "The NetKitPVP Plugin")
 public final class NetKitPVP extends NetPlugin {
 
-    @Getter public static NetKitPVP instance;
-    @Getter public static NetCoolDown coolDown = new NetCoolDown();
+    @Getter private static NetKitPVP instance;
+    @Getter private static NetCoolDown coolDown = new NetCoolDown();
 
     @Override
     protected void enable() {

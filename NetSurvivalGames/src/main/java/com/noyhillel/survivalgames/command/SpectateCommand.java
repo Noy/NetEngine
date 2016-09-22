@@ -29,14 +29,14 @@ public final class SpectateCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        SGPlayer SGPlayer = LinkChestsCommand.resolveGPlayer(sender);
-        if (!SGGame.getSpectators().contains(SGPlayer)) throw new NewNetCommandException("You need to be a spectator to perform this command!", NewNetCommandException.ErrorType.Special);
-        if (args.length == 0) throw new NewNetCommandException("You need to provide a player!", NewNetCommandException.ErrorType.FewArguments);
-        if (args.length > 1) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.FewArguments);
+        SGPlayer sgPlayer = LinkChestsCommand.resolveGPlayer(sender);
+        if (!SGGame.getSpectators().contains(sgPlayer)) throw new NewNetCommandException("You need to be a spectator to perform this command!", NewNetCommandException.ErrorType.SPECIAL);
+        if (args.length == 0) throw new NewNetCommandException("You need to provide a player!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
+        if (args.length > 1) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
         Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) throw new NewNetCommandException("Player not found!", NewNetCommandException.ErrorType.Null);
-        if (target == sender) throw new NewNetCommandException("You cannot spectate yourself!", NewNetCommandException.ErrorType.Null);
-        if (SGGame.getSpectators().contains(LinkChestsCommand.resolveGPlayer(target))) throw new NewNetCommandException("That player is a spectator!", NewNetCommandException.ErrorType.Special);
+        if (target == null) throw new NewNetCommandException("Player not found!", NewNetCommandException.ErrorType.NULL);
+        if (target == sender) throw new NewNetCommandException("You cannot spectate yourself!", NewNetCommandException.ErrorType.NULL);
+        if (SGGame.getSpectators().contains(LinkChestsCommand.resolveGPlayer(target))) throw new NewNetCommandException("That player is a spectator!", NewNetCommandException.ErrorType.SPECIAL);
         try {
             sender.teleport(target);
             sender.sendMessage(MessageManager.getFormat("formats.teleport-spectator", true, new String[]{"<target>", target.getDisplayName()}));

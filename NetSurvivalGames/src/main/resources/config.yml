@@ -1,3 +1,6 @@
+#Survival Games Created By NoyHillel1
+#Feel free to customise as many of the messages/settings as you want!
+#Hope you enjoy this plugin! Any questions, contact Noy at: noyhillel@gmail.com.
 voting-length: 20 #Number of seconds until the game attempts to start
 maximum-playes: 24 #Never set this higher than the number of cornicopia points in any map, because the game will not start if there are too many players for the map to handler
 minimum-players: 2 #Default, adjust as needed! :3
@@ -14,6 +17,11 @@ formats:
   shutdown: "&cThe server will be shutting down in <seconds> seconds!"
   kick-game-over: "&3The game has ended! The winner was <victor>"
   disguised-player: "&6You have been disguised as; &5&l<nickname>&6!"
+  boost-cooldown: "&cYou can only use that every &7&l[&e<time>&7&l] &cminutes!"
+  boost-cooldown-time: 20
+  boost: "&6You have been given a Help Boost! Things may not be going your way, but &cdon't &6give up!"
+  cant-use-boost: "&cYou can't use that right now!"
+  loss-points: "&cOuch! You lost &4<points> &cpoints for dying!"
   sendpoints: "&e<player> &ahas set your points to &c<points>!"
   setpoints: "&aYou have set &e<player>'s &apoints to &c<points>!"
   setcredits: "&e<player> &ahas set your points to &c<credits>!"
@@ -63,7 +71,7 @@ database: #MUST CONFIGURE FOR PLUGIN TO WORK PROPERLY
   host: "localhost"
   port: '3306'
   username: "root"
-  password: "Google123"
+  password: "google"
   database: "minecraft"
 countdowns:
   pregame: 20

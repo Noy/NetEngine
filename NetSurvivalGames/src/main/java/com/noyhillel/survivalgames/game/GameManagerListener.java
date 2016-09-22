@@ -39,8 +39,8 @@ public final class GameManagerListener implements Listener {
         }
         if((players.size()+1) == gameManager.getMaxPlayers()) {
             if (event.getPlayer().hasPermission(permission)) {
-                for (SGPlayer SGPlayer : players) {
-                    Player player = SGPlayer.getPlayer();
+                for (SGPlayer sgPlayer : players) {
+                    Player player = sgPlayer.getPlayer();
                     if(player.hasPermission(permission)) continue;
                     player.kickPlayer(MessageManager.getFormat("formats.kicked-for-vip", false));
                     break;
@@ -97,11 +97,11 @@ public final class GameManagerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        SGPlayer SGPlayer = resolveGPlayer(event.getPlayer());
+        SGPlayer sgPlayer = resolveGPlayer(event.getPlayer());
         String formatName = "chat.lobby-chat";
         event.setCancelled(true);
-        String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", SGPlayer.getDisplayableName()}) + event.getMessage();
-        for (SGPlayer player : SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayers().values()) {
+        String s = MessageManager.getFormat(formatName, false, new String[]{"<player>", sgPlayer.getDisplayableName()}) + event.getMessage();
+        for (SGPlayer player : SurvivalGames.getInstance().getSgPlayerManager().getOnlinePlayers().values()) {
             player.sendMessage(s);
         }
     }
@@ -153,6 +153,6 @@ public final class GameManagerListener implements Listener {
     }
 
     private SGPlayer resolveGPlayer(Player player) {
-        return plugin.getSGPlayerManager().getOnlinePlayer(player);
+        return plugin.getSgPlayerManager().getOnlinePlayer(player);
     }
 }

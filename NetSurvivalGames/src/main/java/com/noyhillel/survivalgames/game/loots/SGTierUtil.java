@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.game.loots;
 
-import com.noyhillel.survivalgames.arena.Point;
+import com.noyhillel.networkengine.game.arena.Point;
 import com.noyhillel.survivalgames.game.GameException;
 import com.noyhillel.survivalgames.game.impl.SGGame;
 import org.bukkit.World;

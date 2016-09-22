@@ -1,5 +1,9 @@
 package com.noyhillel.survivalgames.arena;
 
+import com.noyhillel.networkengine.game.WorldStrapped;
+import com.noyhillel.networkengine.game.arena.ArenaMeta;
+import com.noyhillel.networkengine.game.arena.Point;
+import com.noyhillel.networkengine.game.arena.PointIterator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

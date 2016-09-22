@@ -62,7 +62,7 @@ cooldown:
   cooldown-item: "&cYou can only use that every &7&l[&e<time>&7&l] &cseconds!"
   cooldown-time: 5 #In Seconds.
   chat: "Please slow down chat!"
-  chat-time: 2.5
+  chat-time: 2.5 #In Seconds.
 
 hide-item:
    item: WATCH

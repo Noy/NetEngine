@@ -1,9 +1,10 @@
 package com.noyhillel.survivalgames;
 
+import com.noyhillel.networkengine.exceptions.ArenaException;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
+import com.noyhillel.networkengine.util.utils.NetCoolDown;
 import com.noyhillel.networkengine.util.utils.RandomUtils;
-import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.arena.ArenaManager;
 import com.noyhillel.survivalgames.arena.JSONArenaManager;
 import com.noyhillel.survivalgames.arena.setup.SetupModeListener;
@@ -38,8 +39,9 @@ public final class SurvivalGames extends NetPlugin {
 
     @Getter private static SurvivalGames instance;
     @Getter private ArenaManager arenaManager;
+    @Getter private NetCoolDown coolDown;
     @Getter private GameManager gameManager;
-    @Getter private SGPlayerManager SGPlayerManager;
+    @Getter private SGPlayerManager sgPlayerManager;
     @Getter private SetupCommand setupCommand;
     @Getter private boolean isSetupOnly = false;
 
@@ -54,6 +56,7 @@ public final class SurvivalGames extends NetPlugin {
         if (new File(getDataFolder(), "SETUP_LOCK").exists()) isSetupOnly = true;
         logInfoInColor(ChatColor.YELLOW + "Enabling SurvivalGames...");
         try {
+            this.coolDown = new NetCoolDown();
             saveDefaultConfig();
             SurvivalGames.instance = this;
             tryEnable();
@@ -78,7 +81,7 @@ public final class SurvivalGames extends NetPlugin {
     }
 
     private void tryDisable() throws StorageError, ArenaException {
-        this.SGPlayerManager.getStorage().shutdown();
+        this.sgPlayerManager.getStorage().shutdown();
         gameManager.disable();
     }
 
@@ -94,14 +97,14 @@ public final class SurvivalGames extends NetPlugin {
         }
         GStorage storage = getStorage();
         if (storage == null) fallbackStorage();
-        else this.SGPlayerManager = new SGPlayerManager(storage);
+        else this.sgPlayerManager = new SGPlayerManager(storage);
         try {
-            this.SGPlayerManager.enable();
+            this.sgPlayerManager.enable();
         } catch (StorageError error) {
             error.printStackTrace();
             fallbackStorage();
         }
-        registerListener(new SGPlayerManagerListener(this.SGPlayerManager));
+        registerListener(new SGPlayerManagerListener(this.sgPlayerManager));
         registerListener(new SignListener());
         registerListener(new SetupModeListener());
         setupCommand = registerListener(setupCommands(SetupCommand.class));
@@ -122,9 +125,9 @@ public final class SurvivalGames extends NetPlugin {
 
     private void fallbackStorage() {
         getLogger().severe("Could not connect to MySQL, defaulting to no-save storage!");
-        this.SGPlayerManager = new SGPlayerManager(new ForgetfulStorage());
+        this.sgPlayerManager = new SGPlayerManager(new ForgetfulStorage());
         try {
-            this.SGPlayerManager.enable();
+            this.sgPlayerManager.enable();
         } catch (StorageError error) {
             error.printStackTrace();
         }
@@ -160,9 +163,7 @@ public final class SurvivalGames extends NetPlugin {
         return builder.toString();
     }
 
-
-
-    /**
+    /*
      * @Deprecated
      * Lilypad
      */

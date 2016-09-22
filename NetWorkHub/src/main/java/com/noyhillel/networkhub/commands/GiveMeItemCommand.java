@@ -27,7 +27,7 @@ public final class GiveMeItemCommand extends NetAbstractCommandHandler {
     g freaking g
      */
 
-    private final static List<String> MATERIALS;
+    private static final List<String> MATERIALS;
 
     static {
         ArrayList<String> materialList = new ArrayList<>();
@@ -41,8 +41,8 @@ public final class GiveMeItemCommand extends NetAbstractCommandHandler {
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
         NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(player);
-        if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FewArguments);
-        if (args.length > 3) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
+        if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
+        if (args.length > 3) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         Material m;
         Integer i;
         if (args.length == 1) {
@@ -53,7 +53,7 @@ public final class GiveMeItemCommand extends NetAbstractCommandHandler {
                 netPlayer.sendMessage(MessageManager.getFormat("formats.give-item-1", true, itemName));
                 return;
             } catch (IllegalArgumentException e) {
-                throw new NewNetCommandException("Unrecognized Item!", NewNetCommandException.ErrorType.Null);
+                throw new NewNetCommandException("Unrecognized Item!", NewNetCommandException.ErrorType.NULL);
             }
         }
         if (args.length == 2) {
@@ -65,7 +65,7 @@ public final class GiveMeItemCommand extends NetAbstractCommandHandler {
                 netPlayer.sendMessage(MessageManager.getFormat("formats.give-item-2", true, new String[]{"<amount>", i.toString()}, itemName));
                 return;
             } catch (IllegalArgumentException e) {
-                throw new NewNetCommandException("Unrecognized Item or Amount!", NewNetCommandException.ErrorType.Null);
+                throw new NewNetCommandException("Unrecognized Item or Amount!", NewNetCommandException.ErrorType.NULL);
             }
         }
         if (args.length == 3) {
@@ -78,7 +78,7 @@ public final class GiveMeItemCommand extends NetAbstractCommandHandler {
                 netPlayer.sendMessage(MessageManager.getFormat("formats.give-item-3", true, new String[]{"<amount>", i.toString()},
                         itemName, new String[]{"<durability>", s.toString()}));
             } catch (IllegalArgumentException e) {
-                throw new NewNetCommandException("Unrecognized Item, Amount or Durability!", NewNetCommandException.ErrorType.Null);
+                throw new NewNetCommandException("Unrecognized Item, Amount or Durability!", NewNetCommandException.ErrorType.NULL);
             }
         }
     }

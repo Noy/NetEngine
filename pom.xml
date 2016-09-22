@@ -14,5 +14,6 @@
         <module>NetSurvivalGames</module>
         <module>NetKitPVP</module>
         <module>NetBattledome</module>
+        <module>NetPaintball</module>
     </modules>
 </project>

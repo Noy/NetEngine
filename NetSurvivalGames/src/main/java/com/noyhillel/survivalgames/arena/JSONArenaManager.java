@@ -1,6 +1,10 @@
 package com.noyhillel.survivalgames.arena;
 
-import com.noyhillel.survivalgames.game.lobby.GameLobby;
+import com.noyhillel.networkengine.exceptions.ArenaException;
+import com.noyhillel.networkengine.game.WorldStrapped;
+import com.noyhillel.networkengine.game.arena.ArenaMeta;
+import com.noyhillel.networkengine.game.arena.Point;
+import com.noyhillel.networkengine.game.arena.lobby.GameLobby;
 import lombok.Getter;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;

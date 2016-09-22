@@ -1,12 +1,12 @@
 package com.noyhillel.survivalgames.command;
 
+import com.noyhillel.networkengine.exceptions.ArenaException;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
+import com.noyhillel.networkengine.game.arena.ArenaMeta;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.networkengine.newcommand.Permission;
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.arena.ArenaException;
-import com.noyhillel.survivalgames.arena.ArenaMeta;
 import com.noyhillel.survivalgames.arena.setup.ArenaSetup;
 import com.noyhillel.survivalgames.arena.setup.LobbySetup;
 import com.noyhillel.survivalgames.arena.setup.SetupSession;
@@ -39,66 +39,66 @@ public final class SetupCommand extends NetAbstractCommandHandler implements Lis
 
     @Override
     public void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
-        if (args.length == 0) throw new NewNetCommandException("Usage: /setup <arena|lobby>", NewNetCommandException.ErrorType.Special);
+        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.SPECIAL);
+        if (args.length == 0) throw new NewNetCommandException("Usage: /setup <arena|lobby>", NewNetCommandException.ErrorType.SPECIAL);
         SetupSession session;
-        SGPlayer SGPlayer = resolveGPlayer(player);
+        SGPlayer sgPlayer = resolveGPlayer(player);
         if (args[0].equalsIgnoreCase("arena")) {
-            session = new ArenaSetup(SGPlayer, player.getWorld());
-            setupSessions.put(SGPlayer, session);
+            session = new ArenaSetup(sgPlayer, player.getWorld());
+            setupSessions.put(sgPlayer, session);
         }
         else if (args[0].equalsIgnoreCase("lobby")) {
-            session = new LobbySetup(SGPlayer, player.getWorld());
-            setupSessions.put(SGPlayer, session);
+            session = new LobbySetup(sgPlayer, player.getWorld());
+            setupSessions.put(sgPlayer, session);
         }
         else if (args[0].equalsIgnoreCase("metaname")) {
-            playerNameSet.add(SGPlayer);
-            SGPlayer.sendMessage(ChatColor.YELLOW + "Please Type The Arena name.");
+            playerNameSet.add(sgPlayer);
+            sgPlayer.sendMessage(ChatColor.YELLOW + "Please Type The Arena name.");
             return;
         }
         else if (args[0].equalsIgnoreCase("metaauthors")) {
-            playerAuthorSet.add(SGPlayer);
-            SGPlayer.sendMessage(ChatColor.YELLOW + "Please Type The Arena Builder.");
+            playerAuthorSet.add(sgPlayer);
+            sgPlayer.sendMessage(ChatColor.YELLOW + "Please Type The Arena Builder.");
             return;
         }
         else if (args[0].equalsIgnoreCase("metalink")) {
-            playerSocialLinkSet.add(SGPlayer);
-            SGPlayer.sendMessage(ChatColor.YELLOW + "Please Type The Arena Social Link.");
+            playerSocialLinkSet.add(sgPlayer);
+            sgPlayer.sendMessage(ChatColor.YELLOW + "Please Type The Arena Social Link.");
             return;
         }
         else if (args[0].equalsIgnoreCase("done")) {
-            if (!setupSessions.containsKey(SGPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.Special);
-            SetupSession setupSession = setupSessions.get(SGPlayer);
+            if (!setupSessions.containsKey(sgPlayer)) throw new NewNetCommandException("You are not currently setting up an arena!", NewNetCommandException.ErrorType.SPECIAL);
+            SetupSession setupSession = setupSessions.get(sgPlayer);
             try {
                 setupSession.commit();
             } catch (ArenaException e) {
-                SGPlayer.sendMessage(ChatColor.RED + "Failed to setup the arena! " + e.getMessage());
+                sgPlayer.sendMessage(ChatColor.RED + "Failed to setup the arena! " + e.getMessage());
                 return;
             } catch (Exception e) {
-                SGPlayer.sendMessage(ChatColor.RED + "Internal server error!");
+                sgPlayer.sendMessage(ChatColor.RED + "Internal server error!");
                 e.printStackTrace();
                 return;
             }
             HandlerList.unregisterAll(setupSession);
-            SGPlayer.sendMessage(ChatColor.GREEN + "Your arena has been setup! But did you remember to set the spawn of the arena to the middle of the map?");
-            SGPlayer.resetPlayer();
-            SGPlayer.playSound(Sound.LEVEL_UP);
-            setupSessions.remove(SGPlayer);
+            sgPlayer.sendMessage(ChatColor.GREEN + "Your arena has been setup! But did you remember to set the spawn of the arena to the middle of the map?");
+            sgPlayer.resetPlayer();
+            sgPlayer.playSound(Sound.ENTITY_PLAYER_LEVELUP);
+            setupSessions.remove(sgPlayer);
             return;
         }
         else {
-            throw new NewNetCommandException("Use: /setup <arena|lobby|metatype>", NewNetCommandException.ErrorType.Special);
+            throw new NewNetCommandException("Use: /setup <arena|lobby|metatype>", NewNetCommandException.ErrorType.SPECIAL);
         }
         session.start();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerLeave(PlayerQuitEvent event) {
-        SGPlayer SGPlayer = resolveGPlayer(event.getPlayer());
-        if (setupSessions.containsKey(SGPlayer)) setupSessions.remove(SGPlayer);
-        if (playerNameSet.contains(SGPlayer)) playerNameSet.remove(SGPlayer);
-        if (playerAuthorSet.contains(SGPlayer)) playerAuthorSet.remove(SGPlayer);
-        if (playerSocialLinkSet.contains(SGPlayer)) playerSocialLinkSet.remove(SGPlayer);
+        SGPlayer sgPlayer = resolveGPlayer(event.getPlayer());
+        if (setupSessions.containsKey(sgPlayer)) setupSessions.remove(sgPlayer);
+        if (playerNameSet.contains(sgPlayer)) playerNameSet.remove(sgPlayer);
+        if (playerAuthorSet.contains(sgPlayer)) playerAuthorSet.remove(sgPlayer);
+        if (playerSocialLinkSet.contains(sgPlayer)) playerSocialLinkSet.remove(sgPlayer);
     }
 
     @EventHandler

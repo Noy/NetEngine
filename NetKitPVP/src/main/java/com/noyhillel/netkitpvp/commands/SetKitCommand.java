@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p/>
@@ -30,11 +29,11 @@ public final class SetKitCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player p, String[] args) throws NewNetCommandException {
-        if (args.length < 3) throw new NewNetCommandException("Too few arguments!", NewNetCommandException.ErrorType.FewArguments);
+        if (args.length < 3) throw new NewNetCommandException("Too few arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
         Material m;
         try {
             m = Material.getMaterial(args[0].toUpperCase());
-            if (m == null) throw new NewNetCommandException("Too few arguments!", NewNetCommandException.ErrorType.Null);
+            if (m == null) throw new NewNetCommandException("Unrecognised item!", NewNetCommandException.ErrorType.NULL);
         } catch (Exception e) {
             p.sendMessage(e.getCause().toString());
             return;

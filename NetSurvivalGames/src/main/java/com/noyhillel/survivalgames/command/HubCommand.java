@@ -14,7 +14,7 @@ public final class HubCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        if (args.length > 0) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
+        if (args.length > 0) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         //SurvivalGames.getInstance().sendToServer("hub", sender); // Only works with lillypad, etc.
         sender.sendMessage(ChatColor.GREEN + "Sending you to the hub!");
     }

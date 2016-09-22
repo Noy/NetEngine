@@ -28,11 +28,11 @@ public final class GetInfoCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FewArguments);
-        if (args.length > 1) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.FewArguments);
+        if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
+        if (args.length > 1) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
         Player target = Bukkit.getPlayerExact(args[0]);
         NetPlayer netPlayer = NetPlugin.getNetPlayerManager().getOnlinePlayer(target);
-        if (netPlayer == null) throw new NewNetCommandException("An argument you have provided was null!", NewNetCommandException.ErrorType.Null);
+        if (netPlayer == null) throw new NewNetCommandException("An argument you have provided was null!", NewNetCommandException.ErrorType.NULL);
         String[] name = {"<name>", target.getName()};
         String[] nl = {"<nl>", "\n"};
         netPlayer.sendMessage(MessageManager.getFormat("whois.uuid", true, new String[]{"<uuid>", netPlayer.getUuid().toString()}, name, nl));
@@ -54,11 +54,11 @@ public final class GetInfoCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void consoleCommand(ConsoleCommandSender sender, String[] args) throws NewNetCommandException {
-        if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FewArguments);
-        if (args.length > 1) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.FewArguments);
+        if (args.length == 0) throw new NewNetCommandException("You have provided too few arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
+        if (args.length > 1) throw new NewNetCommandException("You have provided too many arguments!", NewNetCommandException.ErrorType.FEW_ARGUMENTS);
         Player target = Bukkit.getPlayerExact(args[0]);
         NetPlayer netPlayer = NetPlugin.getNetPlayerManager().getOnlinePlayer(target);
-        if (netPlayer == null) throw new NewNetCommandException("An argument you have provided was null!", NewNetCommandException.ErrorType.Null);
+        if (netPlayer == null) throw new NewNetCommandException("An argument you have provided was null!", NewNetCommandException.ErrorType.NULL);
         String[] name = {"<name>", target.getName()};
         String[] nl = {"<nl>", "\n"};
         sender.sendMessage(MessageManager.getFormat("whois.uuid", true, new String[]{"<uuid>", netPlayer.getUuid().toString()}, name, nl));

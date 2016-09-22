@@ -57,7 +57,7 @@ public abstract class NetHubItemDelegate implements Listener {
         ItemStack itemInHand = player.getItemInHand();
         // If it's not a right click, don't do anything.
         if (!(action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)) return;
-        // If Null, don't do anything
+        // If NULL, don't do anything
         if (itemInHand == null) return;
         // If the Item does not have anything unique to it, don't do anything
         if (!(itemInHand.hasItemMeta())) return;

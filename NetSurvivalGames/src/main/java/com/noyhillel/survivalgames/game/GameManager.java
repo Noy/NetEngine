@@ -1,12 +1,12 @@
 package com.noyhillel.survivalgames.game;
 
+import com.noyhillel.networkengine.exceptions.ArenaException;
+import com.noyhillel.networkengine.game.arena.lobby.GameLobby;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
-import com.noyhillel.survivalgames.arena.ArenaException;
 import com.noyhillel.survivalgames.game.impl.SGGame;
-import com.noyhillel.survivalgames.game.lobby.GameLobby;
 import com.noyhillel.survivalgames.game.lobby.LobbyItemListener;
 import com.noyhillel.survivalgames.game.lobby.LobbyState;
 import com.noyhillel.survivalgames.game.voting.VotingRestartException;
@@ -119,14 +119,14 @@ public final class GameManager implements VotingSessionDisplay {
         broadcast(MessageManager.getFormat("formats.shutdown", new String[]{"<seconds>", String.valueOf(shutdownCountdownLength)}));
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             String format = MessageManager.getFormat("formats.kick-game-over", false, new String[]{"<victor>", victor.getDisplayableName()});
-            for (SGPlayer SGPlayer : getPlayers()) {
+            for (SGPlayer sgPlayer : getPlayers()) {
                 try {
-                    SGPlayer.save();
+                    sgPlayer.save();
                 } catch (StorageError | PlayerNotFoundException storageError) {
                     storageError.printStackTrace();
-                    SGPlayer.sendMessage(ChatColor.RED + "Unable to save your player data!");
+                    sgPlayer.sendMessage(ChatColor.RED + "Unable to save your player data!");
                 }
-                SGPlayer.sendMessage(format);
+                sgPlayer.sendMessage(format);
                 //SurvivalGames.getInstance().sendToServer("hub", SGPlayer.getPlayer());
             }
             try {
@@ -146,16 +146,18 @@ public final class GameManager implements VotingSessionDisplay {
     public Set<SGPlayer> getPlayers() {
         Set<SGPlayer> players = new HashSet<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            players.add(plugin.getSGPlayerManager().getOnlinePlayer(player));
+            players.add(plugin.getSgPlayerManager().getOnlinePlayer(player));
         }
         return players;
     }
 
     @Override
     public void votingStarted() {
-        for (SGPlayer SGPlayer : getPlayers()) {
-            setupScoreboard(SGPlayer);
-        }
+//        for (SGPlayer sgPlayer : getPlayers()) {
+//            setupScoreboard(SGPlayer);
+//        }
+        // Java 8
+        getPlayers().forEach(this::setupScoreboard);
     }
 
     @Override
@@ -175,26 +177,24 @@ public final class GameManager implements VotingSessionDisplay {
     @Override
     public void votesUpdated(Arena arena, Integer votes) {
         String name = arena.getMeta().getName();
-        for (SGPlayer SGPlayer : getPlayers()) {
-            SGPlayer.setScoreBoardSide(ChatColor.GOLD + name, votes);
+        for (SGPlayer sgPlayer : getPlayers()) {
+            sgPlayer.setScoreBoardSide(ChatColor.GOLD + name, votes);
         }
     }
-
-
 
     @Override
     public void clockUpdated(Integer secondsRemain) {
         if (RandomUtils.contains(secondsRemain, BROADCAST_TIMES)) {
             broadcast(MessageManager.getFormat("formats.time-remaining-lobby", true, new String[]{"<time>", secondsRemain.toString()}));
-            broadcastSound(Sound.CLICK);
+            broadcastSound(Sound.UI_BUTTON_CLICK);
         }
         if (secondsRemain <= 60 && secondsRemain >= 1) {
-            for (SGPlayer SGPlayer : getPlayers()) {
-                NetPlayer playerFromNetPlayer = SGPlayer.getPlayerFromNetPlayer();
+            for (SGPlayer sgPlayer : getPlayers()) {
+                NetPlayer playerFromNetPlayer = sgPlayer.getPlayerFromNetPlayer();
                 playerFromNetPlayer.setExperience(secondsRemain.floatValue()/60);
                 playerFromNetPlayer.getPlayer().setLevel(secondsRemain);
-                //NetEnderHealthBarEffect.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", SGPlayer.getDisplayableName()}));
-                //NetEnderHealthBarEffect.setHealthPercent(playerFromNetPlayer, secondsRemain.doubleValue()/60);
+                //NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", SGPlayer.getDisplayableName()}));
+                //NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemain.doubleValue()/60);
             }
         }
     }
@@ -221,7 +221,7 @@ public final class GameManager implements VotingSessionDisplay {
 
 
     public void voteFor(Player player, Arena arena) {
-        this.votingSession.handleVote(arena, plugin.getSGPlayerManager().getOnlinePlayer(player));
+        this.votingSession.handleVote(arena, plugin.getSgPlayerManager().getOnlinePlayer(player));
     }
 
     public void setupScoreboard(SGPlayer player) {
@@ -231,9 +231,9 @@ public final class GameManager implements VotingSessionDisplay {
         }
     }
 
-    void broadcast(String message) {
-        for (SGPlayer SGPlayer : getPlayers()) {
-            SGPlayer.sendMessage(message);
+    private void broadcast(String message) {
+        for (SGPlayer sgPlayer : getPlayers()) {
+            sgPlayer.sendMessage(message);
         }
         SurvivalGames.getInstance().getServer().getConsoleSender().sendMessage(message);
     }
@@ -257,9 +257,9 @@ public final class GameManager implements VotingSessionDisplay {
         switch (this.lobbyState) {
             case PRE_GAME:
             case POST_GAME:
-                for (SGPlayer SGPlayer : this.getPlayers()) {
-                    SGPlayer.resetPlayer();
-                    this.lobbyState.giveItems(SGPlayer, this);
+                for (SGPlayer sgPlayer : this.getPlayers()) {
+                    sgPlayer.resetPlayer();
+                    this.lobbyState.giveItems(sgPlayer, this);
                 }
                 break;
         }

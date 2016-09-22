@@ -1,6 +1,6 @@
 package com.noyhillel.survivalgames.arena.setup;
 
-import com.noyhillel.survivalgames.arena.ArenaException;
+import com.noyhillel.networkengine.exceptions.ArenaException;
 import org.bukkit.event.Listener;
 
 

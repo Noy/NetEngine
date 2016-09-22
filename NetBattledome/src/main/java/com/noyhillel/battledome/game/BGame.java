@@ -3,7 +3,7 @@ package com.noyhillel.battledome.game;
 import com.noyhillel.battledome.MessageManager;
 import com.noyhillel.battledome.NetBD;
 import com.noyhillel.battledome.arena.Point;
-import com.noyhillel.networkengine.util.effects.NetEnderHealthBarEffect;
+import com.noyhillel.networkengine.util.effects.NetEnderBar;
 import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.RandomUtils;
@@ -19,6 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -128,8 +129,8 @@ public final class BGame implements Listener, GameCountdownHandler {
         if (this.gameCountdown != null) enderBarText = enderBarText + MessageManager.getFormat("formats.ender-bar-time-ingame", false, new String[]{"<time>", RandomUtils.formatTime(this.gameCountdown.getSeconds() - this.gameCountdown.getPassed())});
         Float percentEnderBar = this.gameCountdown == null ? 1 : ((float)this.gameCountdown.getSeconds()-(float)this.gameCountdown.getPassed())/(float)this.gameCountdown.getSeconds();
         for (NetPlayer player : playerSet) {
-            NetEnderHealthBarEffect.setTextFor(player, enderBarText.replaceAll("<team>", getTeamForPlayer(player).toString()));
-            //NetEnderHealthBarEffect.setHealthPercent(player, percentEnderBar);
+            NetEnderBar.setTextFor(player, enderBarText.replaceAll("<team>", getTeamForPlayer(player).toString()));
+            NetEnderBar.setHealthPercent(player, (double)percentEnderBar);
         }
     }
 
@@ -301,7 +302,11 @@ public final class BGame implements Listener, GameCountdownHandler {
     public void onBlockBreak(BlockBreakEvent event) {
         NetPlayer player = NetPlayer.getPlayerFromPlayer(event.getPlayer());
         if (isSpectating(player)) event.setCancelled(true);
-        if (event.getBlock().getType().equals(Material.OBSIDIAN)) {
+        if (event.getBlock().getType().equals(Material.ENCHANTMENT_TABLE)) event.setCancelled(true);
+        if (event.getBlock().getType().equals(Material.GLASS)) event.setCancelled(true);
+        ItemStack obs = new ItemStack(Material.OBSIDIAN);
+        if (event.getBlock().getType().equals(obs.getType())) {
+            if (!(obs.hasItemMeta())) return;
             if (phase == Phase.BUILD) {
                 if (!this.phase.getGameListenerDelegate().canBreakObsi()) {
                     event.setCancelled(true);
@@ -325,9 +330,7 @@ public final class BGame implements Listener, GameCountdownHandler {
                     }
                 }
                 if (losingTeam == null) return;
-                for (NetPlayer player1 : getPlayersForTeam(losingTeam)) {
-                    endGameForPlayerForce(player1);
-                }
+                getPlayersForTeam(losingTeam).forEach(this::endGameForPlayerForce);
             }
         }
     }

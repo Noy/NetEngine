@@ -26,15 +26,15 @@ public class LobbyItemListener implements Listener {
         LobbyItem lobbyItem1 = resolveLobbyItem(itemInHand, event.getPlayer().getInventory().getHeldItemSlot());
         if (lobbyItem1 == null) return;
         LobbyItemDefinition lobbyItem = lobbyItem1.getLobbyItemDefinition();
-        SGPlayer SGPlayer = resolveGPlayer(event.getPlayer());
+        SGPlayer sgPlayer = resolveGPlayer(event.getPlayer());
         switch (event.getAction()) {
             case LEFT_CLICK_AIR:
             case LEFT_CLICK_BLOCK:
-                lobbyItem.leftClick(SGPlayer, gameManager);
+                lobbyItem.leftClick(sgPlayer, gameManager);
                 break;
             case RIGHT_CLICK_BLOCK:
             case RIGHT_CLICK_AIR:
-                lobbyItem.rightClick(SGPlayer, gameManager);
+                lobbyItem.rightClick(sgPlayer, gameManager);
                 break;
         }
         event.setCancelled(true);
@@ -55,6 +55,6 @@ public class LobbyItemListener implements Listener {
     }
 
     private SGPlayer resolveGPlayer(Player player) {
-        return SurvivalGames.getInstance().getSGPlayerManager().getOnlinePlayer(player);
+        return SurvivalGames.getInstance().getSgPlayerManager().getOnlinePlayer(player);
     }
 }

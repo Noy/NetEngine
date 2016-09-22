@@ -1,10 +1,10 @@
 package com.noyhillel.survivalgames.command;
 
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
+import com.noyhillel.networkengine.game.arena.ArenaMeta;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.arena.ArenaMeta;
 import com.noyhillel.survivalgames.game.GameManager;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.entity.Player;
@@ -16,9 +16,9 @@ public final class MapCommand extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
-        if (args.length > 0) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.ManyArguments);
+        if (args.length > 0) throw new NewNetCommandException("Too many arguments!", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         GameManager manager = SurvivalGames.getInstance().getGameManager();
-        if (manager.getRunningSGGame() == null) throw new NewNetCommandException("Map is not set yet! Type /vote <map>", NewNetCommandException.ErrorType.Special);
+        if (manager.getRunningSGGame() == null) throw new NewNetCommandException("Map is not set yet! Type /vote <map>", NewNetCommandException.ErrorType.SPECIAL);
         ArenaMeta arenaMeta = manager.getRunningSGGame().getArena().getMeta();
         String socialLink = arenaMeta.getSocialLink();
         String name = arenaMeta.getName();

@@ -3,7 +3,6 @@ package com.noyhillel.survivalgames.player;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.utils.MessageManager;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -72,11 +71,8 @@ public final class SGPlayer extends SGOfflinePlayer {
         player.setVelocity(new Vector());
         player.setFallDistance(0);
         player.setNoDamageTicks(5);
-        player.setFireTicks(0);
-        removePotionEffects();
-        player.setHealth(player.getMaxHealth());
+        heal();
         player.setSaturation(0);
-        player.setFoodLevel(20);
         player.setTotalExperience(0);
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[4]);
@@ -95,7 +91,7 @@ public final class SGPlayer extends SGOfflinePlayer {
         player.setFireTicks(0);
         player.setFoodLevel(20);
         removePotionEffects();
-        sendMessage(MessageManager.getFormat("formats.heal-msg", true));
+        //sendMessage(MessageManager.getFormat("formats.heal-msg", true));
     }
 
     public void playSound(Sound sound) {
@@ -108,7 +104,7 @@ public final class SGPlayer extends SGOfflinePlayer {
     }
 
     public void teleport(Location location) {
-        playSound(Sound.ENDERMAN_TELEPORT);
+        playSound(Sound.ENTITY_ENDERMEN_TELEPORT);
         getPlayer().teleport(location);
     }
 
@@ -144,10 +140,10 @@ public final class SGPlayer extends SGOfflinePlayer {
         if (!this.isOnline()) return;
         if (this.currentScoreboardObjective == null || this.playerScoreboard == null) {}
             Score score = this.currentScoreboardObjective.getScore(Bukkit.getOfflinePlayer(key.substring(0, Math.min(key.length(), 15))));
-        score.setScore(value);
-        if (getPlayer() == null) return;
-        if (!getPlayer().isOnline()) return;
-        getPlayer().setScoreboard(this.playerScoreboard);
+            score.setScore(value);
+            if (getPlayer() == null) return;
+            if (!getPlayer().isOnline()) return;
+            getPlayer().setScoreboard(this.playerScoreboard);
     }
 
     public void addPotionEffect(PotionEffectType effectType, Integer level, Integer length, boolean ambient) {
@@ -180,7 +176,7 @@ public final class SGPlayer extends SGOfflinePlayer {
     }
 
     public void save() throws StorageError, PlayerNotFoundException {
-        SurvivalGames.getInstance().getSGPlayerManager().getStorage().savePlayer(this);
+        SurvivalGames.getInstance().getSgPlayerManager().getStorage().savePlayer(this);
     }
 
     @Override

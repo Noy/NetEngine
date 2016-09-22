@@ -1,9 +1,9 @@
 package com.noyhillel.survivalgames.arena.setup;
 
+import com.noyhillel.networkengine.exceptions.ArenaException;
+import com.noyhillel.networkengine.game.arena.Point;
+import com.noyhillel.networkengine.game.arena.lobby.GameLobby;
 import com.noyhillel.survivalgames.SurvivalGames;
-import com.noyhillel.survivalgames.arena.ArenaException;
-import com.noyhillel.survivalgames.arena.Point;
-import com.noyhillel.survivalgames.game.lobby.GameLobby;
 import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.Data;
 import org.bukkit.*;
@@ -42,7 +42,7 @@ public final class LobbySetup implements SetupSession {
         player.resetPlayer();
         p.setAllowFlight(true);
         p.setGameMode(GameMode.CREATIVE);
-        player.playSound(Sound.LEVEL_UP);
+        player.playSound(Sound.ENTITY_PLAYER_LEVELUP, 0.1F);
         p.getInventory().addItem(stackWithName(Material.WOOD_SPADE, ChatColor.RED + "Spawn point selector"));
     }
 

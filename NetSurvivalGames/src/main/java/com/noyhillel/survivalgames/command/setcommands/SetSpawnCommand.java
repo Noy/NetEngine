@@ -18,8 +18,8 @@ public final class SetSpawnCommand extends NetAbstractCommandHandler { // NEEDS 
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.Special);
-        if (args.length > 0) throw new NewNetCommandException("Too many arguemnts.", NewNetCommandException.ErrorType.ManyArguments);
+        if (!SurvivalGames.getInstance().isSetupOnly()) throw new NewNetCommandException("The server needs to be in setup mode!", NewNetCommandException.ErrorType.SPECIAL);
+        if (args.length > 0) throw new NewNetCommandException("Too many arguemnts.", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
         Location loc = player.getLocation();
         player.getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ());
         player.sendMessage(ChatColor.GREEN + "You have set the world spawn!");

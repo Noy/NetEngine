@@ -36,3 +36,5 @@ formats:
   get-kit: "&cYou have got kit: &4<kit>."
   delete-kit: "&4You have deleted that kit!"
   kit-set: "&aYou have set that kit!"
+potion-effecs:
+  killer: ABSORBTION

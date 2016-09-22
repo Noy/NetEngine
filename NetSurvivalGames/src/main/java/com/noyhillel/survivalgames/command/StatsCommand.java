@@ -23,27 +23,27 @@ public final class StatsCommand extends NetAbstractCommandHandler {
 
     @Override
     public void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (args.length > 1) throw new NewNetCommandException("Too many Arguments!", NewNetCommandException.ErrorType.ManyArguments);
-        SGPlayer SGPlayer = resolveGPlayer(player);
+        if (args.length > 1) throw new NewNetCommandException("Too many Arguments!", NewNetCommandException.ErrorType.MANY_ARGUMENTS);
+        SGPlayer sgPlayer = resolveGPlayer(player);
         List<String> yourStats = new ArrayList<>();
         yourStats.add(MessageManager.getFormat("formats.stats.header", false));
-        yourStats.add(getFormattedStat("Kills", SGPlayer.getKills()));
-        yourStats.add(getFormattedStat("Deaths", SGPlayer.getDeaths()));
-        yourStats.add(getFormattedStat("Wins", SGPlayer.getWins()));
-        if (SGPlayer.getKills() > 0 && SGPlayer.getDeaths() > 0) {
-            yourStats.add(getFormattedStat("KDR", (float) SGPlayer.getKills()/ SGPlayer.getDeaths()));
-        } else SGPlayer.sendMessage(ChatColor.RED + "Cannot get your KDR with either 0 kills or 0 deaths!");
-        yourStats.add(getFormattedStat("Points", SGPlayer.getPoints()));
-        yourStats.add(getFormattedStat("Games played", SGPlayer.getTotalGames()));
-        yourStats.add(getFormattedStat("Mutation Credits", SGPlayer.getMutationCredits()));
+        yourStats.add(getFormattedStat("Kills", sgPlayer.getKills()));
+        yourStats.add(getFormattedStat("Deaths", sgPlayer.getDeaths()));
+        yourStats.add(getFormattedStat("Wins", sgPlayer.getWins()));
+        if (sgPlayer.getKills() > 0 && sgPlayer.getDeaths() > 0) {
+            yourStats.add(getFormattedStat("KDR", (float) sgPlayer.getKills()/ sgPlayer.getDeaths()));
+        } else sgPlayer.sendMessage(ChatColor.RED + "Cannot get your KDR with either 0 kills or 0 deaths!");
+        yourStats.add(getFormattedStat("Points", sgPlayer.getPoints()));
+        yourStats.add(getFormattedStat("Games played", sgPlayer.getTotalGames()));
+        yourStats.add(getFormattedStat("Mutation Credits", sgPlayer.getMutationCredits()));
         if (args.length == 0) {
-            yourStats.forEach(SGPlayer::sendMessage);
+            yourStats.forEach(sgPlayer::sendMessage);
             return;
         }
         Player target = Bukkit.getPlayer(args[0]);
-        if (target == null) throw new NewNetCommandException("Can't find that player!", NewNetCommandException.ErrorType.Null);
+        if (target == null) throw new NewNetCommandException("Can't find that player!", NewNetCommandException.ErrorType.NULL);
         SGPlayer gTarget = resolveGPlayer(target);
-        if (gTarget == null) throw new NewNetCommandException("Can't find that player!", NewNetCommandException.ErrorType.Null);
+        if (gTarget == null) throw new NewNetCommandException("Can't find that player!", NewNetCommandException.ErrorType.NULL);
         List<String> targetStats = new ArrayList<>();
         targetStats.add(MessageManager.getFormat("formats.stats.header", false));
         targetStats.add(ChatColor.YELLOW + gTarget.getDisplayableName() + "'s stats are:");
@@ -52,11 +52,11 @@ public final class StatsCommand extends NetAbstractCommandHandler {
         targetStats.add(getFormattedStat("Wins", gTarget.getWins()));
         if (gTarget.getKills() > 0 && gTarget.getDeaths() > 0) {
             targetStats.add(getFormattedStat("KDR", (float)gTarget.getKills()/gTarget.getDeaths()));
-        } else SGPlayer.sendMessage(ChatColor.RED + "Cannot get your KDR with either 0 kills or 0 deaths!");
+        } else sgPlayer.sendMessage(ChatColor.RED + "Cannot get your KDR with either 0 kills or 0 deaths!");
         targetStats.add(getFormattedStat("Points", gTarget.getPoints()));
         targetStats.add(getFormattedStat("Games played", gTarget.getTotalGames()));
         targetStats.add(getFormattedStat("Mutation Credits", gTarget.getMutationCredits()));
-        targetStats.forEach(SGPlayer::sendMessage);
+        targetStats.forEach(sgPlayer::sendMessage);
     }
 
     private String getFormattedStat(String statName, Object stat) {

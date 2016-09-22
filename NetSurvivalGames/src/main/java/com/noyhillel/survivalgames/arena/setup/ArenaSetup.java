@@ -1,10 +1,10 @@
 package com.noyhillel.survivalgames.arena.setup;
 
+import com.noyhillel.networkengine.exceptions.ArenaException;
+import com.noyhillel.networkengine.game.arena.ArenaMeta;
+import com.noyhillel.networkengine.game.arena.Point;
 import com.noyhillel.survivalgames.SurvivalGames;
 import com.noyhillel.survivalgames.arena.Arena;
-import com.noyhillel.survivalgames.arena.ArenaException;
-import com.noyhillel.survivalgames.arena.ArenaMeta;
-import com.noyhillel.survivalgames.arena.Point;
 import com.noyhillel.survivalgames.command.SetupCommand;
 import com.noyhillel.survivalgames.player.SGPlayer;
 import lombok.Data;
@@ -43,11 +43,12 @@ public final class ArenaSetup implements SetupSession {
         player.resetPlayer();
         p.setAllowFlight(true);
         p.setGameMode(GameMode.CREATIVE);
-        player.playSound(Sound.LEVEL_UP);
-        //p.getInventory().addItem(stackWithName(Material.DIAMOND_SPADE, ChatColor.RED + "Tier one selector")); // Tier 1
-        //p.getInventory().addItem(stackWithName(Material.IRON_SPADE, ChatColor.RED + "Tier two selector")); // Tier 2 | Leaving this out for now
+        player.playSound(Sound.ENTITY_PLAYER_LEVELUP);
         p.getInventory().addItem(stackWithName(Material.GOLD_SPADE, ChatColor.RED + "Cornicopia spawn selector")); // Corn
         p.getInventory().addItem(stackWithName(Material.DIAMOND_AXE, ChatColor.RED + "Region selector")); //region selector
+        /*Deprecated*/
+        //p.getInventory().addItem(stackWithName(Material.DIAMOND_SPADE, ChatColor.RED + "Tier one selector")); // Tier 1
+        //p.getInventory().addItem(stackWithName(Material.IRON_SPADE, ChatColor.RED + "Tier two selector")); // Tier 2 | Leaving this out for now
     }
 
     static ItemStack stackWithName(Material m, String name) {
@@ -101,7 +102,7 @@ public final class ArenaSetup implements SetupSession {
                 if (!(action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)) return;
                 if (action == Action.RIGHT_CLICK_BLOCK) {
                     l1 = clickedBlock;
-                    player.sendMessage(ChatColor.LIGHT_PURPLE + "Region Point 2 selected.");
+                    player.sendMessage(ChatColor.LIGHT_PURPLE + "Region Point 2 selected."); //world edit lmfao
                     return;
                 } else if (action == Action.LEFT_CLICK_BLOCK) {
                     l2 = clickedBlock;
