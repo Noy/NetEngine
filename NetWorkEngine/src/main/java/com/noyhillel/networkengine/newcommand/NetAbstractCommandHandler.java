@@ -32,7 +32,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
     @Getter(AccessLevel.PROTECTED) private final Set<CommandErrorHandler> commandErrorHandlers = new HashSet<>();
 
     /**
-     * Private field, Our @Permission annotation.
+     * Private field, Our @PERMISSION annotation.
      */
     @Getter private final Permission permission = getClass().getAnnotation(Permission.class);
 
@@ -70,8 +70,8 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
                 }
                 // Checking if the thing whom executed the command is a Player
                 if (commandSender instanceof Player) {
-                    // Checking if the Player has permission from our @Permission annotation which we created, if not, throw a 'NewCommandException' which takes 2 parameters: String (Permission message, ErrorType)
-                    if (permission != null && !commandSender.hasPermission(permission.value())) throw new NewNetCommandException(permission.permissionErrorMessage(), NewNetCommandException.ErrorType.Permission);
+                    // Checking if the Player has permission from our @PERMISSION annotation which we created, if not, throw a 'NewCommandException' which takes 2 parameters: String (PERMISSION message, ErrorType)
+                    if (permission != null && !commandSender.hasPermission(permission.value())) throw new NewNetCommandException(permission.permissionErrorMessage(), NewNetCommandException.ErrorType.PERMISSION);
                     // If all goes well, execute the method which we created.
                     playerCommand((Player) commandSender, args);
                 }
@@ -87,7 +87,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
                     // Print out the Stack Trace.
                     t.printStackTrace();
                     // Throw a NewCommandException.
-                    throw new NewNetCommandException(t.getClass().getSimpleName() + ": Exception encountered during command execution: " + t.getMessage(), NewNetCommandException.ErrorType.Special);
+                    throw new NewNetCommandException(t.getClass().getSimpleName() + ": Exception encountered during command execution: " + t.getMessage(), NewNetCommandException.ErrorType.SPECIAL);
                     // If not,
                 } else {
                     // Throw a Throwable Exception.
@@ -124,7 +124,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
     @SuppressWarnings("UnusedParameters")
     protected void consoleCommand(ConsoleCommandSender sender, String[] args) throws NewNetCommandException {
         // If the Console did not execute this command, throw this exception.
-        throw new NewNetCommandException("The console cannot execute this command!", NewNetCommandException.ErrorType.Special);
+        throw new NewNetCommandException("The console cannot execute this command!", NewNetCommandException.ErrorType.SPECIAL);
     }
 
     /**
@@ -136,7 +136,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
     @SuppressWarnings("UnusedParameters")
     protected void playerCommand(Player sender, String[] args) throws NewNetCommandException {
         // If the Player did not execute this command, throw this exception.
-        throw new NewNetCommandException("You cannot execute this command!", NewNetCommandException.ErrorType.Special);
+        throw new NewNetCommandException("You cannot execute this command!", NewNetCommandException.ErrorType.SPECIAL);
     }
 
     /**
@@ -148,7 +148,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
     @SuppressWarnings({"UnusedParameters"})
     protected void blockCommand(BlockCommandSender sender, String[] args) throws NewNetCommandException {
         // If the CommandBlock did not execute this command, throw this exception.
-        throw new NewNetCommandException("A block cannot execute this command!", NewNetCommandException.ErrorType.Special);
+        throw new NewNetCommandException("A block cannot execute this command!", NewNetCommandException.ErrorType.SPECIAL);
     }
 
     /**
@@ -185,7 +185,7 @@ public abstract class NetAbstractCommandHandler implements CommandExecutor, TabC
         // Creating our local variable.
         PluginCommand command1 = plugin.getCommand(meta.name());
         // If the Command which we create in all the sub-classes are not registered in the plugin.yml, print it out in the console.
-        if (command1 == null) throw new NewNetCommandException("Could not register command, not in plugin.yml.", NewNetCommandException.ErrorType.Special);
+        if (command1 == null) throw new NewNetCommandException("Could not register command, not in plugin.yml.", NewNetCommandException.ErrorType.SPECIAL);
         // Set the executor as this class.
         command1.setExecutor(this);
         // Setting the description to our description method.

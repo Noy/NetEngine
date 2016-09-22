@@ -1,8 +1,8 @@
-package com.noyhillel.survivalgames.game.lobby;
+package com.noyhillel.networkengine.game.arena.lobby;
 
-import com.noyhillel.survivalgames.arena.Point;
-import com.noyhillel.survivalgames.arena.PointIterator;
-import com.noyhillel.survivalgames.arena.WorldStrapped;
+import com.noyhillel.networkengine.game.WorldStrapped;
+import com.noyhillel.networkengine.game.arena.Point;
+import com.noyhillel.networkengine.game.arena.PointIterator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.World;

@@ -1,12 +1,13 @@
-package com.noyhillel.survivalgames.arena;
+package com.noyhillel.networkengine.game.arena;
 
 import lombok.Data;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-@Data(staticConstructor =  "of")
+@Data(staticConstructor = "of")
 public final class Point {
+
     private final Double x;
     private final Double y;
     private final Double z;

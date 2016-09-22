@@ -1,7 +1,8 @@
-package com.noyhillel.survivalgames.arena;
+package com.noyhillel.networkengine.game;
 
+import com.noyhillel.networkengine.exceptions.ArenaException;
+import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.utils.RandomUtils;
-import com.noyhillel.survivalgames.SurvivalGames;
 import lombok.Data;
 import lombok.NonNull;
 import net.lingala.zip4j.core.ZipFile;
@@ -23,7 +24,7 @@ public abstract class WorldStrapped {
         this.zippedWorldFile = file;
     }
 
-    protected  WorldStrapped(World world) {
+    protected WorldStrapped(World world) {
         this.loadedWorld = world;
         this.zippedWorldFile = null;
     }
@@ -53,14 +54,14 @@ public abstract class WorldStrapped {
         this.loadedWorld.setGameRuleValue("keepInventory", "false");
         this.loadedWorld.setGameRuleValue("doDaylightCycle", "true");
         this.loadedWorld.setGameRuleValue("doFireTick", "false");
-        SurvivalGames.logInfo("Loaded world " + loadedWorld.getName());
+        NetPlugin.logInfo("Loaded world " + loadedWorld.getName());
     }
 
     public void unloadWorld() throws ArenaException {
         Bukkit.unloadWorld(loadedWorld, false);
         try {
-            SurvivalGames.getInstance().deleteDirectory(loadedWorld.getWorldFolder());
-            SurvivalGames.logInfo("Unloaded world " + loadedWorld.getWorldFolder().getName());
+            NetPlugin.getInstance().deleteDirectory(loadedWorld.getWorldFolder());
+            NetPlugin.logInfo("Unloaded world " + loadedWorld.getWorldFolder().getName());
         } catch (Exception e) {
             throw new ArenaException(this, e, "Could not delete world folder on unload!");
         }

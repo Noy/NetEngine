@@ -14,13 +14,13 @@ public @interface Permission {
 
     /**
      * This represents the permission node which is going to be created.
-     * @return Permission Value
+     * @return PERMISSION Value
      */
     String value();
 
     /**
      * The permission message. The message a player would get when they don't have permission while executing the command
-     * @return Permission Error Message.
+     * @return PERMISSION Error Message.
      */
     String permissionErrorMessage() default "You do not have permission to use this command!";
 }

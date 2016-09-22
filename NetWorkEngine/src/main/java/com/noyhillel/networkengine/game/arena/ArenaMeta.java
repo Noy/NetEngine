@@ -1,4 +1,4 @@
-package com.noyhillel.survivalgames.arena;
+package com.noyhillel.networkengine.game.arena;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

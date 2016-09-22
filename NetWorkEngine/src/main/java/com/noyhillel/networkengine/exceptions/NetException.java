@@ -10,8 +10,4 @@ import lombok.EqualsAndHashCode;
 @Data
 public class NetException extends Exception {
     private String errorMessage;
-
-    public NetException(String s) {
-        this.errorMessage = s;
-    }
 }

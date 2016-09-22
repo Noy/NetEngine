@@ -257,7 +257,7 @@ public final class NetPlayer {
     }
 
     public void sendException(Throwable t) {
-        getPlayer().sendMessage(ChatColor.RED + "Error: " + ChatColor.WHITE + t.getMessage());
+        this.sendMessage(ChatColor.RED + "Error: " + ChatColor.WHITE + t.getMessage());
     }
 
     public void kick(String s) {
@@ -277,7 +277,7 @@ public final class NetPlayer {
     }
 
     public boolean isOnline() {
-        return Bukkit.getOfflinePlayer(this.playerName).isOnline() && getPlayer() != null;
+        return Bukkit.getOfflinePlayer(this.uuid).isOnline() && getPlayer() != null;
     }
 
     public boolean isFirstTimeOnline() {

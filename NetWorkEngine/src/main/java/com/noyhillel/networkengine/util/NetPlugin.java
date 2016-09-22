@@ -42,6 +42,8 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
     @Getter protected Provider provider;
     @Getter private final MainClass meta = getClass().getAnnotation(MainClass.class);
     @Getter private final PluginDescriptionFile pluginDescriptionFile = getDescription();
+
+    /* constants */
     protected static final String RELOAD_MESSAGE = ChatColor.GRAY + "Server Reloading!";
 
     protected abstract void enable();
@@ -50,7 +52,7 @@ public abstract class NetPlugin extends JavaPlugin implements CommandHandler {
 
     @Override
     public final void onEnable() {
-        logInfoInColor(ChatColor.RED + "Attempting to link to engine...");
+        logInfoInColor(ChatColor.RED + "Attempting to link to NetEngine...");
         try {
             NetPlugin.instance = this;
             NetPlugin.netPlayerManager = new NetPlayerManager();

@@ -1,6 +1,6 @@
-package com.noyhillel.survivalgames.arena;
+package com.noyhillel.networkengine.game.arena;
 
-import com.noyhillel.survivalgames.SurvivalGames;
+import com.noyhillel.networkengine.util.NetPlugin;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +37,7 @@ public final class PointIterator implements Iterator<Point>, Iterable<Point> {
     }
 
     public Point random() {
-        return this.points.get(SurvivalGames.getRandom().nextInt(points.size()));
+        return this.points.get(NetPlugin.getRandom().nextInt(points.size()));
     }
 
     @Override

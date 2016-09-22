@@ -23,8 +23,8 @@ public @interface NetCommand {
      */
     String usage() default "/<command>";
     /**
-     * Permission to use command.
-     * @return Permission to use this command.
+     * PERMISSION to use command.
+     * @return PERMISSION to use this command.
      */
     String permission();
 

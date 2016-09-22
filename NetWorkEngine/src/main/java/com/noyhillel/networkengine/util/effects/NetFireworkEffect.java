@@ -18,17 +18,17 @@ public final class NetFireworkEffect {
 
     public static void shootFireWorks(NetPlayer player, Location location) {
         if (player == null) return;
-        Firework f = player.getPlayer().getWorld().spawn(location, Firework.class);
-        FireworkMeta fm = f.getFireworkMeta();
-        Random r = new Random();
-        FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean())
+        Firework fireworks = player.getPlayer().getWorld().spawn(location, Firework.class);
+        FireworkMeta fm = fireworks.getFireworkMeta();
+        Random random = new Random();
+        FireworkEffect effect = FireworkEffect.builder().flicker(random.nextBoolean())
                 .withColor(getRandomColors()).withFade(getRandomColors())
                 .with(getFireWorkType())
-                .trail(r.nextBoolean()).build();
+                .trail(random.nextBoolean()).build();
         fm.addEffect(effect);
-        Integer power = r.nextInt(1)+1;
+        Integer power = random.nextInt(1)+1;
         fm.setPower(power);
-        f.setFireworkMeta(fm);
+        fireworks.setFireworkMeta(fm);
     }
 
     private static Color getRandomColors() {

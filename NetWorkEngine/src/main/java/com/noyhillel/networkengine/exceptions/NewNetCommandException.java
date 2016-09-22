@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class NewNetCommandException extends Exception {
+public class NewNetCommandException extends NetException {
     /**
      * Private field The Error Message.
      */
@@ -24,24 +24,24 @@ public class NewNetCommandException extends Exception {
      */
     public enum ErrorType {
         /**
-         * Special Error Type, for example: If an exceptions occurred, It will be a 'Special' Error Type.
+         * SPECIAL Error Type, for example: If an exceptions occurred, It will be a 'SPECIAL' Error Type.
          */
-        Special,
+        SPECIAL,
         /**
-         * Permission Error Type, for example: If the Player executing the command does not have permission, It will be a 'Permission' Error.
+         * PERMISSION Error Type, for example: If the Player executing the command does not have permission, It will be a 'PERMISSION' Error.
          */
-        Permission,
+        PERMISSION,
         /**
-         * Few Arguments Error Type, for example: If the Command Sender doesn't provide enough arguments, It will be a 'FewArguments' Error.
+         * Few Arguments Error Type, for example: If the Command Sender doesn't provide enough arguments, It will be a 'FEW_ARGUMENTS' Error.
          */
-        FewArguments,
+        FEW_ARGUMENTS,
         /**
-         * Many Arguments Error Type, for example: If the Command Sender provides too many arguments, It will be a 'ManyArguments' Error.
+         * Many Arguments Error Type, for example: If the Command Sender provides too many arguments, It will be a 'MANY_ARGUMENTS' Error.
          */
-        ManyArguments,
+        MANY_ARGUMENTS,
         /**
-         * Null Error Type, for example: If the sender provides something which is null, It will be a 'Null' Error.
+         * NULL Error Type, for example: If the sender provides something which is null, It will be a 'NULL' Error.
          */
-        Null
+        NULL
     }
 }
