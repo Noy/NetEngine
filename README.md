@@ -18,13 +18,13 @@ LICENCE:
 This project is open source for a few reasons:
 
 Training Purposes:
-- I would like other, newer developers to learn and possibly see how Bukkit can be used to created a back end engine like this for customers, or even their own server.
+- I would like other, newer developers to learn and possibly see how Bukkit can be used to create a back end engine like this for customers, or even their own server.
 
 Employers:
-- I would also like for other employers to see the work which I have created, this is my biggest project to date totalling to over 11,000 lines of code!
+- I would also like for other employers to see the work which I have created, this is my biggest project to date.
 
 The Community:
-- If you have a passion for Minecraft and servers, feel free to use this on your server. If you have any problems, also feel free to drop me and email and I'll add you on Skype to help resolve aqny issues.
+- If you have a passion for Minecraft and servers, feel free to use this on your server. If you have any problems, also feel free to drop me and email and I'll add you on Skype to help resolve any issues.
 
 Thanks and Enjoy!
 
