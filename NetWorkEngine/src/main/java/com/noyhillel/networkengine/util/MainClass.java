@@ -34,5 +34,5 @@ public @interface MainClass {
      * This is the website of the plugin creator, it is NOT needed in the plugin.yml.
      * @return the website
      */
-    String website() default "http://noyhillel.com";
+    String website() default "https://noys.site/";
 }
