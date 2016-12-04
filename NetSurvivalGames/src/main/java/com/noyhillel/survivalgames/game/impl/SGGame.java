@@ -71,7 +71,7 @@ public final class SGGame implements Listener {
     @Getter public final static Set<SGPlayer> spectators = new HashSet<>();
     private final Set<SGPlayer> players = new HashSet<>();
     private final Set<SGPlayer> pendingSpectators = new HashSet<>();
-    private final Set<MutatedPlayer> mutations = new HashSet<>();
+    //private final Set<MutatedPlayer> mutations = new HashSet<>();
     private final PvPTracker tracker = new PvPTracker();
     public final Integer deathmatchSize;
 
@@ -172,8 +172,12 @@ public final class SGGame implements Listener {
         if (isSpectating(player)) return;
         if (!players.contains(player)) return;
         if (goingTo.distance(arenaWorld.getSpawnLocation()) >= 30) {
-            player.getPlayer().damage(0.5);
-            player.sendMessage(ChatColor.RED + "Don't cross out of bounds!");
+            //player.getPlayer().damage(0.5);
+            //player.sendMessage(ChatColor.RED + "Don't cross out of bounds!");
+            player.teleport(arena.getLoadedWorld().getSpawnLocation());
+            player.getPlayer().setFallDistance(0);
+            Bukkit.getScheduler().runTaskLater(SurvivalGames.getInstance(),
+                    () -> player.sendMessage(ChatColor.RED + "You crossed out of bounds, teleporting you to spawn!.."), 1L);
         }
     }
 
@@ -247,50 +251,28 @@ public final class SGGame implements Listener {
         EntityDamageEvent lastDamageCause = event.getEntity().getLastDamageCause();
         EntityDamageEvent.DamageCause cause = lastDamageCause.getCause();
         switch (cause) {
-            case CONTACT:
-                break;
-            case ENTITY_ATTACK:
-                break;
-            case PROJECTILE:
-                break;
-            case SUFFOCATION:
-                break;
-            case FALL:
-                break;
-            case FIRE:
-                break;
-            case FIRE_TICK:
-                break;
-            case MELTING:
-                break;
-            case LAVA:
-                break;
-            case DROWNING:
-                break;
-            case BLOCK_EXPLOSION:
-                break;
-            case ENTITY_EXPLOSION:
-                break;
-            case VOID:
-                break;
-            case LIGHTNING:
-                break;
-            case SUICIDE:
-                break;
-            case STARVATION:
-                break;
-            case POISON:
-                break;
-            case MAGIC:
-                break;
-            case WITHER:
-                break;
-            case FALLING_BLOCK:
-                break;
-            case THORNS:
-                break;
-            case CUSTOM:
-                break;
+            case CONTACT: break;
+            case ENTITY_ATTACK: break;
+            case PROJECTILE: break;
+            case SUFFOCATION: break;
+            case FALL: break;
+            case FIRE: break;
+            case FIRE_TICK: break;
+            case MELTING: break;
+            case LAVA: break;
+            case DROWNING: break;
+            case BLOCK_EXPLOSION: break;
+            case ENTITY_EXPLOSION: break;
+            case VOID: break;
+            case LIGHTNING: break;
+            case SUICIDE: break;
+            case STARVATION: break;
+            case POISON: break;
+            case MAGIC: break;
+            case WITHER: break;
+            case FALLING_BLOCK: break;
+            case THORNS: break;
+            case CUSTOM: break;
         }
         StringBuilder sb = new StringBuilder();
         for (String s1 : Arrays.asList(cause.toString())) {
@@ -345,27 +327,6 @@ public final class SGGame implements Listener {
         player.addPotionEffect(PotionEffectType.BLINDNESS, 2, 5);
         NetFireworkEffect.shootFireWorks(player.getPlayerFromNetPlayer(), player.getPlayer().getEyeLocation());
         player.sendMessage(MessageManager.getFormat("formats.player-hit-by-egg", true, new String[]{"<player>", ((Player) egg.getShooter()).getName()}));
-    }
-
-    Map<SGPlayer, MutatedPlayer> mutateDamager = new HashMap<>();
-
-    //TODO actually make this work
-    @EventHandler
-    public void onMutateHit(EntityDamageByEntityEvent event) {
-        if (gameState != GameState.GAMEPLAY) return;
-        if (!(event.getEntity() instanceof Player)) return;
-        if (!(event.getDamager() instanceof  Player)) return;
-        if (players.contains(getSGPlayer((Player)event.getEntity()))) return;
-        SGPlayer damager = getSGPlayer((Player) event.getDamager());
-        SGPlayer target = tracker.getPlayersKiller(damager);
-        if (mutateDamager.containsKey(damager)) {
-            if (!(event.getEntity().equals(target.getPlayer()))) {
-                event.setCancelled(true);
-                event.getEntity().sendMessage("you cant hit this player");
-                return;
-            }
-            event.getEntity().sendMessage("You hit " + damager.getDisplayableName() + " they have " + damager.getPlayer().getHealth()/2 + " hearts left.");
-        }
     }
 
     @EventHandler
@@ -620,44 +581,15 @@ public final class SGGame implements Listener {
             return;
         }
         if (gameState == GameState.GAMEPLAY && getPlayers().size() <= deathmatchSize) {
-            for (MutatedPlayer mutation : this.mutations) {
-                mutation.unMutate(manager, mutation);
-                mutation.getPlayer().sendMessage(MessageManager.getFormat("formats.deathmatch-start-unmutate"));
-                mutation.getPlayer().playSound(Sound.ENTITY_BLAZE_DEATH);
-            }
+//            for (MutatedPlayer mutation : this.mutations) {
+//                mutation.unMutate(manager, mutation);
+//                mutation.getPlayer().sendMessage(MessageManager.getFormat("formats.deathmatch-start-unmutate"));
+//                mutation.getPlayer().playSound(Sound.ENTITY_BLAZE_DEATH);
+//            }
             if (gameState != GameState.OVER) {
                 updateState(); //Triggers deathmatch
             }
         }
-    }
-
-    public void mutatePlayer(SGPlayer player) {
-        if (gameState != GameState.GAMEPLAY) {
-            player.sendMessage(ChatColor.RED + "You cannot mutate during this time!");
-            return;
-        }
-        if (this.players.contains(player)) {
-            player.sendMessage(ChatColor.RED + "You cannot mutate as an in-game player!");
-            return;
-        }
-        SGPlayer target = this.tracker.getPlayersKiller(player);
-        if (target == null) {
-            player.sendMessage(ChatColor.RED + "You did not have a killer!");
-            return;
-        }
-        if (target.getPlayer() == null) {
-            player.sendMessage(ChatColor.RED + "Your killer is no longer on the server, or cannot be resolved!");
-            return;
-        }
-        player.setMutationCredits(player.getMutationCredits()-1);
-        spectators.remove(player);
-        MutatedPlayer mutatedPlayer = new MutatedPlayer(player, target);
-        mutations.add(mutatedPlayer);
-        mutateDamager.put(player, mutatedPlayer);
-        mutatedPlayer.mutate();
-        broadcastSound(Sound.ENTITY_BLAZE_DEATH);
-        broadcast(MessageManager.getFormat("formats.mutated", new String[]{"<player>", player.getDisplayableName()}, new String[]{ "<killer>", target.getDisplayableName()}));
-        mutatedPlayer.getPlayer().teleport(arena.getCornicopiaSpawns().random().toLocation(arena.getLoadedWorld()));
     }
 
     //TODO add back to 1.9
@@ -781,7 +713,7 @@ public final class SGGame implements Listener {
         victor.setMutationCredits(credits + 1);
         victor.setWins(newWins + 1);
         broadcast(MessageManager.getFormat("formats.winner", new String[]{"<victor>", this.victor.getDisplayableName()}));
-        for (MutatedPlayer mutatedPlayers : getMutations()) mutatedPlayers.unMutate(manager, mutatedPlayers);
+        //for (MutatedPlayer mutatedPlayers : getMutations()) mutatedPlayers.unMutate(manager, mutatedPlayers);
         getAllPlayers().forEach(SGPlayer::resetPlayer);
 //        for (SGPlayer player : spectators) showToAllPlayers(player);
         this.manager.gameEnded();
@@ -817,7 +749,7 @@ public final class SGGame implements Listener {
         Set<SGPlayer> players = new HashSet<>();
         players.addAll(spectators);
         players.addAll(this.players);
-        mutations.addAll(this.mutations);
+        //mutations.addAll(this.mutations);
         return players;
     }
 
@@ -826,7 +758,7 @@ public final class SGGame implements Listener {
         players.addAll(spectators);
         players.addAll(pendingSpectators);
         players.addAll(this.players);
-        mutations.addAll(this.mutations);
+        //mutations.addAll(this.mutations);
         return players;
     }
 
@@ -851,8 +783,7 @@ public final class SGGame implements Listener {
         private static Integer[] secondsToSoundHigher = {5, 4, 3, 2, 1};
 
         @Override
-        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {
-        }
+        public void countdownStarting(Integer maxSeconds, GameCountdown countdown) {}
 
         @Override
         public void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown) {

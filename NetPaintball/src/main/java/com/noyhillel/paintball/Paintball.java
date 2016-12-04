@@ -3,6 +3,9 @@ package com.noyhillel.paintball;
 import com.noyhillel.networkengine.exceptions.ArenaException;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
+import com.noyhillel.paintball.command.SetupCommand;
+import com.noyhillel.paintball.game.arena.ArenaManager;
+import com.noyhillel.paintball.game.arena.ArenaSetupListener;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,9 +21,9 @@ import java.lang.reflect.InvocationTargetException;
 public class Paintball extends NetPlugin {
 
     @Getter private static Paintball instance;
+    @Getter private ArenaManager arenaManager;
     @Getter private boolean isSetupOnly = false;
-
-    private static final String ARENA_DIRECTORY = "arenas";
+    @Getter private SetupCommand setupCommand;
 
 
     protected void enable() {
@@ -55,8 +58,10 @@ public class Paintball extends NetPlugin {
             //this.gameManager = new GameManager();
             //registerListener(new GameManagerListener(this, gameManager));
         } catch (Exception ex) {
-            isSetupOnly = true; //This means that we can only setup arenas now because there was a problem setting up the game manager, which normally means that you could not load the lobby
+            isSetupOnly = true;
         }
+        registerListener(new ArenaSetupListener());
+        setupCommand = registerListener(setupCommands(SetupCommand.class));
     }
 
     private void tryDisable() {

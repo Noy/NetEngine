@@ -1,5 +1,5 @@
 name: NetSurvivalGames
-version: 1.0
+version: 1.2
 main: com.noyhillel.survivalgames.SurvivalGames
 depends: [LibsDisguises, ProtocolLib]
 

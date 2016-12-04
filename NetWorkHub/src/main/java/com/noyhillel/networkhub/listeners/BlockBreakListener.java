@@ -7,7 +7,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 /**
  * Created by Belfort on 4/12/2016.
  */
-public class BlockBreakListener extends ModuleListener {
+public final class BlockBreakListener extends ModuleListener {
 
     public BlockBreakListener() {
         super("block-break");

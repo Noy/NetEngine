@@ -69,7 +69,7 @@ public final class LinkChestsCommand extends NetAbstractCommandHandler {
     }
 
     @SneakyThrows
-    public static SGPlayer resolveGPlayer(Player player) {
+    static SGPlayer resolveGPlayer(Player player) {
         if (player == null) throw new NewNetCommandException("Player not found!", NewNetCommandException.ErrorType.NULL);
         return SurvivalGames.getInstance().getSgPlayerManager().getOnlinePlayer(player);
     }

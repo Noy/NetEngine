@@ -21,7 +21,7 @@ public final class FlyCommand extends AbstractCommandHandler {
     @NetCommand(
             name = "fly",
             description = "The Fly Command",
-            usage = "/flyspeed",
+            usage = "/fly",
             permission = "hub.fly",
             senders = {NetCommandSenders.PLAYER}
     )

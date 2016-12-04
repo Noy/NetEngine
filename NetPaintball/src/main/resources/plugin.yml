@@ -1,3 +1,7 @@
 name: NetPaintball
 version: 1.0
 main: com.noyhillel.paintball.Paintball
+
+commands:
+  setup:
+    aliases: upset
