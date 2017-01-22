@@ -79,7 +79,7 @@ public class PaintballGame implements Listener {
 
     private void putPlayerInTeam() {
         this.teams = new HashMap<>();
-        ArrayList<NetPlayer > netPlayers = new ArrayList<>(players);
+        ArrayList<NetPlayer> netPlayers = new ArrayList<>(players);
         Collections.shuffle(netPlayers);
         for (NetPlayer player : netPlayers) {
             teams.put(player, smallestTeam());

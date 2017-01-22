@@ -18,16 +18,26 @@
             <id>lilypad</id>
             <url>http://ci.lilypadmc.org/plugin/repository/everything</url>
         </repository>
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>http://repo.dmulloy2.net/content/groups/public/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>dmulloy2-repo</id>-->
+            <!--<url>http://repo.dmulloy2.net/content/groups/public/</url>-->
+        <!--</repository>-->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>com.comphenix.protocol</groupId>-->
+            <!--<artifactId>ProtocolLib-API</artifactId>-->
+            <!--<version>4.1.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>LibsDisguises</groupId>-->
+            <!--<artifactId>LibsDisguises</artifactId>-->
+            <!--<version>9.0.7</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.noyhillel</groupId>
             <artifactId>networkengine</artifactId>

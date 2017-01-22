@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
+//import me.libraryaddict.disguise.DisguiseAPI;
+//import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -39,7 +41,7 @@ public final class SGPlayer extends SGOfflinePlayer {
         //updateNick();
     }
 
-    public void updateNick() {
+    private void updateNick() {
         Player player = getPlayer();
         if (nick == null || nick.equalsIgnoreCase(player.getName())) {
             player.setPlayerListName(player.getName());

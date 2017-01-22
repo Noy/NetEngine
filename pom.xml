@@ -15,5 +15,6 @@
         <module>NetKitPVP</module>
         <module>NetBattledome</module>
         <module>NetPaintball</module>
+        <module>NetVegas</module>
     </modules>
 </project>
