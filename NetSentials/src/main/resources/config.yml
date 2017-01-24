@@ -1,0 +1,24 @@
+formats:
+    prefix: "&c[&bNetSentials&c] "
+    tp-to-spawn: "&cYou have been teleported to spawn!"
+    set-spawn: "&eYou have set the spawn!"
+    home-set: "&aYou have set your home!"
+    no-home: "&cYou haven't set a home!"
+    tp-home: "&eYou have teleported home!"
+    home-del: "&cYou have deleted your home!"
+    send-message: "&3[&cYou &b> &c<target>&3] &e<message>"
+    rec-message: "&3[&c<target> &b> &cYou&3] &e<message>"
+    not-found: "&cPlayer not found."
+
+spawn:
+  world: world
+  x:
+  y:
+  z:
+  yaw:
+  pitch:
+
+module-listener:
+  join: TRUE
+  chat: TRUE
+  leave: TRUE

@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Created by Noy on 25/05/2014.
  */
-public final class CommandStructure implements CommandExecutor, TabCompleter {
+public class CommandStructure implements CommandExecutor, TabCompleter {
 
     /**
      * Creating our constructor.
@@ -156,7 +156,7 @@ public final class CommandStructure implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatColor.DARK_GREEN + "[" + ChatColor.GREEN + "Help" + ChatColor.DARK_GREEN + "] " + ChatColor.LIGHT_PURPLE + " >> " + annotation.usage());
                     break;
                 case NULL: // If the Sender provides an argument which is null, let them know.
-                    sender.sendMessage(ChatColor.RED + "An argument you have provided was null!");
+                    sender.sendMessage(ChatColor.RED + "Error: Looks like that command returned null!");
                     break;
             }
             handler.handleCommand(status, sender, type);
@@ -183,7 +183,7 @@ public final class CommandStructure implements CommandExecutor, TabCompleter {
      * @return The Complete Args.
      */
     @SuppressWarnings("UnusedParameters")
-    protected List<String> completeArgs(CommandSender sender, String[] args) {
+    public List<String> completeArgs(CommandSender sender, String[] args) {
         // Returns an ArrayList of Strings.
         return new ArrayList<>();
     }

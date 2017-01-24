@@ -16,5 +16,6 @@
         <module>NetBattledome</module>
         <module>NetPaintball</module>
         <module>NetVegas</module>
+        <module>NetSentials</module>
     </modules>
 </project>

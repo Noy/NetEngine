@@ -1,0 +1,13 @@
+name: NetSentials
+version: 1.0
+main: com.noyhillel.netsentials.NetSentials
+
+commands:
+    spawn:
+        aliases: [s]
+    home:
+        aliases: [h]
+    msg:
+        aliases: [tell, message, whisper]
+    reply:
+        aliases: [r]
