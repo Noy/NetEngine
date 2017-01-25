@@ -42,6 +42,7 @@ public final class NetSentials extends NetPlugin {
         setupCommands(Message.class);
         setupCommands(Reply.class);
         setupCommands(I.class);
+        setupCommands(Fly.class);
     }
 
     private void registerAllListeners() {
