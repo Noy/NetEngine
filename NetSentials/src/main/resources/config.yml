@@ -13,7 +13,9 @@ formats:
     give-item-2: "&eYou have received &3<amount> <item>&e(&3s&e)&e!"
     give-item-3: "&eYou have received &3<amount> <item>&e(&3s&e)&e at &3<durability> &edurability!"
     set-the-spawn: "&cYou need to set the spawn first!"
-
+    fly-on: "&aYour flight has been enabled."
+    fly-off: "&aYour flight has been disabled."
+    
 spawn:
   world:
   x:
