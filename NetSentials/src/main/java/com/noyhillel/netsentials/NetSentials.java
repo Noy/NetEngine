@@ -1,9 +1,6 @@
 package com.noyhillel.netsentials;
 
-import com.noyhillel.netsentials.commands.Home;
-import com.noyhillel.netsentials.commands.Message;
-import com.noyhillel.netsentials.commands.Reply;
-import com.noyhillel.netsentials.commands.Spawn;
+import com.noyhillel.netsentials.commands.*;
 import com.noyhillel.netsentials.listeners.Chat;
 import com.noyhillel.netsentials.listeners.Join;
 import com.noyhillel.netsentials.listeners.Leave;
@@ -44,6 +41,7 @@ public final class NetSentials extends NetPlugin {
         registerCommands(new Home());
         setupCommands(Message.class);
         setupCommands(Reply.class);
+        setupCommands(I.class);
     }
 
     private void registerAllListeners() {

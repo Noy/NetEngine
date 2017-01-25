@@ -11,3 +11,5 @@ commands:
         aliases: [tell, message, whisper]
     reply:
         aliases: [r]
+    i:
+        aliases: [giveme, give]

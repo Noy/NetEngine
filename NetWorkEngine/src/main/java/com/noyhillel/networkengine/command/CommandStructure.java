@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Created by Noy on 25/05/2014.
  */
-public class CommandStructure implements CommandExecutor, TabCompleter {
+public final class CommandStructure implements CommandExecutor, TabCompleter {
 
     /**
      * Creating our constructor.
