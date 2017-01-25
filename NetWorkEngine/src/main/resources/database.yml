@@ -3,4 +3,4 @@ host: kahana.mongohq.com
 port: 10011
 database: minecraft
 username: noyhillel #OPTIONAL, comment out to disable this
-password: ilovetoeatcookies #OPTIONAL, comment out to disable this
+password: ilovetoeatcookies #OPTIONAL, comment out to disable this - this isn't real btw lol
