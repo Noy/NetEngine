@@ -13,3 +13,5 @@ commands:
         aliases: [r]
     i:
         aliases: [giveme, give]
+    fly:
+        aliases: [f]

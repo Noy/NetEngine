@@ -1,6 +1,7 @@
 package com.noyhillel.netsentials.commands;
 
 import com.noyhillel.netsentials.MessageManager;
+import com.noyhillel.netsentials.NetSentials;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
@@ -22,8 +23,8 @@ public final class Message extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (args.length == 0) throw new NewNetCommandException(MessageManager.getFormats("prefix") + "Specify who to message.", NewNetCommandException.ErrorType.NULL);
-        if (args.length == 1) throw new NewNetCommandException(MessageManager.getFormats("prefix") + "Specify a message.", NewNetCommandException.ErrorType.NULL);
+        if (args.length == 0) throw new NewNetCommandException(NetSentials.getPrefix() + "Specify who to message.", NewNetCommandException.ErrorType.NULL);
+        if (args.length == 1) throw new NewNetCommandException(NetSentials.getPrefix() + "Specify a message.", NewNetCommandException.ErrorType.NULL);
         Player target = Bukkit.getPlayerExact(args[0]);
         String message = "";
         NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(player);
@@ -49,5 +50,10 @@ public final class Message extends NetAbstractCommandHandler {
             return names;
         }
         return null;
+    }
+
+    static List<String> tabComplete(CommandSender sender, String[] args) {
+        Message message = new Message();
+        return message.completeArgs(sender, args);
     }
 }

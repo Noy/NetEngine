@@ -1,6 +1,7 @@
 package com.noyhillel.netsentials.commands;
 
 import com.noyhillel.netsentials.MessageManager;
+import com.noyhillel.netsentials.NetSentials;
 import com.noyhillel.networkengine.exceptions.NewNetCommandException;
 import com.noyhillel.networkengine.newcommand.CommandMeta;
 import com.noyhillel.networkengine.newcommand.NetAbstractCommandHandler;
@@ -17,7 +18,7 @@ public final class Reply extends NetAbstractCommandHandler {
 
     @Override
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
-        if (args.length == 0) throw new NewNetCommandException(MessageManager.getFormats("prefix") + "Specify your message.", NewNetCommandException.ErrorType.NULL);
+        if (args.length == 0) throw new NewNetCommandException(NetSentials.getPrefix() + "Specify your message.", NewNetCommandException.ErrorType.NULL);
         NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(player);
         NetPlayer target = NetPlayer.getPlayerFromPlayer(Bukkit.getServer().getPlayer(receivedMessage.get(netPlayer.getUuid())));
         String message = "";

@@ -6,6 +6,7 @@ import com.noyhillel.netsentials.listeners.Join;
 import com.noyhillel.netsentials.listeners.Leave;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
+import com.noyhillel.networkengine.util.utils.NetCoolDown;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
@@ -14,14 +15,18 @@ import org.bukkit.entity.Player;
 @MainClass(name = "NetSentials", description = "The Net-Essentials esk Plugin")
 public final class NetSentials extends NetPlugin {
 
-     @Getter public static NetSentials instance;
+    @Getter public static NetSentials instance;
+    @Getter private static String prefix;
+    @Getter private static NetCoolDown cooldown;
 
     @Override
     protected void enable() {
         try {
             NetSentials.instance = this;
+            prefix = MessageManager.getFormats("");
             registerAllCommands();
             registerAllListeners();
+            cooldown = new NetCoolDown();
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.getPlayer().kickPlayer(RELOAD_MESSAGE);
             }
@@ -31,9 +36,7 @@ public final class NetSentials extends NetPlugin {
     }
 
     @Override
-    protected void disable() {
-
-    }
+    protected void disable() {}
 
     @SneakyThrows
     private void registerAllCommands() {
