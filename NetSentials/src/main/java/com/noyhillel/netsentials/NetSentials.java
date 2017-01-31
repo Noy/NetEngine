@@ -46,6 +46,8 @@ public final class NetSentials extends NetPlugin {
         setupCommands(Reply.class);
         setupCommands(I.class);
         setupCommands(Fly.class);
+        setupCommands(Heal.class);
+        setupCommands(Feed.class);
     }
 
     private void registerAllListeners() {

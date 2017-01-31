@@ -62,6 +62,24 @@ public final class NetPlayer {
         clearInventory();
     }
 
+    public void refreshPlayer() {
+        Player player = getPlayer();
+        player.setFallDistance(0);
+        player.setNoDamageTicks(5);
+        player.setFireTicks(0);
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
+        player.setHealth(player.getMaxHealth());
+        player.setSaturation(0);
+        player.setFoodLevel(20);
+    }
+
+    public void setMaxFood() {
+        Player player = getPlayer();
+        player.setFoodLevel(23); // saturation
+    }
+
     public void restorePlayer() {
         resetPlayer();
         Player player = getPlayer();

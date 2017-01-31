@@ -35,20 +35,20 @@ public final class GetInfoCommand extends NetAbstractCommandHandler {
         if (netPlayer == null) throw new NewNetCommandException("An argument you have provided was null!", NewNetCommandException.ErrorType.NULL);
         String[] name = {"<name>", target.getName()};
         String[] nl = {"<nl>", "\n"};
-        netPlayer.sendMessage(MessageManager.getFormat("whois.uuid", true, new String[]{"<uuid>", netPlayer.getUuid().toString()}, name, nl));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.nick", true, new String[]{"<nick>", netPlayer.getPlayer().getDisplayName()}, name));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.health", true, new String[]{"<health>", String.valueOf(netPlayer.getPlayer().getHealth())}, name));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.hunger", true, new String[]{"<hunger>", String.valueOf(netPlayer.getPlayer().getFoodLevel())},
+        player.sendMessage(MessageManager.getFormat("whois.uuid", true, new String[]{"<uuid>", netPlayer.getUuid().toString()}, name, nl));
+        player.sendMessage(MessageManager.getFormat("whois.nick", true, new String[]{"<nick>", netPlayer.getPlayer().getDisplayName()}, name));
+        player.sendMessage(MessageManager.getFormat("whois.health", true, new String[]{"<health>", String.valueOf(netPlayer.getPlayer().getHealth())}, name));
+        player.sendMessage(MessageManager.getFormat("whois.hunger", true, new String[]{"<hunger>", String.valueOf(netPlayer.getPlayer().getFoodLevel())},
                 new String[]{"<saturation>", String.valueOf(player.getPlayer().getSaturation())}, name));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.location", true,
+        player.sendMessage(MessageManager.getFormat("whois.location", true,
                 new String[]{"<worldname>", netPlayer.getPlayer().getWorld().getName()},
                 new String[] {"<x>", String.valueOf(netPlayer.getPlayer().getLocation().getBlockX())},
                 new String[] {"<y>", String.valueOf(netPlayer.getPlayer().getLocation().getBlockY())},
                 new String[] {"<z>", String.valueOf(netPlayer.getPlayer().getLocation().getBlockZ())}, name, nl));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.ip", true, new String[]{"<ip>", netPlayer.getIP()}, name));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.gamemode", true, new String[]{"<gamemode>", String.valueOf(netPlayer.getPlayer().getGameMode())}, name));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.op", true, new String[]{"<op>", String.valueOf(netPlayer.getPlayer().isOp())}, name));
-        netPlayer.sendMessage(MessageManager.getFormat("whois.flying", true, new String[]{"<flying>", String.valueOf(netPlayer.getPlayer().getAllowFlight())}, name));
+        player.sendMessage(MessageManager.getFormat("whois.ip", true, new String[]{"<ip>", netPlayer.getIP()}, name));
+        player.sendMessage(MessageManager.getFormat("whois.gamemode", true, new String[]{"<gamemode>", String.valueOf(netPlayer.getPlayer().getGameMode())}, name));
+        player.sendMessage(MessageManager.getFormat("whois.op", true, new String[]{"<op>", String.valueOf(netPlayer.getPlayer().isOp())}, name));
+        player.sendMessage(MessageManager.getFormat("whois.flying", true, new String[]{"<flying>", String.valueOf(netPlayer.getPlayer().getAllowFlight())}, name));
         //Nick, Health, Hunger, Exp, Location, IP, GameMode, OP, FlyMode
     }
 

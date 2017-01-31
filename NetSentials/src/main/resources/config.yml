@@ -1,11 +1,11 @@
 formats:
     prefix: "&c[&bNetSentials&c] "
-    tp-to-spawn: "&cYou have been teleported to spawn!"
-    set-spawn: "&eYou have set the spawn!"
-    home-set: "&aYou have set your home!"
-    no-home: "&cYou haven't set a home!"
-    tp-home: "&eYou have teleported home!"
-    home-del: "&cYou have deleted your home!"
+    tp-to-spawn: "&eYou have been teleported to spawn."
+    set-spawn: "&eYou have set the spawn."
+    home-set: "&eYou have set your home."
+    no-home: "&cYou haven't set a home."
+    tp-home: "&eYou have teleported home."
+    home-del: "&cYou have deleted your home."
     send-message: "&3[&cYou &b> &c<target>&3] &e<message>"
     rec-message: "&3[&c<target> &b> &cYou&3] &e<message>"
     not-found: "&cPlayer not found."
@@ -13,11 +13,17 @@ formats:
     give-item-2: "&eYou have received &3<amount> <item>&e(&3s&e)&e."
     give-item-3: "&eYou have received &3<amount> <item>&e(&3s&e)&e at &3<durability> &edurability."
     set-the-spawn: "&cYou need to set the spawn first."
-    fly-on: "&aYour flight has been enabled."
-    fly-off: "&aYour flight has been disabled."
-    fly-on-target: "&aYou have successfully turned on <target>'s flight"
-    fly-off-target: "&aYou have successfully turned off <target>'s flight"
-    
+    fly-on: "&eYour flight has been enabled."
+    fly-off: "&eYour flight has been disabled."
+    fly-on-target: "&eYou have successfully turned on <target>'s flight."
+    fly-off-target: "&eYou have successfully turned off <target>'s flight."
+    healed: "&eYou have been healed."
+    player-healed: "&eYou have been healed by <player>"
+    healed-player: "&eYou have healed <target>"
+    fed: "&eYou have been fed."
+    player-fed: "&eYou have been fed by <player>"
+    fed-player: "&eYou have feed <target>"
+
 spawn:
   world:
   x:

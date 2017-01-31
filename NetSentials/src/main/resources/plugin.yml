@@ -15,3 +15,7 @@ commands:
         aliases: [giveme, give]
     fly:
         aliases: [f]
+    feed:
+        aliases: [eat]
+    heal:
+        aliases: [health]
