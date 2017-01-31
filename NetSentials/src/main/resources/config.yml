@@ -21,8 +21,15 @@ formats:
     player-healed: "&eYou have been healed by <player>"
     healed-player: "&eYou have healed <target>"
     fed: "&eYou have been fed."
-    player-fed: "&eYou have been fed by <player>"
-    fed-player: "&eYou have feed <target>"
+    player-fed: "&eYou have been fed by <player>."
+    fed-player: "&eYou have feed <target>."
+    tpd-you: "&c<player> &ehas teleported you to &c<target>&e."
+    you-tpd: "&eYou have teleported &c<player> &eto &c<target>&e."
+    tpd-cords: "&eYou have teleported &c<target> &eto those co-ordinates."
+    cords-tpd: "&c<player> &eteleported you to co-ordinates: &c<x> <y> <z>&e."
+    cord-tpd: "&eYou have teleported to: &c<x> <y> <z>&e."
+    you-tpd: "&eYou have teleported to &c<target>&e."
+    gone-back: "&eYou have gone back to your previous location."
 
 spawn:
   world:
@@ -36,3 +43,5 @@ module-listener:
   join: TRUE
   chat: TRUE
   leave: TRUE
+  death: TRUE
+  teleport: TRUE

@@ -8,6 +8,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
+import static com.noyhillel.netsentials.listeners.Death.back;
+
 public final class Leave extends ModuleListener {
 
     public Leave() {
@@ -18,6 +20,9 @@ public final class Leave extends ModuleListener {
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uniqueId = player.getUniqueId();
+        if (back.containsKey(player.getUniqueId())) {
+            back.remove(player.getUniqueId());
+        }
         if (Message.receivedMessage.containsKey(uniqueId)) {
             Message.receivedMessage.remove(uniqueId);
         }
@@ -27,6 +32,9 @@ public final class Leave extends ModuleListener {
     public void onPlayerLeave(PlayerKickEvent event) {
         Player player = event.getPlayer();
         UUID uniqueId = player.getUniqueId();
+        if (back.containsKey(player.getUniqueId())) {
+            back.remove(player.getUniqueId());
+        }
         if (Message.receivedMessage.containsKey(uniqueId)) {
             Message.receivedMessage.remove(uniqueId);
         }

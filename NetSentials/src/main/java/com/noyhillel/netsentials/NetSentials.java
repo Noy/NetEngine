@@ -1,9 +1,7 @@
 package com.noyhillel.netsentials;
 
 import com.noyhillel.netsentials.commands.*;
-import com.noyhillel.netsentials.listeners.Chat;
-import com.noyhillel.netsentials.listeners.Join;
-import com.noyhillel.netsentials.listeners.Leave;
+import com.noyhillel.netsentials.listeners.*;
 import com.noyhillel.networkengine.util.MainClass;
 import com.noyhillel.networkengine.util.NetPlugin;
 import com.noyhillel.networkengine.util.utils.NetCoolDown;
@@ -48,11 +46,15 @@ public final class NetSentials extends NetPlugin {
         setupCommands(Fly.class);
         setupCommands(Heal.class);
         setupCommands(Feed.class);
+        setupCommands(Back.class);
+        setupCommands(TP.class);
     }
 
     private void registerAllListeners() {
         new Join().register();
         new Chat().register();
         new Leave().register();
+        new Death().register();
+        new Teleport().register();
     }
 }

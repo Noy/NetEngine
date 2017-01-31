@@ -21,12 +21,12 @@ public final class Heal extends NetAbstractCommandHandler {
     protected void playerCommand(Player player, String[] args) throws NewNetCommandException {
         if (args.length > 1) throw new NewNetCommandException(NetSentials.getPrefix() + "Too many arguments.", NewNetCommandException.ErrorType.NULL);
         NetPlayer netPlayer = NetPlayer.getPlayerFromPlayer(player);
-        NetPlayer target = NetPlayer.getPlayerFromPlayer(Bukkit.getPlayer(args[0]));
         if (args.length == 0) {
             netPlayer.refreshPlayer();
             netPlayer.sendMessage(MessageManager.getFormats("formats.healed"));
         }
         if (args.length == 1) {
+            NetPlayer target = NetPlayer.getPlayerFromPlayer(Bukkit.getPlayer(args[0]));
             if (target == null) {
                 netPlayer.sendMessage(MessageManager.getFormats("formats.not-found"));
                 return;

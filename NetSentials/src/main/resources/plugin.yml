@@ -19,3 +19,7 @@ commands:
         aliases: [eat]
     heal:
         aliases: [health]
+    tp:
+        aliases: [teleport]
+    back:
+        aliases: [b, previousloc]
