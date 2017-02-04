@@ -34,8 +34,8 @@ public final class SGPlayer extends SGOfflinePlayer {
     @Setter(AccessLevel.PRIVATE) private Scoreboard playerScoreboard;
     private Objective currentScoreboardObjective;
 
-    public SGPlayer(String username, UUID uuid, List<String> usernames, Integer kills, Integer deaths, Integer wins, Integer plays, Integer mutation_credits, Integer points, String nick) {
-        super(uuid, usernames, kills, deaths, wins, plays, mutation_credits, points, nick);
+    public SGPlayer(String username, UUID uuid, List<String> usernames, Integer kills, Integer deaths, Integer wins, Integer plays, /*Integer mutation_credits,*/ Integer points, String nick) {
+        super(uuid, usernames, kills, deaths, wins, plays, /*mutation_credits,*/ points, nick);
         this.username = username;
         this.playerScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         //updateNick();

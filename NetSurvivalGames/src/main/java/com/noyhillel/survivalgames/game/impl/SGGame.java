@@ -2,6 +2,7 @@ package com.noyhillel.survivalgames.game.impl;
 
 import com.noyhillel.networkengine.exceptions.CooldownUnexpiredException;
 import com.noyhillel.networkengine.game.arena.PointIterator;
+import com.noyhillel.networkengine.util.effects.NetEnderBar;
 import com.noyhillel.networkengine.util.effects.NetFireworkEffect;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.RandomUtils;
@@ -440,9 +441,7 @@ public final class SGGame implements Listener {
 
     @EventHandler
     public void onChatEvent(AsyncPlayerChatEvent event) {
-        if (gameState != GameState.GAMEPLAY) {
-            return;
-        }
+        if (gameState != GameState.GAMEPLAY) return;
         SGPlayer sgPlayer = this.getSGPlayer(event.getPlayer());
         Player player = sgPlayer.getPlayer();
         if (SGGame.isSpectating(sgPlayer)) return;
@@ -557,12 +556,11 @@ public final class SGGame implements Listener {
     }
 
     private void playerDied(SGPlayer player, EntityDamageEvent.DamageCause reason) {
-        if (gameState == GameState.OVER)
-            throw new IllegalStateException("This state does not permit death processing!");
+        if (gameState == GameState.OVER) throw new IllegalStateException("This state does not permit death processing!");
         tributeFallen(player);
         Integer deaths = player.getDeaths();
         player.setDeaths(deaths + 1);
-        Integer newPoints = SurvivalGames.getRandom().nextInt(130);
+        Integer newPoints = SurvivalGames.getRandom().nextInt(113);
         player.setPoints(player.getPoints() - newPoints);
         player.sendMessage(MessageManager.getFormat("formats.loss-points", true, new String[]{"<points>", String.valueOf(newPoints)}));
     }
@@ -603,10 +601,10 @@ public final class SGGame implements Listener {
         //String mutationFormat = MessageManager.getFormat("formats.scoreboard.mutations", false);
         //noinspection StatementWithEmptyBody,StatementWithEmptyBody
         for (SGPlayer sgPlayer : getAllPlayers()) {
-            //SGPlayer.setScoreBoardSide(spectatorsFormat, spectatorsSize);
-            //SGPlayer.setScoreBoardSide(playersFormat, playersSize);
-            //SGPlayer.setScoreBoardSide(mutationFormat, mutationSize);
-            //SGPlayer.sendMessage(ChatColor.RED + "Welcome, you have joined as a spectator!");
+            //sgPlayer.setScoreBoardSide(spectatorsFormat, spectatorsSize);
+            //sgPlayer.setScoreBoardSide(playersFormat, playersSize);
+            //sgPlayer.setScoreBoardSide(mutationFormat, mutationSize);
+            //sgPlayer.sendMessage(ChatColor.RED + "Welcome, you have joined as a spectator!");
         }
     }
 
@@ -708,9 +706,9 @@ public final class SGGame implements Listener {
             player.setTotalGames(gamesPlayed + 1);
         }
         this.victor = (SGPlayer) this.getPlayers().toArray()[0];
-        Integer credits = victor.getMutationCredits();
+        //Integer credits = victor.getMutationCredits();
         Integer newWins = victor.getWins();
-        victor.setMutationCredits(credits + 1);
+        //victor.setMutationCredits(credits + 1);
         victor.setWins(newWins + 1);
         broadcast(MessageManager.getFormat("formats.winner", new String[]{"<victor>", this.victor.getDisplayableName()}));
         //for (MutatedPlayer mutatedPlayers : getMutations()) mutatedPlayers.unMutate(manager, mutatedPlayers);
@@ -722,7 +720,7 @@ public final class SGGame implements Listener {
         for (SGPlayer sgPlayer : getAllPlayersForChat()) {
             NetPlayer playerFromNetPlayer = sgPlayer.getPlayerFromNetPlayer();
             //TODO add this back
-            //NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("formats.ender-winner", false, new String[]{"<victor>", victor.getDisplayableName()}));
+            NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("formats.ender-winner", false, new String[]{"<victor>", victor.getDisplayableName()}));
         }
         if (victor != null) {
             Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
@@ -771,7 +769,7 @@ public final class SGGame implements Listener {
     private void removeEnderBar() {
         for (SGPlayer sgPlayer : getAllPlayers()) {
             NetPlayer playerFromNetPlayer = sgPlayer.getPlayerFromNetPlayer();
-            //NetEnderBar.remove(playerFromNetPlayer);
+            NetEnderBar.remove(playerFromNetPlayer);
         }
     }
 
@@ -793,8 +791,8 @@ public final class SGGame implements Listener {
             if (secondsRemaining <= 60 && secondsRemaining >= 1) {
                 for (SGPlayer sgPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = sgPlayer.getPlayerFromNetPlayer();
-                    //NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemaining.doubleValue() / 60);
-                    //NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.game-countdown-time", false, new String[]{"<time>", RandomUtils.formatTime(countdown.getSeconds() - countdown.getSecondsPassed())}));
+                    NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemaining.doubleValue() / 60);
+                    NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.game-countdown-time", false, new String[]{"<time>", RandomUtils.formatTime(countdown.getSeconds() - countdown.getSecondsPassed())}));
                     sgPlayer.getPlayer().setLevel(secondsRemaining);
                     sgPlayer.getPlayer().setExp(secondsRemaining.floatValue() / 60);
                 }
@@ -832,8 +830,8 @@ public final class SGGame implements Listener {
             if (secondsRemaining <= 60 && secondsRemaining >= 1) {
                 for (SGPlayer sgPlayer : game.getAllPlayers()) {
                     NetPlayer playerFromNetPlayer = sgPlayer.getPlayerFromNetPlayer();
-                    //NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemaining.doubleValue() / 60);
-                    //NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false, new String[]{"<time>", RandomUtils.formatTime(countdown.getSeconds() - countdown.getSecondsPassed())}));
+                    NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemaining.doubleValue() / 60);
+                    NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.deathmatch-countdown-time", false, new String[]{"<time>", RandomUtils.formatTime(countdown.getSeconds() - countdown.getSecondsPassed())}));
                 }
             }
             if (RandomUtils.contains(secondsRemaining, secondsToSound))

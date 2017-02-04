@@ -17,5 +17,6 @@
         <module>NetPaintball</module>
         <module>NetVegas</module>
         <module>NetSentials</module>
+        <module>NetSweeper</module>
     </modules>
 </project>

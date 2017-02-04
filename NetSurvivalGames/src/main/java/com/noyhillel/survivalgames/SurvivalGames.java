@@ -119,7 +119,7 @@ public final class SurvivalGames extends NetPlugin {
         setupCommands(SpectateCommand.class);
         setupCommands(SetPointsCommand.class);
         setupCommands(RefillChestsCommand.class);
-        setupCommands(SetMutationCreditsCommand.class);
+        //setupCommands(SetMutationCreditsCommand.class);
         logInfoInColor(ChatColor.translateAlternateColorCodes('&', "&eSurvivalGames&a has been fully enabled!"));
     }
 

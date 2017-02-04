@@ -167,6 +167,18 @@ public final class NetPlayer {
         return level;
     }
 
+    public void setCreative() {
+        getPlayer().setGameMode(GameMode.CREATIVE);
+    }
+
+    public void setSurvival() {
+        getPlayer().setGameMode(GameMode.SURVIVAL);
+    }
+
+    public void setAdventure() {
+        getPlayer().setGameMode(GameMode.ADVENTURE);
+    }
+
     public boolean hasPotionEffect(PotionEffectType e) {
         return e != null && getPlayer().hasPotionEffect(e);
     }

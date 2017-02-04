@@ -34,7 +34,7 @@ public final class MySQLStorage implements GStorage {
         DEATHS("deaths"),
         WINS("wins"),
         TOTAL_GAMES("totalgames"),
-        MUTATION_CREDITS("mutationpasses"),
+        //MUTATION_CREDITS("mutationpasses"),
         NICK("nick");
         private String key;
         DatabaseKeys(String key) {
@@ -71,10 +71,10 @@ public final class MySQLStorage implements GStorage {
             int deaths = resultSet.getInt(DatabaseKeys.DEATHS.getKey());
             int wins = resultSet.getInt(DatabaseKeys.WINS.getKey());
             int totalgames = resultSet.getInt(DatabaseKeys.TOTAL_GAMES.getKey());
-            int mutation_credits = resultSet.getInt(DatabaseKeys.MUTATION_CREDITS.getKey());
+            //int mutation_credits = resultSet.getInt(DatabaseKeys.MUTATION_CREDITS.getKey());
             int points = resultSet.getInt(DatabaseKeys.POINTS.getKey());
             String nick = resultSet.getString(DatabaseKeys.NICK.getKey());
-            return new SGOfflinePlayer(uuid, usernames, kills, deaths, wins, totalgames, mutation_credits, points, nick);
+            return new SGOfflinePlayer(uuid, usernames, kills, deaths, wins, totalgames, /*mutation_credits,*/ points, nick);
         } catch (SQLException e) {
             throw new StorageError("Could not complete some part of the SQL chain while getting an offline player", e);
         }
@@ -95,22 +95,22 @@ public final class MySQLStorage implements GStorage {
         } catch (SQLException e) {
             throw new StorageError("Could not establish connection to the SQL server!", e);
         }
-        return new SGOfflinePlayer(uuid, usernames, 0, 0, 0, 0, 0, 0, null);
+        return new SGOfflinePlayer(uuid, usernames, 0, 0, 0, 0, /*0,*/ 0, null);
     }
 
     @Override
     public void savePlayer(SGPlayer player) throws StorageError, PlayerNotFoundException {
         getOfflinePlayerByUUID(player.getUuid());
-        try (Connection connection = connectionPool.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + DatabaseKeys.PLAYERS_TABLE + " SET deaths=?,totalgames=?,mutationpasses=?,kills=?,wins=?,points=?,nick=? WHERE id=?");
+        try (Connection connection = connectionPool.getConnection()) { //mutationpasses=?
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE " + DatabaseKeys.PLAYERS_TABLE + " SET deaths=?,totalgames=?,kills=?,wins=?,points=?,nick=? WHERE id=?");
             preparedStatement.setInt(1, player.getDeaths());
             preparedStatement.setInt(2, player.getTotalGames());
-            preparedStatement.setInt(3, player.getMutationCredits());
-            preparedStatement.setInt(4, player.getKills());
-            preparedStatement.setInt(5, player.getWins());
-            preparedStatement.setInt(6, player.getPoints());
-            preparedStatement.setString(7, player.getNick());
-            preparedStatement.setString(8, String.valueOf(player.getUuid()));
+            //preparedStatement.setInt(3, player.getMutationCredits());
+            preparedStatement.setInt(3, player.getKills());
+            preparedStatement.setInt(4, player.getWins());
+            preparedStatement.setInt(5, player.getPoints());
+            preparedStatement.setString(6, player.getNick());
+            preparedStatement.setString(7, String.valueOf(player.getUuid()));
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new StorageError("Could not communicate with the SQL Server!", e);
@@ -144,11 +144,11 @@ public final class MySQLStorage implements GStorage {
                                         "deaths BIGINT NULL DEFAULT 0," +
                                         "wins BIGINT NULL DEFAULT 0," +
                                         "totalgames BIGINT NULL DEFAULT 0," +
-                                        "mutationpasses BIGINT NULL DEFAULT 0," +
                                         "nick MEDIUMTEXT NULL," +
                                         "PRIMARY KEY (id)" +
                                         ");");
                 preparedStatement.executeUpdate();
+                //"mutationpasses BIGINT NULL DEFAULT 0," +
             }
         } catch (SQLException e) {
             throw new StorageError("Could not get/use a Connection object from the connection pool to perform table checks/creation! (Or there was an error in our query, which is less likely)", e);

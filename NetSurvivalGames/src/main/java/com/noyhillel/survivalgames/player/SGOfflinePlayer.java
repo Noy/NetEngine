@@ -23,7 +23,7 @@ public class SGOfflinePlayer {
     private Integer totalGames;
 
     /* Credits/Game stuff */
-    private Integer mutationCredits;
+    //private Integer mutationCredits;
     private Integer points;
 
     /* Utils */
@@ -38,7 +38,7 @@ public class SGOfflinePlayer {
     }
 
     public SGPlayer getOnlinePlayer(Player player) {
-        if (player.getUniqueId().equals(uuid)) return new SGPlayer(player.getName(), uuid, usernames, kills, deaths, wins, totalGames, mutationCredits, points, nick);
+        if (player.getUniqueId().equals(uuid)) return new SGPlayer(player.getName(), uuid, usernames, kills, deaths, wins, totalGames, /*mutationCredits,*/ points, nick);
         return null;
     }
 }

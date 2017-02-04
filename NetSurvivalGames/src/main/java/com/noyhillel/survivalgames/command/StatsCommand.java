@@ -7,10 +7,14 @@ import com.noyhillel.survivalgames.player.SGPlayer;
 import com.noyhillel.survivalgames.utils.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.noyhillel.survivalgames.command.LinkChestsCommand.resolveGPlayer;
 
@@ -35,7 +39,7 @@ public final class StatsCommand extends NetAbstractCommandHandler {
         } else sgPlayer.sendMessage(ChatColor.RED + "Cannot get your KDR with either 0 kills or 0 deaths!");
         yourStats.add(getFormattedStat("Points", sgPlayer.getPoints()));
         yourStats.add(getFormattedStat("Games played", sgPlayer.getTotalGames()));
-        yourStats.add(getFormattedStat("Mutation Credits", sgPlayer.getMutationCredits()));
+        //yourStats.add(getFormattedStat("Mutation Credits", sgPlayer.getMutationCredits()));
         if (args.length == 0) {
             yourStats.forEach(sgPlayer::sendMessage);
             return;
@@ -55,11 +59,22 @@ public final class StatsCommand extends NetAbstractCommandHandler {
         } else sgPlayer.sendMessage(ChatColor.RED + "Cannot get your KDR with either 0 kills or 0 deaths!");
         targetStats.add(getFormattedStat("Points", gTarget.getPoints()));
         targetStats.add(getFormattedStat("Games played", gTarget.getTotalGames()));
-        targetStats.add(getFormattedStat("Mutation Credits", gTarget.getMutationCredits()));
+        //targetStats.add(getFormattedStat("Mutation Credits", gTarget.getMutationCredits()));
         targetStats.forEach(sgPlayer::sendMessage);
     }
 
     private String getFormattedStat(String statName, Object stat) {
         return MessageManager.getFormat("formats.stats.stat-display", false, new String[]{"<stat>", stat.toString()}, new String[]{"<name>", statName});
+    }
+
+    @Override
+    public List<String> completeArgs(CommandSender sender, String[] args) {
+        List<String> names = new ArrayList<>();
+        if (args[0].equals("")) {
+            names.addAll(Bukkit.getOnlinePlayers().stream().filter(player -> player.getName().startsWith(args[0])).map((Function<Player, String>) Player::getName).collect(Collectors.toList()));
+            Collections.sort(names);
+            return names;
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package com.noyhillel.survivalgames.game;
 
 import com.noyhillel.networkengine.exceptions.ArenaException;
 import com.noyhillel.networkengine.game.arena.lobby.GameLobby;
+import com.noyhillel.networkengine.util.effects.NetEnderBar;
 import com.noyhillel.networkengine.util.player.NetPlayer;
 import com.noyhillel.networkengine.util.utils.RandomUtils;
 import com.noyhillel.survivalgames.SurvivalGames;
@@ -193,8 +194,8 @@ public final class GameManager implements VotingSessionDisplay {
                 NetPlayer playerFromNetPlayer = sgPlayer.getPlayerFromNetPlayer();
                 playerFromNetPlayer.setExperience(secondsRemain.floatValue()/60);
                 playerFromNetPlayer.getPlayer().setLevel(secondsRemain);
-                //NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", SGPlayer.getDisplayableName()}));
-                //NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemain.doubleValue()/60);
+                NetEnderBar.setTextFor(playerFromNetPlayer, MessageManager.getFormat("enderbar.lobby-time", false, new String[]{"<player>", sgPlayer.getDisplayableName()}));
+                NetEnderBar.setHealthPercent(playerFromNetPlayer, secondsRemain.doubleValue()/60);
             }
         }
     }

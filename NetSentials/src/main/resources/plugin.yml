@@ -1,5 +1,5 @@
 name: NetSentials
-version: 1.0
+version: 1.1
 main: com.noyhillel.netsentials.NetSentials
 
 commands:

@@ -41,9 +41,9 @@ public final class SetMutationCreditsCommand extends NetAbstractCommandHandler {
         try {
             Integer x = Integer.parseInt(args[1]);
             if (x > 100000) throw new NewNetCommandException("You cannot set that high amount of points.", NewNetCommandException.ErrorType.SPECIAL);
-            gTarget.setMutationCredits(gTarget.getMutationCredits() + x);
-            sgPlayer.sendMessage(MessageManager.getFormat("formats.setcredits", true, new String[]{"<player>", gTarget.getDisplayableName()}, new String[]{"<credits>", String.valueOf(gTarget.getMutationCredits())}));
-            gTarget.sendMessage(MessageManager.getFormat("formats.sendcredits", true, new String[]{"<player>", sgPlayer.getDisplayableName()}, new String[]{"<credits>", String.valueOf(gTarget.getMutationCredits())}));
+            //gTarget.setMutationCredits(gTarget.getMutationCredits() + x);
+            //sgPlayer.sendMessage(MessageManager.getFormat("formats.setcredits", true, new String[]{"<player>", gTarget.getDisplayableName()}, new String[]{"<credits>", String.valueOf(gTarget.getMutationCredits())}));
+            //gTarget.sendMessage(MessageManager.getFormat("formats.sendcredits", true, new String[]{"<player>", sgPlayer.getDisplayableName()}, new String[]{"<credits>", String.valueOf(gTarget.getMutationCredits())}));
         } catch (NumberFormatException e) {
             throw new NewNetCommandException("Cannot recognise argument, most likely not a number!", NewNetCommandException.ErrorType.NULL);
         }

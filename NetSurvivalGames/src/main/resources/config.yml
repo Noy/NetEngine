@@ -97,7 +97,7 @@ arena:
   social-link: "&cWebsite/Social Link: &6<social>"
 chat:
   spectator-chat: "&7[&cSpectator&7] &7<player>&a:&f "
-  player-chat: "&6[&c<points>&6]&7<player>&a:&f "
+  player-chat: "&6[&c<points>&6] &7<player>&a:&f "
   lobby-chat: "&7[&6LOBBY&7] &7<player>&a:&f "
 enderbar:
   lobby-time: "&cWelcome, &6<player>&c"
