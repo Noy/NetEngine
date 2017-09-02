@@ -1,0 +1,10 @@
+package org.inscriptio.uhc.game.countdown;
+
+public interface CountdownDelegate {
+
+    void countdownStarting(Integer maxSeconds, GameCountdown countdown);
+
+    void countdownChanged(Integer maxSeconds, Integer secondsRemaining, GameCountdown countdown);
+
+    void countdownComplete(Integer maxSeconds, GameCountdown countdow);
+}

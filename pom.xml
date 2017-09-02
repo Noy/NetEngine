@@ -18,5 +18,6 @@
         <module>NetVegas</module>
         <module>NetSentials</module>
         <module>NetSweeper</module>
+        <module>NetUHC</module>
     </modules>
 </project>

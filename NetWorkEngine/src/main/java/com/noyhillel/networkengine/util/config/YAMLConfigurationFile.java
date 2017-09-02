@@ -43,8 +43,8 @@ public final class YAMLConfigurationFile {
         // Look for defaults in the jar
         InputStream defConfigStream = plugin.getResource(fileName);
         if (defConfigStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-            fileConfiguration.setDefaults(defConfig);
+            //YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+            //fileConfiguration.setDefaults(defConfig);
         }
     }
 
